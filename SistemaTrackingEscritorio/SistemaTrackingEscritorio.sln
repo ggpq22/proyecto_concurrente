@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SistemaTrackingEscritorio", "SistemaTrackingEscritorio\SistemaTrackingEscritorio.csproj", "{9077F6D0-C244-47E7-A5B5-4DA91DCFDDDE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SistemaTrackingEscritorio", "SistemaTrackingEscritorio\SistemaTrackingEscritorio.csproj", "{9150AA28-65D7-4A5C-A291-7E9CD368C835}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9077F6D0-C244-47E7-A5B5-4DA91DCFDDDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9077F6D0-C244-47E7-A5B5-4DA91DCFDDDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9077F6D0-C244-47E7-A5B5-4DA91DCFDDDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9077F6D0-C244-47E7-A5B5-4DA91DCFDDDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9150AA28-65D7-4A5C-A291-7E9CD368C835}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9150AA28-65D7-4A5C-A291-7E9CD368C835}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9150AA28-65D7-4A5C-A291-7E9CD368C835}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9150AA28-65D7-4A5C-A291-7E9CD368C835}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
