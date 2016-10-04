@@ -27,7 +27,7 @@ namespace Mapa
         {
             gMapControl1.DragButton = MouseButtons.Left;
             gMapControl1.CanDragMap = true;
-            gMapControl1.MapProvider = GMapProviders.GoogleMap;
+            gMapControl1.MapProvider = GMapProviders.GoogleChinaMap;
             gMapControl1.Position = new PointLatLng(37.583, -1.133);
             gMapControl1.MinZoom = 0;
             gMapControl1.MaxZoom = 24;
