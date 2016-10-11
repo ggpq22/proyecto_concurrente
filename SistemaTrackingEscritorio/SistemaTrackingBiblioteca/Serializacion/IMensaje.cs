@@ -10,9 +10,6 @@ namespace SistemaTrackingBiblioteca.Serializacion
     {
         string From { get; set; }
         string To { get; set; }
-
-        string Serializar();
-
-        void Deserealizar(Object o);
+        DateTime fecha { get; set; }
     }
 }
