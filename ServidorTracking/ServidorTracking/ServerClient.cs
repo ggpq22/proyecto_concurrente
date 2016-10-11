@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
+using SistemaTrackingBiblioteca.Serializacion;
 
 namespace ServidorTracking
 {
@@ -13,7 +14,7 @@ namespace ServidorTracking
         string name;
         TcpClient client;
         MessageDelivery delivery;
-        //ConcurrentQueue<>
+        ConcurrentQueue<IMensaje> mensajes = new ConcurrentQueue<IMensaje>();
 
         public ServerClient(TcpClient client)
         {
@@ -41,17 +42,9 @@ namespace ServidorTracking
             }
         }
 
-        public void SendToClient(string message)
+        public void SendToClient(IMensaje message)
         {
-            try
-            {
-                delivery.SendMessage(message);
-            }
-            catch (Exception)
-            {
-                
-                throw;
-            }
+            mensajes.Enqueue(message);
         }
 
         public void CloseClient()
