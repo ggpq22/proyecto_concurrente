@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace SistemaTrackingBiblioteca.Serializacion
 {
@@ -12,16 +13,5 @@ namespace SistemaTrackingBiblioteca.Serializacion
         public string To { get; set; }
         public string Mensaje { get; set; }
 
-        public string Serializar()
-        {
-
-            return "";
-        }
-
-
-        public void Deserealizar(Object o)
-        {
-
-        }
     }
 }
