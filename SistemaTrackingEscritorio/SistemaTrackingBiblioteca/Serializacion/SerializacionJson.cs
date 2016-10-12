@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace SistemaTrackingBiblioteca.Serializacion
 {
-    public class SerializarcionJson<T>
+    public class SerializacionJson<T>
     {
         public string Serializar(Object o)
         {

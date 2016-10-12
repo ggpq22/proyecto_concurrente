@@ -11,6 +11,7 @@ namespace SistemaTrackingBiblioteca.Serializacion
     {
         public string From { get; set; }
         public string To { get; set; }
+        public DateTime fecha { get; set; }
         public string Mensaje { get; set; }
 
     }

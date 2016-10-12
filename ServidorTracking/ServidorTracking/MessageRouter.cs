@@ -15,15 +15,40 @@ namespace ServidorTracking
         ConcurrentQueue<IMensaje> mensajes = new ConcurrentQueue<IMensaje>();
         Thread routing;
 
+        public MessageRouter()
+        {
+            routing = new Thread(route);
+
+            routing.Start();
+        }
+
         private void route()
         {
             while (true)
             {
                 if (mensajes.Count > 0)
                 {
+                    IMensaje m;
 
+                    while (mensajes.TryDequeue(out m))
+                    {
+                        foreach (ServerClient sc in clientes)
+                        {
+                            if (sc.Name == m.To)
+                            {
+                                sc.SendToClient(m);
+                            }
+                        }
+                    }
                 }
             }
         }
+
+        public void AddClient(ServerClient client)
+        {
+            clientes.Add(client);
+        }
+
+
     }
 }

@@ -12,8 +12,18 @@ namespace ServidorTracking
     class ServerClient
     {
         string name;
+
+        public string Name
+        {
+            get { return name; }
+            set { name = value; }
+        }
+
+        //TODO: Serializacion y logica para los tipos de mensaje
+
         TcpClient client;
         MessageDelivery delivery;
+        MessageRouter router;
         ConcurrentQueue<IMensaje> mensajes = new ConcurrentQueue<IMensaje>();
 
         public ServerClient(TcpClient client)
