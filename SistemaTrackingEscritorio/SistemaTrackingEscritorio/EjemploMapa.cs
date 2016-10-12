@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using GMap.NET.MapProviders;
 using GMap.NET;
+using GMap.NET.WindowsForms;
+using GMap.NET.WindowsForms.Markers;
 
 namespace Mapa
 {
@@ -32,7 +34,15 @@ namespace Mapa
             gMapControl1.Zoom = 9;
             gMapControl1.AutoScroll = true;
 
-           
+            GMapOverlay gmo = new GMapOverlay("marker");
+            GMapMarker gmm = new GMarkerGoogle(new PointLatLng(37.583, -1.133), GMarkerGoogleType.green);
+            gmo.Markers.Add(gmm);
+            gMapControl1.Overlays.Add(gmo);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            gMapControl1.Overlays[0].Markers[0].Position = new PointLatLng(37.800, -1.133);
         }
     }
 }
