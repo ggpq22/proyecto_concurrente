@@ -5,18 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace SistemaTrackingBiblioteca.Serializacion
+namespace SistemaTrackingBiblioteca.Mensajes
 {
-    public class SerializarcionJson<T>
+    public static class SerializarcionJson
     {
-        public string Serializar(Object o)
+        public static string Serializar<Tipo>(Tipo clase)
         {
-            return JsonConvert.SerializeObject(o, Formatting.Indented);
+            return JsonConvert.SerializeObject(clase, Formatting.Indented);
         }
 
-        public T Deserializar(string json)
+        public static Tipo Deserializar<Tipo>(string json)
         {
-            return  JsonConvert.DeserializeObject<T>(json);
+            return  JsonConvert.DeserializeObject<Tipo>(json);
         }
     }
 }
