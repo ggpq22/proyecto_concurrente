@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SistemaTrackingBiblioteca.Serializacion
+namespace SistemaTrackingBiblioteca.Mensajes
 {
     public interface IMensaje
     {
         string From { get; set; }
         string To { get; set; }
-        DateTime fecha { get; set; }
+        DateTime Fecha { get; set; }
     }
 }
