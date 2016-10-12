@@ -1,4 +1,4 @@
-package com.example.admin.sistematrakingaplicacionmovil;
+package com.example.admin.pruebatracking;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
