@@ -38,6 +38,7 @@ namespace ServidorTracking
         {
             MsgConexion msn = message as MsgConexion;
             router.RouteMessage(msn);
+            CloseClient();
             router.RemoveClient(this);
         }
         void service_LocationChanged(object sender, IMensaje message)
@@ -66,6 +67,7 @@ namespace ServidorTracking
         public void CloseClient()
         {
             client.Close();
+            service.CloseCommunications();
         }
     }
 }

@@ -92,5 +92,10 @@ namespace ServidorTracking
 
             delivery.SendMessage(str);
         }
+
+        public void CloseCommunications()
+        {
+            delivery.CloseDelivery();
+        }
     }
 }
