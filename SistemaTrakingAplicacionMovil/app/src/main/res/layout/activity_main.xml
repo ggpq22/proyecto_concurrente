@@ -18,7 +18,7 @@
         android:id="@+id/ip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="10.75.60.187"
+        android:text="10.75.61.65"
         android:hint="Server ip address" />
 
     <EditText
