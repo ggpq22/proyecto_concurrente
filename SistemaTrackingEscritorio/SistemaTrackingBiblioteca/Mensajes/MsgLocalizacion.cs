@@ -8,18 +8,10 @@ using Newtonsoft.Json;
 namespace SistemaTrackingBiblioteca.Mensajes
 {
     [JsonObject]
-    public class MsgLocalizacion : IMensaje
+    public class MsgLocalizacion : Mensaje
     {
-        [JsonConstructor]
-        public MsgLocalizacion() { }
+        public string Longitud { get; set; }
 
-        [JsonProperty]
-        public string From { get; set; }
-        
-        [JsonProperty]
-        public string To { get; set; }
-
-        [JsonProperty]
-        public DateTime Fecha { get; set; }
+        public string Latitud { get; set; }
     }
 }

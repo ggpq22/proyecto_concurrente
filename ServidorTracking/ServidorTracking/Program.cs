@@ -17,12 +17,15 @@ namespace ServidorTracking
             TcpServer server = new TcpServer(ip, port);
             MessageRouter router = new MessageRouter();
 
-            Thread runningServer = new Thread(() => { 
+            Thread runningServer = new Thread(() => {
+
+                server.StartServer();
+
                 while(true)
                 {
-                    server.StartServer();
+                    TcpClient tcpclient = server.AcceptClient();
 
-                    ServerClient client = new ServerClient(server.AcceptClient(), router);
+                    ServerClient client = new ServerClient(tcpclient, router);
 
                     router.AddClient(client);
                 }

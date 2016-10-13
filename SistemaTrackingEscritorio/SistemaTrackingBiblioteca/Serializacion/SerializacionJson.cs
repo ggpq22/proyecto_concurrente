@@ -11,7 +11,7 @@ namespace SistemaTrackingBiblioteca.Serializacion
     {
         public static string Serializar<Tipo>(Tipo clase)
         {
-            return JsonConvert.SerializeObject(clase, Formatting.Indented);
+            return JsonConvert.SerializeObject(clase);
         }
 
         public static Tipo Deserializar<Tipo>(string json)

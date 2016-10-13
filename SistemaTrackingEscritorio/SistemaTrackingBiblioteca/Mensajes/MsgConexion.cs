@@ -7,18 +7,11 @@ using Newtonsoft.Json;
 
 namespace SistemaTrackingBiblioteca.Mensajes
 {
-    public class MsgConexion : IMensaje
+    public class MsgConexion : Mensaje
     {
         [JsonConstructor]
         public MsgConexion() { }
 
-        [JsonProperty]
-        public string From { get; set; }
-        [JsonProperty]
-        public string To { get; set; }
-        [JsonProperty]
-        public DateTime Fecha { get; set; }
-        [JsonProperty]
         public string Mensaje { get; set; }
 
     }

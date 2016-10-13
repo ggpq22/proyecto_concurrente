@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace SistemaTrackingBiblioteca.Mensajes
 {
-    public interface IMensaje
+    public class Mensaje
     {
-        string From { get; set; }
-        string To { get; set; }
-        DateTime Fecha { get; set; }
+        public string From { get; set; }
+        public string To { get; set; }
+        public DateTime Fecha { get; set; }
     }
 }
