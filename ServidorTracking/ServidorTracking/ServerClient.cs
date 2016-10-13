@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
 using SistemaTrackingBiblioteca.Serializacion;
+using SistemaTrackingBiblioteca.Mensajes;
 
 namespace ServidorTracking
 {
@@ -22,34 +23,40 @@ namespace ServidorTracking
         //TODO: Serializacion y logica para los tipos de mensaje
 
         TcpClient client;
-        MessageDelivery delivery;
+        CommunicationService service;
         MessageRouter router;
         ConcurrentQueue<IMensaje> mensajes = new ConcurrentQueue<IMensaje>();
 
-        public ServerClient(TcpClient client)
+        // Event Methods
+        void service_Connect(object sender, IMensaje message)
         {
-            try 
-	        {
-                this.client = client;
-                delivery = new MessageDelivery(this.client.GetStream());
-	        }
-	        catch (Exception)
-	        {
-		        throw;
-	        }
+            MsgConexion msn = message as MsgConexion;
+            this.name = msn.From;
+            router.RouteMessage(msn);
+        }
+        void service_Disconnect(object sender, IMensaje message)
+        {
+            MsgConexion msn = message as MsgConexion;
+            router.RouteMessage(msn);
+            CloseClient();
+            router.RemoveClient(this);
+        }
+        void service_LocationChanged(object sender, IMensaje message)
+        {
+            MsgLocalizacion msn = message as MsgLocalizacion;
+            router.RouteMessage(msn);
         }
 
-        public string RecieveFromClient()
+        public ServerClient(TcpClient client, MessageRouter router)
         {
-            try
-            {
-                return delivery.RecieveMessage();
-            }
-            catch (Exception)
-            {
-                
-                throw;
-            }
+            this.client = client;
+            this.router = router;
+            service = new CommunicationService(this.client.GetStream());
+	        
+            // Subscribe Events
+            service.Connect += service_Connect;
+            service.Disconnect += service_Disconnect;
+            service.LocationChanged += service_LocationChanged;
         }
 
         public void SendToClient(IMensaje message)
@@ -60,6 +67,7 @@ namespace ServidorTracking
         public void CloseClient()
         {
             client.Close();
+            service.CloseCommunications();
         }
     }
 }

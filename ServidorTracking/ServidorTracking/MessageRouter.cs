@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
+using SistemaTrackingBiblioteca.Mensajes;
 using SistemaTrackingBiblioteca.Serializacion;
 using System.Threading;
 
@@ -49,6 +50,14 @@ namespace ServidorTracking
             clientes.Add(client);
         }
 
+        public void RemoveClient(ServerClient client)
+        {
+            clientes.Remove(client);
+        }
 
+        public void RouteMessage(IMensaje message)
+        {
+            mensajes.Enqueue(message);
+        }
     }
 }

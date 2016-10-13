@@ -5,13 +5,20 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace SistemaTrackingBiblioteca.Serializacion
+namespace SistemaTrackingBiblioteca.Mensajes
 {
-    public class MensajeConexion :IMensaje
+    public class MsgConexion : IMensaje
     {
+        [JsonConstructor]
+        public MsgConexion() { }
+
+        [JsonProperty]
         public string From { get; set; }
+        [JsonProperty]
         public string To { get; set; }
-        public DateTime fecha { get; set; }
+        [JsonProperty]
+        public DateTime Fecha { get; set; }
+        [JsonProperty]
         public string Mensaje { get; set; }
 
     }
