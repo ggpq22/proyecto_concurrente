@@ -10,10 +10,17 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class Cliente extends AsyncTask<Void, Void, Void> {
 
@@ -36,20 +43,19 @@ public class Cliente extends AsyncTask<Void, Void, Void> {
         Socket socket = null;
 
         try{
-            Socket cliente = new Socket("10.75.60.187",8999);
+            Socket cliente = new Socket(addr,port);
 
-            InputStreamReader isr = new InputStreamReader(System.in);
-            BufferedReader br = new BufferedReader(isr);
-            ObjectOutputStream oos = new ObjectOutputStream(cliente.getOutputStream()); // para enviar datos al server
-            ObjectInputStream ois = new ObjectInputStream(cliente.getInputStream()); // para recibir datos del server
+            //Creamos el objeto json
+            //JSONObject jsonParam = new JSONObject();
+            //jsonParam.put("mensaje", mensaje);
 
-            oos.writeObject(mensaje);
-            respuesta = ois.readObject().toString();
+            DataOutputStream dos = new DataOutputStream(cliente.getOutputStream()); // para enviar datos al servidor
+            DataInputStream dis = new DataInputStream(cliente.getInputStream()); // para recibir datos del servidor
 
-            isr.close();
-            br.close();
-            oos.close();
-            ois.close();
+            dos.writeUTF(serializeToJson(new Mensaje(mensaje)));
+
+            dos.close();
+            dis.close();
             cliente.close();
 
         }catch(Exception e){
@@ -57,6 +63,12 @@ public class Cliente extends AsyncTask<Void, Void, Void> {
             respuesta = e.toString();
         }
         return null;
+    }
+
+    public String serializeToJson(Mensaje myClass) {
+        Gson gson = new Gson();
+        String j = gson.toJson(myClass);
+        return j;
     }
 
     @Override
