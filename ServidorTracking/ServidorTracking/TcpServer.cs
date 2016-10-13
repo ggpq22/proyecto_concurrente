@@ -27,7 +27,11 @@ namespace ServidorTracking
         }
 
         TcpListener listener;
-
+        /// <summary>
+        /// Constructor de TcpServer
+        /// </summary>
+        /// <param name="ipAddress">Direccion Ip</param>
+        /// <param name="port">Puerto</param>
         public TcpServer(string ipAddress, int port)
         {
             this.ipAddress = IPAddress.Parse(ipAddress);
