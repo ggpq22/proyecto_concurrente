@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 namespace SistemaTrackingBiblioteca.Mensajes
 {
     [JsonObject]
-    class MsgLocalizacion : IMensaje
+    public class MsgLocalizacion : IMensaje
     {
         [JsonConstructor]
         public MsgLocalizacion() { }
