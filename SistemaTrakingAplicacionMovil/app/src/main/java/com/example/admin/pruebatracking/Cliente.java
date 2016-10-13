@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
@@ -42,25 +43,29 @@ public class Cliente extends AsyncTask<Void, Void, Void> {
 
         Socket socket = null;
 
-        try{
-            Socket cliente = new Socket(addr,port);
+        try {
+            socket = new Socket( addr, port);
+            PrintWriter writer = new PrintWriter(socket.getOutputStream());
+            writer.print(serializeToJson(new Mensaje(mensaje)));
+            writer.flush();
+            socket.shutdownOutput();
 
-            //Creamos el objeto json
-            //JSONObject jsonParam = new JSONObject();
-            //jsonParam.put("mensaje", mensaje);
+            /* ************ esperando respuesta ************** */
 
-            DataOutputStream dos = new DataOutputStream(cliente.getOutputStream()); // para enviar datos al servidor
-            DataInputStream dis = new DataInputStream(cliente.getInputStream()); // para recibir datos del servidor
+            BufferedReader r = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            /*StringBuilder total = new StringBuilder();
+            String line;
+            while ((line = r.readLine()) != null) {
+                total.append(line);
+            }*/
+            String linea = r.readLine();
+            respuesta = deserializeFromJson(linea).getMensaje();
 
-            dos.writeUTF(serializeToJson(new Mensaje(mensaje)));
-
-            dos.close();
-            dis.close();
-            cliente.close();
-
-        }catch(Exception e){
+            socket.close();
+            writer.close();
+        } catch (Exception e) {
             e.printStackTrace();
-            respuesta = e.toString();
+            respuesta = "Error! "+e.toString();
         }
         return null;
     }
@@ -69,6 +74,12 @@ public class Cliente extends AsyncTask<Void, Void, Void> {
         Gson gson = new Gson();
         String j = gson.toJson(myClass);
         return j;
+    }
+
+    public Mensaje deserializeFromJson(String jsonString) {
+        Gson gson = new Gson();
+        Mensaje m = gson.fromJson(jsonString, Mensaje.class);
+        return m;
     }
 
     @Override
