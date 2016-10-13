@@ -10,9 +10,13 @@ namespace SistemaTrackingBiblioteca.Mensajes
     public class MsgConexion : Mensaje
     {
         [JsonConstructor]
-        public MsgConexion() { }
+        public MsgConexion() {
+            base.Tipo = this.GetType().ToString();
+        }
 
         public string Mensaje { get; set; }
 
+        
+        }
     }
 }

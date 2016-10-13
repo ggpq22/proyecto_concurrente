@@ -11,5 +11,6 @@ namespace SistemaTrackingBiblioteca.Mensajes
         public string From { get; set; }
         public string To { get; set; }
         public DateTime Fecha { get; set; }
+        public string Tipo { get; set; }
     }
 }
