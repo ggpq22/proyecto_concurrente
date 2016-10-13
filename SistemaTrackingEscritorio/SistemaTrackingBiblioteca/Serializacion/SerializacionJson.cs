@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace SistemaTrackingBiblioteca.Mensajes
+namespace SistemaTrackingBiblioteca.Serializacion
 {
     public static class SerializarcionJson
     {
