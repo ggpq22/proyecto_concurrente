@@ -50,6 +50,14 @@ namespace ServidorTracking
             clientes.Add(client);
         }
 
+        public void RemoveClient(ServerClient client)
+        {
+            clientes.Remove(client);
+        }
 
+        public void RouteMessage(IMensaje message)
+        {
+            mensajes.Enqueue(message);
+        }
     }
 }
