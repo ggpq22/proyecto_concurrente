@@ -41,12 +41,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-
     <Compile Include="Mensajes\IMensaje.cs" />
     <Compile Include="Mensajes\MsgConexion.cs" />
     <Compile Include="Mensajes\MsgLocalizacion.cs" />
-    <Compile Include="Serializacion\SerializarcionJson.cs" />
-
+    <Compile Include="Serializacion\SerializacionJson.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
