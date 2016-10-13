@@ -40,6 +40,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entidades\Cuenta.cs" />
+    <Compile Include="Entidades\Grupo.cs" />
+    <Compile Include="Entidades\Grupo_Cuentas.cs" />
+    <Compile Include="Entidades\Historial.cs" />
+    <Compile Include="Entidades\Servidor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Mensajes\IMensaje.cs" />
     <Compile Include="Mensajes\MsgConexion.cs" />

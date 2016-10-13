@@ -1,0 +1,21 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SistemaTrackingBiblioteca.Entidades
+{
+    //create table cuenta
+    //(
+    //    idCuenta integer primary key,
+    //    usuario varchar(50),
+    //    pass varchar(50)
+    //);
+    public class Cuenta
+    {
+        public int IdCuenta { get; set; }
+        public string Usuario { get; set; }
+        public string pass { get; set; }
+    }
+}
