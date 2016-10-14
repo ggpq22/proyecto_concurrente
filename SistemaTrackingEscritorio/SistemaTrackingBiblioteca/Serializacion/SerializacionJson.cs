@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using SistemaTrackingBiblioteca.Mensajes;
+
 
 namespace SistemaTrackingBiblioteca.Serializacion
 {
@@ -14,9 +16,35 @@ namespace SistemaTrackingBiblioteca.Serializacion
             return JsonConvert.SerializeObject(clase);
         }
 
-        public static Tipo Deserializar<Tipo>(string json)
+        public static Object Deserializar(string json)
         {
-            return  JsonConvert.DeserializeObject<Tipo>(json);
+            Mensaje msg = JsonConvert.DeserializeObject<Mensaje>(json);
+
+            return DevolverMensaje(msg.Tipo, json);
         }
+
+        #region helper
+
+        public static Object DevolverMensaje(string tipo, string json)
+        {
+            Object obj = new Object();
+
+            switch (tipo)
+            {
+                case "MsgConexion":
+                    obj = JsonConvert.DeserializeObject<MsgConexion>(json);
+                    break;
+                case "MsgLocalizacion":
+                    obj = JsonConvert.DeserializeObject<MsgLocalizacion>(json);
+                    break;
+                default:
+                    break;
+            }
+
+            return obj;
+        }
+
+
+        #endregion
     }
 }
