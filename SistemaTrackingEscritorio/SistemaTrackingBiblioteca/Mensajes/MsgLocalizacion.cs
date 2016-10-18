@@ -12,7 +12,7 @@ namespace SistemaTrackingBiblioteca.Mensajes
     {
         public MsgLocalizacion()
         {
-            base.Tipo = "MsgLocalizacion";
+            base.Tipo = this.GetType().Name;
         }
 
         public string Longitud { get; set; }

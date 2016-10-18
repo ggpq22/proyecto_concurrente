@@ -11,7 +11,7 @@ namespace SistemaTrackingBiblioteca.Mensajes
     {
         [JsonConstructor]
         public MsgConexion() {
-            base.Tipo = "MsgConexion";
+            base.Tipo = this.GetType().Name;
         }
 
         public string Mensaje { get; set; }

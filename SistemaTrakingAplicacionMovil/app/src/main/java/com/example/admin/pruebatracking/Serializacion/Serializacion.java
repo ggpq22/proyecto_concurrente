@@ -1,5 +1,6 @@
 package com.example.admin.pruebatracking.Serializacion;
 
+import com.example.admin.pruebatracking.Mensajes.*;
 import com.google.gson.Gson;
 
 import java.net.Proxy;
@@ -7,17 +8,28 @@ import java.net.Proxy;
 /**
  * Created by Mario on 13/10/2016.
  */
-public class Serializacion<Tipo>{
+public class Serializacion{
 
-    public String Serializar(Tipo objeto){
+    public static String Serializar(Mensaje objeto){
         Gson gson = new Gson();
         return gson.toJson(objeto);
     }
 
 
-    public  Tipo Deserealizar(String json){
+    public static Object Deserealizar(String json){
         Gson gson = new Gson();
-        return gson.fromJson(json, Tipo);
-    }
+        Mensaje msg = gson.fromJson(json, Mensaje.class);
 
+        Object o = new Object();
+
+        switch (msg.getTipo()){
+            case "MsgConexion":
+                o = gson.fromJson(json,MsgConexion.class);
+                break;
+            case "MsgLocalizacion":
+                o = gson.fromJson(json,MsgLocalizacion.class);
+                break;
+        }
+        return  o;
+    }
 }
