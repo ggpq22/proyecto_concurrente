@@ -13,7 +13,7 @@ namespace ServidorTracking
     class MessageRouter
     {
         List<ServerClient> clientes = new List<ServerClient>();
-        ConcurrentQueue<IMensaje> mensajes = new ConcurrentQueue<IMensaje>();
+        ConcurrentQueue<Mensaje> mensajes = new ConcurrentQueue<Mensaje>();
         Thread routing;
 
         public MessageRouter()
@@ -29,7 +29,7 @@ namespace ServidorTracking
             {
                 if (mensajes.Count > 0)
                 {
-                    IMensaje m;
+                    Mensaje m;
 
                     while (mensajes.TryDequeue(out m))
                     {
@@ -55,7 +55,7 @@ namespace ServidorTracking
             clientes.Remove(client);
         }
 
-        public void RouteMessage(IMensaje message)
+        public void RouteMessage(Mensaje message)
         {
             mensajes.Enqueue(message);
         }

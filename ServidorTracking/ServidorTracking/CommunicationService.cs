@@ -17,16 +17,16 @@ namespace ServidorTracking
         Thread events;
 
         // Events: Connect
-        public delegate void CommunicationEventHandler(object sender, IMensaje mensaje);
+        public delegate void CommunicationEventHandler(object sender, Mensaje mensaje);
         public event CommunicationEventHandler Connect;
-        protected virtual void OnConnect(IMensaje e)
+        protected virtual void OnConnect(Mensaje e)
         {
             if (Connect != null)
                 Connect(this, e);
         }
         // Events: Disconnect
         public event CommunicationEventHandler Disconnect;
-        protected virtual void OnDisconnect(IMensaje e)
+        protected virtual void OnDisconnect(Mensaje e)
         {
             if (Disconnect != null)
                 Disconnect(this, e);
@@ -34,7 +34,7 @@ namespace ServidorTracking
 
         // Events: LocationChanged
         public event CommunicationEventHandler LocationChanged;
-        protected virtual void OnLocationChanged(IMensaje e)
+        protected virtual void OnLocationChanged(Mensaje e)
         {
             if (LocationChanged != null)
                 LocationChanged(this, e);
@@ -54,20 +54,20 @@ namespace ServidorTracking
         private void incomingMessage()
         {
             string str;
-            IMensaje message;
+            Mensaje message;
 
             while (true)
             {
                 str = delivery.RecieveMessage();
-                message = SerializarcionJson.Deserializar<IMensaje>(str);
-
+                message = SerializarcionJson.Deserializar(str) as Mensaje;
+                // TODO: Descerializar a Mensaje, checkear el tipo y descerializar a el tipo que corresponde
                 MsgConexion menCon;
                 MsgLocalizacion menLoc;
 
                 if (message is MsgConexion)
                 {
                     menCon = message as MsgConexion;
-
+                    
                     if (menCon.Mensaje == "conectar")
                     {
                         OnConnect(menCon);
@@ -86,9 +86,9 @@ namespace ServidorTracking
             }
         }
 
-        public void SendToClient(IMensaje message)
+        public void SendToClient(Mensaje message)
         {
-            string str = SerializarcionJson.Serializar<IMensaje>(message);
+            string str = SerializarcionJson.Serializar<Mensaje>(message);
 
             delivery.SendMessage(str);
         }
