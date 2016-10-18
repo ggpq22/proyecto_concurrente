@@ -5,8 +5,8 @@ package com.example.admin.pruebatracking.Mensajes;
  */
 public class MsgConexion extends Mensaje{
 
-    public MsgConexion(String to, String from, String mensaje) {
-        super(to, from, "MsgConexion");
+    public MsgConexion(String to, String from, String fecha, String mensaje) {
+        super(to, from, fecha, "MsgConexion");
         this.mensaje = mensaje;
     }
 

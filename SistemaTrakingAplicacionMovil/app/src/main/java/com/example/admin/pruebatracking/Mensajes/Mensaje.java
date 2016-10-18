@@ -6,11 +6,13 @@ package com.example.admin.pruebatracking.Mensajes;
 public class Mensaje {
     private String to;
     private String from;
+    private String fecha;
 
-    public Mensaje(String to, String from, String tipo) {
+    public Mensaje(String to, String from, String fecha, String tipo) {
         this.to = to;
         this.from = from;
         this.tipo = tipo;
+        this.fecha = fecha;
     }
 
     private String tipo;

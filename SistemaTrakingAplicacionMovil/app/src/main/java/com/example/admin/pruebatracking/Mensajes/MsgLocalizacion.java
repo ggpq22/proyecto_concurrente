@@ -7,8 +7,8 @@ public class MsgLocalizacion extends Mensaje {
 
 
 
-    public MsgLocalizacion(String to, String from, String latitud, String longitud) {
-        super(to, from, "MsgLocalizacion");
+    public MsgLocalizacion(String to, String from, String fecha, String latitud, String longitud) {
+        super(to, from, fecha, "MsgLocalizacion");
         this.latitud = latitud;
         this.longitud = longitud;
 

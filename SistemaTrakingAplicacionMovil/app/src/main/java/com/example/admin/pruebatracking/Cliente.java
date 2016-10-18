@@ -18,6 +18,8 @@ import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.admin.pruebatracking.Mensajes.MsgConexion;
+import com.example.admin.pruebatracking.Serializacion.Serializacion;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -46,7 +48,7 @@ public class Cliente extends AsyncTask<Void, Void, Void> {
         try {
             socket = new Socket( addr, port);
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
-            writer.print(serializeToJson(new Mensaje(mensaje)));
+            writer.print(Serializacion.Serializar(new MsgConexion("yo", "yo", "2016-10-18",mensaje)));
             writer.flush();
             socket.shutdownOutput();
 
@@ -59,8 +61,8 @@ public class Cliente extends AsyncTask<Void, Void, Void> {
                 total.append(line);
             }*/
             String linea = r.readLine();
-            Mensaje msj = deserializeFromJson(linea);
-            respuesta = msj.getMensaje();
+            MsgConexion msj = (MsgConexion)Serializacion.Deserealizar(linea);
+            respuesta = "TO: "+msj.getTo()+" FROM: "+msj.getFrom()+" Mensaje: "+msj.getMensaje();
 
             socket.close();
             writer.close();
@@ -71,17 +73,6 @@ public class Cliente extends AsyncTask<Void, Void, Void> {
         return null;
     }
 
-    public String serializeToJson(Mensaje myClass) {
-        Gson gson = new Gson();
-        String j = gson.toJson(myClass);
-        return j;
-    }
-
-    public Mensaje deserializeFromJson(String jsonString) {
-        Gson gson = new Gson();
-        Mensaje m = gson.fromJson(jsonString, Mensaje.class);
-        return m;
-    }
 
     @Override
     protected void onPostExecute(Void result) {
