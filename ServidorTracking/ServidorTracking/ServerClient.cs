@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Collections.Concurrent;
 using SistemaTrackingBiblioteca.Serializacion;
 using SistemaTrackingBiblioteca.Mensajes;
@@ -25,23 +25,25 @@ namespace ServidorTracking
         TcpClient client;
         CommunicationService service;
         MessageRouter router;
-        ConcurrentQueue<IMensaje> mensajes = new ConcurrentQueue<IMensaje>();
+        ConcurrentQueue<Mensaje> mensajes = new ConcurrentQueue<Mensaje>();
+
+        Thread sending;
 
         // Event Methods
-        void service_Connect(object sender, IMensaje message)
+        void service_Connect(object sender, Mensaje message)
         {
             MsgConexion msn = message as MsgConexion;
             this.name = msn.From;
             router.RouteMessage(msn);
         }
-        void service_Disconnect(object sender, IMensaje message)
+        void service_Disconnect(object sender, Mensaje message)
         {
             MsgConexion msn = message as MsgConexion;
             router.RouteMessage(msn);
             CloseClient();
             router.RemoveClient(this);
         }
-        void service_LocationChanged(object sender, IMensaje message)
+        void service_LocationChanged(object sender, Mensaje message)
         {
             MsgLocalizacion msn = message as MsgLocalizacion;
             router.RouteMessage(msn);
@@ -57,9 +59,12 @@ namespace ServidorTracking
             service.Connect += service_Connect;
             service.Disconnect += service_Disconnect;
             service.LocationChanged += service_LocationChanged;
+
+            sending = new Thread(sendMessages);
+            sending.Start();
         }
 
-        public void SendToClient(IMensaje message)
+        public void SendToClient(Mensaje message)
         {
             mensajes.Enqueue(message);
         }
@@ -68,6 +73,22 @@ namespace ServidorTracking
         {
             client.Close();
             service.CloseCommunications();
+        }
+
+        private void sendMessages()
+        {
+            while (true)
+            {
+                if (mensajes.Count > 0)
+                {
+                    Mensaje m;
+
+                    while (mensajes.TryDequeue(out m))
+                    {
+                        service.SendToClient(m);
+                    }
+                }
+            }
         }
     }
 }
