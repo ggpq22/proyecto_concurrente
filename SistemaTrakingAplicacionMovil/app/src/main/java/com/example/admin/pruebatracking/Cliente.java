@@ -59,7 +59,8 @@ public class Cliente extends AsyncTask<Void, Void, Void> {
                 total.append(line);
             }*/
             String linea = r.readLine();
-            respuesta = deserializeFromJson(linea).getMensaje();
+            Mensaje msj = deserializeFromJson(linea);
+            respuesta = msj.getMensaje();
 
             socket.close();
             writer.close();
