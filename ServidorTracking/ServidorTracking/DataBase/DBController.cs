@@ -102,7 +102,7 @@ namespace ServidorTracking.DataBase
             return g;
         }
 
-        public Grupo[] GetGrupoByAnfitrion(int idAnfitrion);
+        /*public Grupo[] GetGrupoByAnfitrion(int idAnfitrion);
 
         public Grupo AddCuentaToGrupo(int idIntegrante, int idGrupo);
 
@@ -114,6 +114,6 @@ namespace ServidorTracking.DataBase
 
         public Historial[] GetHistorialByCuenta(int idCuenta);
 
-        public void CreateHistorial(Historial entry);
+        public void CreateHistorial(Historial entry);*/
     }
 }
