@@ -14,6 +14,7 @@ namespace SistemaTrackingBiblioteca.Entidades
     public class Grupo
     {
         public int IdGrupo { get; set; }
-        public int IdAnfitrion { get; set; }
+        public Cuenta Anfitrion { get; set; }
+        public Cuenta[] Integrantes { get; set; }
     }
 }

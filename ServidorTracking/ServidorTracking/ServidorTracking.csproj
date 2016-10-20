@@ -42,6 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommunicationService.cs" />
+    <Compile Include="DataBase\DBController.cs" />
+    <Compile Include="DataBase\DBEnum.cs" />
+    <Compile Include="DataBase\DBManager.cs" />
     <Compile Include="MessageDelivery.cs" />
     <Compile Include="MessageRouter.cs" />
     <Compile Include="Program.cs" />

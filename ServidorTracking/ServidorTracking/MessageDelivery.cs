@@ -13,6 +13,7 @@ namespace ServidorTracking
         StreamWriter writer;
         StreamReader reader;
         NetworkStream stream;
+        TcpClient client;
 
         public NetworkStream Stream
         {
@@ -20,8 +21,9 @@ namespace ServidorTracking
           set { stream = value; }
         }
 
-        public MessageDelivery(NetworkStream stream)
+        public MessageDelivery(NetworkStream stream, TcpClient client)
         {
+            this.client = client;
             this.stream = stream;
         }
 

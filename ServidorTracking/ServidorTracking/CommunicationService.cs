@@ -41,9 +41,9 @@ namespace ServidorTracking
         }
 
         // Constructor
-        public CommunicationService(NetworkStream stream)
+        public CommunicationService(NetworkStream stream, TcpClient client)
         {
-            delivery = new MessageDelivery(stream);
+            delivery = new MessageDelivery(stream, client);
             delivery.OpenDelivery();
 
             events = new Thread(incomingMessage);

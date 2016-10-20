@@ -53,7 +53,7 @@ namespace ServidorTracking
         {
             this.client = client;
             this.router = router;
-            service = new CommunicationService(this.client.GetStream());
+            service = new CommunicationService(this.client.GetStream(), this.client);
 	        
             // Subscribe Events
             service.Connect += service_Connect;
