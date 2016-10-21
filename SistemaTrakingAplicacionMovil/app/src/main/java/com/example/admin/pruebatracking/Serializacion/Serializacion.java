@@ -18,6 +18,7 @@ public class Serializacion{
 
     public static Object Deserealizar(String json){
         Gson gson = new Gson();
+
         Mensaje msg = gson.fromJson(json, Mensaje.class);
 
         Object o = new Object();

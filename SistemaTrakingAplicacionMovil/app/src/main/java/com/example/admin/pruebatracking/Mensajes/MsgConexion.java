@@ -7,16 +7,16 @@ public class MsgConexion extends Mensaje{
 
     public MsgConexion(String to, String from, String fecha, String mensaje) {
         super(to, from, fecha, "MsgConexion");
-        this.mensaje = mensaje;
+        this.Mensaje = mensaje;
     }
 
     public String getMensaje() {
-        return mensaje;
+        return Mensaje;
     }
 
     public void setMensaje(String mensaje) {
-        this.mensaje = mensaje;
+        this.Mensaje = mensaje;
     }
 
-    private String mensaje;
+    private String Mensaje;
 }
