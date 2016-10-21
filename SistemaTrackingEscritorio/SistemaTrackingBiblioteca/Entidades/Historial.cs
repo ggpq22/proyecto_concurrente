@@ -16,7 +16,7 @@ namespace SistemaTrackingBiblioteca.Entidades
     //    long decimal
     //);
 
-    class Historial
+    public class Historial
     {
         public int IdHistorial { get; set; }
 
