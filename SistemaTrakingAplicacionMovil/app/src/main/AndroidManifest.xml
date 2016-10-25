@@ -6,6 +6,7 @@
         android:minSdkVersion="19"
         android:targetSdkVersion="19" />
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
         android:allowBackup="true"
@@ -13,12 +14,20 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".ListarUnChat"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".ListarUnGrupo"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 

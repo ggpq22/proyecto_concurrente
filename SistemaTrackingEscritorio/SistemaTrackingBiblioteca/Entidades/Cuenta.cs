@@ -16,6 +16,6 @@ namespace SistemaTrackingBiblioteca.Entidades
     {
         public int IdCuenta { get; set; }
         public string Usuario { get; set; }
-        public string pass { get; set; }
+        public string Pass { get; set; }
     }
 }

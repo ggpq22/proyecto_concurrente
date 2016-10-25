@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/opcion_inicio"
+            android:checked="true"
+            android:icon="@drawable/ic_home"
+            android:title="@string/opcion_inicio" />
+    </group>
+
+    <item android:title="General">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/opcion_creditos"
+                    android:icon="@drawable/ic_group"
+                    android:title="@string/opcion_creditos" />
+                <item
+                    android:id="@+id/opcion_contacto"
+                    android:icon="@drawable/ic_call"
+                    android:title="@string/opcion_contacto" />
+            </group>
+        </menu>
+    </item>
+
+</menu>

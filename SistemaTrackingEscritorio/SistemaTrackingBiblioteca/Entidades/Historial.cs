@@ -20,9 +20,9 @@ namespace SistemaTrackingBiblioteca.Entidades
     {
         public int IdHistorial { get; set; }
 
-        public int IdGrupo { get; set; }
+        public Grupo Grupo { get; set; }
 
-        public int IdCuenta { get; set; }
+        public Cuenta Cuenta { get; set; }
 
         public DateTime Fecha { get; set; }
 

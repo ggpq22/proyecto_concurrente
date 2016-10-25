@@ -133,7 +133,7 @@ namespace ServidorTracking.DataBase
                 try
                 {
                     cmd.Connection = getConnection();
-                    if (action == QueryType.ROWS || action == QueryType.ID)
+                    if (action == QueryType.UPDATE || action == QueryType.INSERT)
                     {
                         valor = cmd.ExecuteNonQuery();
                     }
@@ -202,7 +202,7 @@ namespace ServidorTracking.DataBase
                 try
                 {
                     cmd.Connection = getConnection();
-                    if (action == QueryType.ROWS || action == QueryType.ID)
+                    if (action == QueryType.UPDATE || action == QueryType.INSERT)
                     {
                         valor = cmd.ExecuteNonQuery();
                     }

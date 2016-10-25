@@ -1,3 +1,12 @@
 <resources>
-    <string name="app_name">PruebaTracking</string>
+    <string name="app_name">Sistema de Monitoreo</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="opcion_inicio">Inicio</string>
+    <string name="opcion_creditos">Créditos</string>
+    <string name="opcion_contacto">Contacto</string>
+
+    <string name="titulo_tab_gps">GPS</string>
+    <string name="titulo_tab_grupos">GRUPOS</string>
+    <string name="titulo_tab_chats">CHATS</string>
 </resources>

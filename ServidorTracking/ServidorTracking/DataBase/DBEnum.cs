@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace ServidorTracking.DataBase
 {
-    public enum QueryType { ROWS, ID };
+    public enum QueryType { UPDATE, INSERT };
 }
