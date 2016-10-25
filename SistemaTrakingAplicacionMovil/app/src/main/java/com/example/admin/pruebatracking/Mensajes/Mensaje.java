@@ -1,44 +1,56 @@
 package com.example.admin.pruebatracking.Mensajes;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Mario on 18/10/2016.
  */
 public class Mensaje {
-    private String to;
-    private String from;
-    private String fecha;
+    private String To;
+    private String From;
+    private String Fecha;
+    private String Tipo;
+    private boolean IsValido;
+    public ArrayList<String> Errores = new ArrayList<>();
 
     public Mensaje(String to, String from, String fecha, String tipo) {
-        this.to = to;
-        this.from = from;
-        this.tipo = tipo;
-        this.fecha = fecha;
+        this.To = to;
+        this.From = from;
+        this.Tipo = tipo;
+        this.Fecha = fecha;
     }
 
-    private String tipo;
+    public String getFecha(){
+        return Fecha;
+    }
+
+    public void setFecha(String fecha){
+        this.Fecha = fecha;
+    }
 
     public String getTo() {
-        return to;
+        return To;
     }
 
     public void setTo(String to) {
-        this.to = to;
+        this.To = to;
     }
 
     public String getFrom() {
-        return from;
+        return From;
     }
 
     public void setFrom(String from) {
-        this.from = from;
+        this.From = from;
     }
 
     public String getTipo() {
-        return tipo;
+        return Tipo;
     }
 
     public void setTipo(String tipo) {
-        this.tipo = tipo;
+        this.Tipo = tipo;
     }
 
 

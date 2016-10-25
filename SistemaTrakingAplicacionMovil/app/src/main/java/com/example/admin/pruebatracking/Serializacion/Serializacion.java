@@ -19,6 +19,7 @@ public class Serializacion{
 
 
     public static Object Deserealizar(String json){
+<<<<<<< HEAD
         Log.i("inicio de deser",json);
         Gson gson = null;
         try {
@@ -31,6 +32,12 @@ public class Serializacion{
         Log.i("si crea gson","sep");
         Mensaje msg = gson.fromJson(json, MsgConexion.class);
         Log.i("si funciona",msg.getTipo());
+=======
+        Gson gson = new Gson();
+
+        Mensaje msg = gson.fromJson(json, Mensaje.class);
+
+>>>>>>> f1dff8742bf8c90baa572d100cafe2261e5ddcb0
         Object o = new Object();
         Log.i("TIPO",msg.getTipo());
 

@@ -12,5 +12,7 @@ namespace SistemaTrackingBiblioteca.Mensajes
         public string To { get; set; }
         public DateTime Fecha { get; set; }
         public string Tipo { get; set; }
+        public bool IsValido { get; set; }
+        public List<string> Errores = new List<string>();
     }
 }
