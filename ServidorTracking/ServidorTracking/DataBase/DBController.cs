@@ -24,17 +24,9 @@ namespace ServidorTracking.DataBase
             else
             {
                 int id;
-                id = dbMan.execute("insert into cuenta(usuario, pass, state) values(" + cuenta.Usuario + ", " + cuenta.pass + ", 1)", QueryType.ID);
-                data = dbMan.search("select * from cuenta where idCuenta = " + id);
+                id = dbMan.execute("insert into cuenta(usuario, pass, state) values(" + cuenta.Usuario + ", " + cuenta.pass + ", 1)", QueryType.INSERT);
 
-                Cuenta c = new Cuenta();
-
-                foreach(DataRow dt in data.Rows)
-                {
-                    c.IdCuenta = Convert.ToInt32(dt["idCuenta"]);
-                    c.Usuario = Convert.ToString(dt["usuario"]);
-                    c.pass = Convert.ToString(dt["pass"]);
-                }
+                Cuenta c = GetCuenta(id);
 
                 return c;
             }
@@ -42,38 +34,41 @@ namespace ServidorTracking.DataBase
 
         public void DeleteCuenta(int idCuenta)
         {
-            dbMan.execute("update cuenta set state = 0 where idCuenta = " + idCuenta, QueryType.ID);
+            dbMan.execute("update cuenta set state = 0 where idCuenta = " + idCuenta, QueryType.UPDATE);
+        }
+
+        public Cuenta GetCuenta(int idCuenta)
+        {
+            DataTable data;
+
+            data = dbMan.search("select * from cuenta where idCuenta = " + idCuenta);
+
+            Cuenta c = new Cuenta();
+
+            foreach (DataRow dt in data.Rows)
+            {
+                c.IdCuenta = Convert.ToInt32(dt["idCuenta"]);
+                c.Usuario = Convert.ToString(dt["usuario"]);
+                c.pass = Convert.ToString(dt["pass"]);
+            }
+
+            return c;
         }
 
         public Grupo CreateGrupo(Grupo grupo)
         {
-            DataTable dataGrupo;
-            DataTable dataAnfitrion;
+            int id = dbMan.execute("insert into Grupo(idAnfitrion, state) values(" + grupo.Anfitrion.IdCuenta + ", 1)", QueryType.INSERT);
 
-            int id = dbMan.execute("insert into Grupo(idAnfitrion, state) values(" + grupo.Anfitrion.IdCuenta + ", 1)", QueryType.ID);
-
-            dataGrupo = dbMan.search("select * from Grupo where idGrupo = " + id);
-            dataAnfitrion = dbMan.search("select * from Cuenta where idCuenta = " + Convert.ToInt32(dataGrupo.Rows[1]["idAnfitrion"]));
-
-            Grupo g = new Grupo();
-
-            foreach (DataRow dt in dataGrupo.Rows)
-            {
-                g.IdGrupo = Convert.ToInt32(dt["idGrupo"]);
-                g.Anfitrion.IdCuenta = Convert.ToInt32(dataAnfitrion.Rows[1]["idCuenta"]);
-                g.Anfitrion.Usuario = Convert.ToString(dataAnfitrion.Rows[1]["usuario"]);
-                g.Anfitrion.pass = Convert.ToString(dataAnfitrion.Rows[1]["pass"]);
-            }
+            Grupo g = GetGrupo(id);
 
             return g;
         }
 
         public Grupo GetGrupo(int idGrupo)
         {
-            DataTable dataGrupo, dataAnfitrion, dataIntegrantes;
+            DataTable dataGrupo, dataIntegrantes;
 
             dataGrupo = dbMan.search("select * from grupo where idGrupo = " + idGrupo);
-            dataAnfitrion = dbMan.search("select * from cuenta where idCuenta = " + Convert.ToInt32(dataGrupo.Rows[1]["idAnfitrion"]));
             dataIntegrantes = dbMan.search("select * from grupo_cuentas where idGrupo = " + idGrupo);
 
             Grupo g = new Grupo();
@@ -81,39 +76,107 @@ namespace ServidorTracking.DataBase
             foreach (DataRow dt in dataGrupo.Rows)
             {
                 g.IdGrupo = Convert.ToInt32(dt["idGrupo"]);
-                g.Anfitrion.IdCuenta = Convert.ToInt32(dataAnfitrion.Rows[1]["idCuenta"]);
-                g.Anfitrion.Usuario = Convert.ToString(dataAnfitrion.Rows[1]["usuario"]);
-                g.Anfitrion.pass = Convert.ToString(dataAnfitrion.Rows[1]["pass"]);
+                g.Anfitrion = GetCuenta(Convert.ToInt32(dataGrupo.Rows[1]["idAnfitrion"]));
             }
 
             List<Cuenta> c = new List<Cuenta>();
-            int i = 0;
 
             foreach (DataRow dt in dataIntegrantes.Rows)
             {
-                c.Add(new Cuenta());
-                c[i].IdCuenta = Convert.ToInt32(dt["idCuenta"]);
-                c[i].Usuario = Convert.ToString(dt["usuario"]);
-                c[i].pass = Convert.ToString(dt["pass"]);
+                c.Add(GetCuenta(Convert.ToInt32(dt["idCuenta"])));
             }
 
-            g.Integrantes = c.ToArray();
+            g.Integrantes = c;
 
             return g;
         }
 
-        /*public Grupo[] GetGrupoByAnfitrion(int idAnfitrion);
+        public List<Grupo> GetGrupoByAnfitrion(int idAnfitrion)
+        {
+            DataTable dataGrupo;
 
-        public Grupo AddCuentaToGrupo(int idIntegrante, int idGrupo);
+            dataGrupo = dbMan.search("select * from grupo where idAnfitrion = " + idAnfitrion);
 
-        public Grupo DeleteCuentaFromGrupo(int idIntegrante);
+            List<Grupo> g = new List<Grupo>();
 
-        public Grupo DeleteGrupo(int idGrupo);
+            foreach (DataRow dr in dataGrupo.Rows)
+            {
+                g.Add(GetGrupo(Convert.ToInt32(dr["idGrupo"])));
+            }
 
-        public Historial[] GetHistorialByGrupo(int idGrupo);
+            return g;
+        }
 
-        public Historial[] GetHistorialByCuenta(int idCuenta);
+        public Grupo AddCuentaToGrupo(int idIntegrante, int idGrupo)
+        {
+            int id = dbMan.execute("insert into grupo_cuentas(idGrupo, idCuenta) values(" + idGrupo + ", " + idIntegrante + ")", QueryType.INSERT);
 
-        public void CreateHistorial(Historial entry);*/
+            Grupo g = GetGrupo(id);
+
+            return g;
+        }
+        
+        public Grupo DeleteCuentaFromGrupo(int idIntegrante, int idGrupo)
+        {
+            dbMan.execute("delete from grupo_cuentas where idGrupo = " + idGrupo + " and idCuenta = " + idIntegrante, QueryType.UPDATE);
+
+            Grupo grupo = GetGrupo(idGrupo);
+
+            return grupo;
+        }
+
+        public void DeleteGrupo(int idGrupo)
+        {
+            dbMan.execute("delete from grupo where idGrupo = " + idGrupo, QueryType.UPDATE);
+        }
+
+        public List<Historial> GetHistorialByGrupo(int idGrupo)
+        {
+            DataTable data;
+
+            data = dbMan.search("select * from historial where idGrupo = " + idGrupo);
+
+            List<Historial> list = new List<Historial>();
+
+            foreach (DataRow row in data.Rows)
+            {
+                list.Add(new Historial());
+                list[list.Count - 1].IdHistorial = Convert.ToInt32(row["idHistorial"]);
+                list[list.Count - 1].Grupo = GetGrupo(Convert.ToInt32(row["idGrupo"]));
+                list[list.Count - 1].Fecha = Convert.ToDateTime(row["fecha"]);
+                list[list.Count - 1].Cuenta = GetCuenta(Convert.ToInt32(row["idCuenta"]));
+                list[list.Count - 1].Lat = Convert.ToInt32(row["lat"]);
+                list[list.Count - 1].Long = Convert.ToInt32(row["long"]);
+            }
+
+            return list;
+        }
+
+        public List<Historial> GetHistorialByCuenta(int idCuenta)
+        {
+            DataTable data;
+
+            data = dbMan.search("select * from historial where idCuenta = " + idCuenta);
+
+            List<Historial> list = new List<Historial>();
+
+            foreach (DataRow row in data.Rows)
+            {
+                list.Add(new Historial());
+                list[list.Count - 1].IdHistorial = Convert.ToInt32(row["idHistorial"]);
+                list[list.Count - 1].Grupo = GetGrupo(Convert.ToInt32(row["idGrupo"]));
+                list[list.Count - 1].Fecha = Convert.ToDateTime(row["fecha"]);
+                list[list.Count - 1].Cuenta = GetCuenta(Convert.ToInt32(row["idCuenta"]));
+                list[list.Count - 1].Lat = Convert.ToInt32(row["lat"]);
+                list[list.Count - 1].Long = Convert.ToInt32(row["long"]);
+            }
+
+            return list;
+        }
+
+        public void CreateHistorial(Historial entry)
+        {
+            dbMan.execute("insert into historial(idGrupo, idCuenta, fecha, lat, long) values(" + entry.Grupo.IdGrupo + ", " + entry.Cuenta.IdCuenta + ", "+entry.Fecha+", "+entry.Lat+", "+entry.Long+")", QueryType.INSERT);
+        }
     }
 }
