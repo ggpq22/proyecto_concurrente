@@ -1,5 +1,7 @@
 package com.example.admin.pruebatracking.Serializacion;
 
+import android.util.Log;
+
 import com.example.admin.pruebatracking.Mensajes.*;
 import com.google.gson.Gson;
 
@@ -17,10 +19,20 @@ public class Serializacion{
 
 
     public static Object Deserealizar(String json){
-        Gson gson = new Gson();
-        Mensaje msg = gson.fromJson(json, Mensaje.class);
-
+        Log.i("inicio de deser",json);
+        Gson gson = null;
+        try {
+            gson = new Gson();
+        }
+        catch (Exception e)
+        {
+            Log.i("ERROR:" ,e.getMessage());
+        }
+        Log.i("si crea gson","sep");
+        Mensaje msg = gson.fromJson(json, MsgConexion.class);
+        Log.i("si funciona",msg.getTipo());
         Object o = new Object();
+        Log.i("TIPO",msg.getTipo());
 
         switch (msg.getTipo()){
             case "MsgConexion":

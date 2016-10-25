@@ -59,29 +59,37 @@ namespace ServidorTracking
             while (true)
             {
                 str = delivery.RecieveMessage();
-                message = SerializarcionJson.Deserializar(str) as Mensaje;
-                // TODO: Descerializar a Mensaje, checkear el tipo y descerializar a el tipo que corresponde
-                MsgConexion menCon;
-                MsgLocalizacion menLoc;
-
-                if (message is MsgConexion)
+                Console.WriteLine(str);
+                if (str != null)
                 {
-                    menCon = message as MsgConexion;
-                    
-                    if (menCon.Mensaje == "conectar")
+                    message = SerializarcionJson.Deserializar(str) as Mensaje;
+                    // TODO: Descerializar a Mensaje, checkear el tipo y descerializar a el tipo que corresponde
+                    MsgConexion menCon;
+                    MsgLocalizacion menLoc;
+
+                    if (message is MsgConexion)
                     {
-                        OnConnect(menCon);
+                        menCon = message as MsgConexion;
+
+                        if (menCon.Mensaje == "conectar")
+                        {
+                            OnConnect(menCon);
+                        }
+                        else if (menCon.Mensaje == "desconectar")
+                        {
+                            OnDisconnect(menCon);
+                        }
                     }
-                    else if (menCon.Mensaje == "desconectar")
+                    else if (message is MsgLocalizacion)
                     {
-                        OnDisconnect(menCon);
+                        menLoc = message as MsgLocalizacion;
+
+                        OnLocationChanged(menLoc);
                     }
                 }
-                else if (message is MsgLocalizacion)
+                else
                 {
-                    menLoc = message as MsgLocalizacion;
-
-                    OnLocationChanged(menLoc);
+                    Console.WriteLine("llega null");
                 }
             }
         }
@@ -89,7 +97,7 @@ namespace ServidorTracking
         public void SendToClient(Mensaje message)
         {
             string str = SerializarcionJson.Serializar<Mensaje>(message);
-
+            Console.WriteLine(str);
             delivery.SendMessage(str);
         }
 

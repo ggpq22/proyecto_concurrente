@@ -15,6 +15,8 @@ import java.net.URLEncoder;
 import java.net.UnknownHostException;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
+import android.util.Xml;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,9 +50,6 @@ public class Cliente extends AsyncTask<Void, Void, Void> {
         try {
             socket = new Socket( addr, port);
             PrintWriter writer = new PrintWriter(socket.getOutputStream());
-            writer.print(Serializacion.Serializar(new MsgConexion("yo", "yo", "2016-10-18",mensaje)));
-            writer.flush();
-            socket.shutdownOutput();
 
             /* ************ esperando respuesta ************** */
 
@@ -60,9 +59,23 @@ public class Cliente extends AsyncTask<Void, Void, Void> {
             while ((line = r.readLine()) != null) {
                 total.append(line);
             }*/
+
+            while(socket.isConnected()) {
+                writer.println(Serializacion.Serializar(new MsgConexion("yo", "yo", "2016-10-18", mensaje)));
+                writer.flush();
+                //socket.shutdownOutput();
+            Log.i("msg","esperando respuesta");
             String linea = r.readLine();
-            MsgConexion msj = (MsgConexion)Serializacion.Deserealizar(linea);
-            respuesta = "TO: "+msj.getTo()+" FROM: "+msj.getFrom()+" Mensaje: "+msj.getMensaje();
+            Log.i("msg","leyo respuesta");
+            Log.i("msg",linea);
+            MsgConexion msj = (MsgConexion) Serializacion.Deserealizar(linea);
+                Log.i("Tarea Deserializar","ya deserialice");
+            //respuesta = "TO: " + msj.getTo() + " FROM: " + msj.getFrom() + " Mensaje: " + msj.getMensaje();
+                Log.i("Tarea Mostrar ",respuesta);
+        }
+
+            Log.i("msg",respuesta);
+
 
             socket.close();
             writer.close();
