@@ -72,7 +72,7 @@ namespace ServidorTracking
         public ServerClient(TcpClient client)
         {
             this.client = client;
-            service = new CommunicationService(this.client.GetStream(), this.client);
+            service = new CommunicationService(this.client);
 	        
             // Subscribe Events
             service.Connect += service_Connect;
