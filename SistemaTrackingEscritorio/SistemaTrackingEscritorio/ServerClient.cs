@@ -69,9 +69,10 @@ namespace ServidorTracking
             OnLocationChanged(msn);
         }
 
-        public ServerClient(TcpClient client)
+        public ServerClient(String ip, int puerto)
         {
-            this.client = client;
+
+            this.client = new TcpClient(ip, puerto);
             service = new CommunicationService(this.client);
 	        
             // Subscribe Events
