@@ -52,7 +52,7 @@ public class FragmentGps extends Fragment {
                             case "ENVIAR LOCALIZACIÓN":
                                 btnLocalizacion.setText("STOP LOCALIZACIÓN");
                                 btnLocalizacion.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_stop1, 0, 0, 0);
-                                myClient = new Cliente(context,editTextAddress.getText()
+                                myClient = new Cliente(btnLocalizacion,savinAnimation,context,editTextAddress.getText()
                                         .toString(), Integer.parseInt(editTextPort
                                         .getText().toString()), response);
                                 myClient.execute();

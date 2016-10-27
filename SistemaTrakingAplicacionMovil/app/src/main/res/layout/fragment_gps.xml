@@ -29,13 +29,14 @@
         android:id="@+id/textIP"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
+        android:text="10.75.60.145"
         android:hint="Server ip address" />
 
     <EditText
         android:id="@+id/textPuerto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="8999"
         android:hint="Server port number" />
 
     <ImageView
@@ -52,7 +53,6 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:enabled="false"
         android:text="ENVIAR LOCALIZACIÓN"
         android:drawableLeft="@drawable/ic_localizacion"
         android:background="@drawable/boton_cuadrado_azul"
