@@ -10,12 +10,35 @@ namespace ServidorTracking.DataBase
 {
     class DBController
     {
-        DBManager dbMan = new DBManager("pablo", "pablo");
+        DBManager dbMan;
+
+        public DBController(string usuario, string password)
+        {
+            dbMan = new DBManager(usuario, password);
+        }
+
+        public Cuenta Login(Cuenta cuenta)
+        {
+            DataTable data;
+            Cuenta c;
+
+            data = dbMan.search("select * from cuenta where state = 1 and usuario = " + cuenta.Usuario + " and pass = " + cuenta.Pass);
+
+            if (data.Rows.Count < 1)
+            {
+                throw new Exception("Su combinacion de Usuario y Contraseña no existen.");
+            }
+            else
+            {
+                c = GetCuenta(Convert.ToInt32(data.Rows[0]["idCuenta"]));
+                return c;
+            }
+        }
 
         public Cuenta CreateCuenta(Cuenta cuenta)
         {
             DataTable data;
-            data = dbMan.search("select * from cuenta where usuario = " + cuenta.Usuario);
+            data = dbMan.search("select * from cuenta where state = 1 and usuario = " + cuenta.Usuario);
 
             if (data.Rows.Count < 1)
             {
@@ -24,7 +47,7 @@ namespace ServidorTracking.DataBase
             else
             {
                 int id;
-                id = dbMan.execute("insert into cuenta(usuario, pass, state) values(" + cuenta.Usuario + ", " + cuenta.pass + ", 1)", QueryType.INSERT);
+                id = dbMan.execute("insert into cuenta(usuario, pass, state) values(" + cuenta.Usuario + ", " + cuenta.Pass + ", 1)", QueryType.INSERT);
 
                 Cuenta c = GetCuenta(id);
 
@@ -41,7 +64,7 @@ namespace ServidorTracking.DataBase
         {
             DataTable data;
 
-            data = dbMan.search("select * from cuenta where idCuenta = " + idCuenta);
+            data = dbMan.search("select * from cuenta where state = 1 and idCuenta = " + idCuenta);
 
             Cuenta c = new Cuenta();
 
@@ -49,7 +72,7 @@ namespace ServidorTracking.DataBase
             {
                 c.IdCuenta = Convert.ToInt32(dt["idCuenta"]);
                 c.Usuario = Convert.ToString(dt["usuario"]);
-                c.pass = Convert.ToString(dt["pass"]);
+                c.Pass = Convert.ToString(dt["pass"]);
             }
 
             return c;
@@ -68,8 +91,8 @@ namespace ServidorTracking.DataBase
         {
             DataTable dataGrupo, dataIntegrantes;
 
-            dataGrupo = dbMan.search("select * from grupo where idGrupo = " + idGrupo);
-            dataIntegrantes = dbMan.search("select * from grupo_cuentas where idGrupo = " + idGrupo);
+            dataGrupo = dbMan.search("select * from grupo where state = 1 and idGrupo = " + idGrupo);
+            dataIntegrantes = dbMan.search("select * from grupo_cuentas where state = 1 and idGrupo = " + idGrupo);
 
             Grupo g = new Grupo();
 
@@ -95,7 +118,23 @@ namespace ServidorTracking.DataBase
         {
             DataTable dataGrupo;
 
-            dataGrupo = dbMan.search("select * from grupo where idAnfitrion = " + idAnfitrion);
+            dataGrupo = dbMan.search("select * from grupo where state = 1 and idAnfitrion = " + idAnfitrion);
+
+            List<Grupo> g = new List<Grupo>();
+
+            foreach (DataRow dr in dataGrupo.Rows)
+            {
+                g.Add(GetGrupo(Convert.ToInt32(dr["idGrupo"])));
+            }
+
+            return g;
+        }
+
+        public List<Grupo> GetGrupoByIntegrante(int idIntegrante)
+        {
+            DataTable dataGrupo;
+
+            dataGrupo = dbMan.search("select * from grupo_cuentas where state = 1 and idCuenta = " + idIntegrante);
 
             List<Grupo> g = new List<Grupo>();
 
@@ -109,7 +148,7 @@ namespace ServidorTracking.DataBase
 
         public Grupo AddCuentaToGrupo(int idIntegrante, int idGrupo)
         {
-            int id = dbMan.execute("insert into grupo_cuentas(idGrupo, idCuenta) values(" + idGrupo + ", " + idIntegrante + ")", QueryType.INSERT);
+            int id = dbMan.execute("insert into grupo_cuentas(idGrupo, idCuenta, state) values(" + idGrupo + ", " + idIntegrante + ", 1)", QueryType.INSERT);
 
             Grupo g = GetGrupo(id);
 
@@ -134,7 +173,7 @@ namespace ServidorTracking.DataBase
         {
             DataTable data;
 
-            data = dbMan.search("select * from historial where idGrupo = " + idGrupo);
+            data = dbMan.search("select * from historial where state = 1 and idGrupo = " + idGrupo);
 
             List<Historial> list = new List<Historial>();
 
@@ -156,7 +195,7 @@ namespace ServidorTracking.DataBase
         {
             DataTable data;
 
-            data = dbMan.search("select * from historial where idCuenta = " + idCuenta);
+            data = dbMan.search("select * from historial where state = 1 and idCuenta = " + idCuenta);
 
             List<Historial> list = new List<Historial>();
 
@@ -176,7 +215,7 @@ namespace ServidorTracking.DataBase
 
         public void CreateHistorial(Historial entry)
         {
-            dbMan.execute("insert into historial(idGrupo, idCuenta, fecha, lat, long) values(" + entry.Grupo.IdGrupo + ", " + entry.Cuenta.IdCuenta + ", "+entry.Fecha+", "+entry.Lat+", "+entry.Long+")", QueryType.INSERT);
+            dbMan.execute("insert into historial(idGrupo, idCuenta, fecha, lat, long, state) values(" + entry.Grupo.IdGrupo + ", " + entry.Cuenta.IdCuenta + ", "+entry.Fecha+", "+entry.Lat+", "+entry.Long+", 1)", QueryType.INSERT);
         }
     }
 }
