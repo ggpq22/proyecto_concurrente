@@ -1,7 +1,5 @@
-package com.example.admin.pruebatracking;
+package com.example.admin.pruebatracking.IU;
 
-import android.app.PendingIntent;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -13,6 +11,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.example.admin.pruebatracking.IU.FragmentContacto;
+import com.example.admin.pruebatracking.IU.FragmentCreditos;
+import com.example.admin.pruebatracking.IU.FragmentInicio;
+import com.example.admin.pruebatracking.R;
 
 
 public class MainActivity extends AppCompatActivity {

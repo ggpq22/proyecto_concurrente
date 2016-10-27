@@ -1,4 +1,4 @@
-package com.example.admin.pruebatracking;
+package com.example.admin.pruebatracking.IU;
 
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -11,10 +11,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.admin.pruebatracking.R;
+
 import java.util.ArrayList;
 
 
-public class ListarUnGrupo extends ActionBarActivity {
+public class ListarUnChat extends ActionBarActivity {
 
     String[] titulos;
     int[] imagenes;
@@ -29,3 +31,4 @@ public class ListarUnGrupo extends ActionBarActivity {
 
     }
 }
+

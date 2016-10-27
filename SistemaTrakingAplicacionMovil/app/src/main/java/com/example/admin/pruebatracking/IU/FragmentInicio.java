@@ -1,4 +1,4 @@
-package com.example.admin.pruebatracking;
+package com.example.admin.pruebatracking.IU;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -11,6 +11,11 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.example.admin.pruebatracking.IU.FragmentChats;
+import com.example.admin.pruebatracking.IU.FragmentGps;
+import com.example.admin.pruebatracking.IU.FragmentGrupos;
+import com.example.admin.pruebatracking.R;
 
 import java.util.ArrayList;
 import java.util.List;
