@@ -1,4 +1,4 @@
-package com.example.admin.pruebatracking;
+package com.example.admin.pruebatracking.IU;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,7 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 
-import java.util.ArrayList;
+import com.example.admin.pruebatracking.R;
 
 
 public class FragmentGrupos extends Fragment {

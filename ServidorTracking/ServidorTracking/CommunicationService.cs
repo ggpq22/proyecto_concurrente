@@ -15,7 +15,7 @@ namespace ServidorTracking
         MessageDelivery delivery;
 
         Thread events;
-
+        String latitud = null, longitud = null;
         // Events: Connect
         public delegate void CommunicationEventHandler(object sender, Mensaje mensaje);
         public event CommunicationEventHandler Connect;
@@ -59,7 +59,6 @@ namespace ServidorTracking
             while (true)
             {
                 str = delivery.RecieveMessage();
-                Console.WriteLine(str);
                 if (str != null)
                 {
                     message = SerializarcionJson.Deserializar(str) as Mensaje;
@@ -83,7 +82,31 @@ namespace ServidorTracking
                     else if (message is MsgLocalizacion)
                     {
                         menLoc = message as MsgLocalizacion;
+                        if (longitud == null)
+                        {
+                            longitud = menLoc.Longitud;
+                            latitud = menLoc.Latitud;
+                        }
+                        String newlongitud = menLoc.Longitud;
+                        String newlatitud = menLoc.Latitud;
 
+                        if (longitud == newlongitud)
+                        {
+                            Console.WriteLine("longitud igual");
+                        }
+                        else
+                        {
+                            Console.WriteLine("longitud distinta");
+                        }
+
+                        if (latitud== newlatitud)
+                        {
+                            Console.WriteLine("latitud igual");
+                        }
+                        else
+                        {
+                            Console.WriteLine("latitud distinta");
+                        }
                         OnLocationChanged(menLoc);
                     }
                 }
