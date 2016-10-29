@@ -13,14 +13,10 @@ namespace SistemaTrackingBiblioteca.Entidades
     //    ip varchar(50),
     //    puerto varchar(50)
     //);
-    public class Servidor
+    public class Servidor : DBEntidad
     {
-        public int IdServidor { get; set; }
-
         public string Nombre { get; set; }
-
         public string Ip { get; set; }
-
         public string Puerto { get; set; }
     }
 }

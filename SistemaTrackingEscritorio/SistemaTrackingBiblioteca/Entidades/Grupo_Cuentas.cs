@@ -11,10 +11,8 @@ namespace SistemaTrackingBiblioteca.Entidades
     //    idGrupo integer foreign key references grupo,
     //    idCuenta integer foreign key references cuenta
     //);
-    public class Grupo_Cuentas
+    public class Grupo_Cuentas : DBEntidad
     {
-        public int IdGrupo { get; set; }
-
         public int IdCuenta { get; set; }
 
     }
