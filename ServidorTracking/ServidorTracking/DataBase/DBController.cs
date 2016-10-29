@@ -82,6 +82,11 @@ namespace ServidorTracking.DataBase
         {
             int id = dbMan.execute("insert into Grupo(idAnfitrion, state) values(" + grupo.Anfitrion.Id + ", 1)", QueryType.INSERT);
 
+            foreach (Cuenta c in grupo.Integrantes)
+            {
+                AddCuentaToGrupo(c.Id, id);
+            }
+
             Grupo g = GetGrupo(id);
 
             return g;
