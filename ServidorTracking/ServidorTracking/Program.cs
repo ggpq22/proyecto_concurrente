@@ -11,11 +11,7 @@ namespace ServidorTracking
     {
         static void Main(string[] args)
         {
-<<<<<<< HEAD
             string ip = "10.75.60.51";
-=======
-            string ip = "10.75.60.145";
->>>>>>> 38e1284ff7dedbe86798f7807ba5ada42595118a
             int port = 8999;
 
             TcpServer server = new TcpServer(ip, port);

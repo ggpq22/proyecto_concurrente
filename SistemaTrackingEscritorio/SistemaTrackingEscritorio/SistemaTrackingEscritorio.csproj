@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Mapa</RootNamespace>
     <AssemblyName>Mapa</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -42,6 +42,7 @@
       <HintPath>..\..\gmap\GMap.NET.WindowsForms.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -54,11 +55,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommunicationService.cs" />
+    <Compile Include="Configuracion.cs" />
     <Compile Include="EjemploMapa.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="EjemploMapa.Designer.cs">
       <DependentUpon>EjemploMapa.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Login.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Login.Designer.cs">
+      <DependentUpon>Login.cs</DependentUpon>
     </Compile>
     <Compile Include="MessageDelivery.cs" />
     <Compile Include="Program.cs" />
@@ -66,6 +74,9 @@
     <Compile Include="ServerClient.cs" />
     <EmbeddedResource Include="EjemploMapa.resx">
       <DependentUpon>EjemploMapa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Login.resx">
+      <DependentUpon>Login.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

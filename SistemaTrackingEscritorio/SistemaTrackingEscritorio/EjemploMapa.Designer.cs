@@ -78,6 +78,7 @@
             this.tbIp.Name = "tbIp";
             this.tbIp.Size = new System.Drawing.Size(100, 20);
             this.tbIp.TabIndex = 2;
+            this.tbIp.Text = "10.75.60.145";
             // 
             // tbPuerto
             // 
@@ -85,6 +86,7 @@
             this.tbPuerto.Name = "tbPuerto";
             this.tbPuerto.Size = new System.Drawing.Size(100, 20);
             this.tbPuerto.TabIndex = 3;
+            this.tbPuerto.Text = "8999";
             // 
             // label1
             // 
