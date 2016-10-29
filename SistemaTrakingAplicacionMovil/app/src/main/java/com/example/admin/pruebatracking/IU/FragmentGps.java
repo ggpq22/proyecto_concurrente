@@ -1,10 +1,15 @@
 package com.example.admin.pruebatracking.IU;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +21,9 @@ import android.widget.TextView;
 import com.example.admin.pruebatracking.Cliente;
 import com.example.admin.pruebatracking.R;
 
+import java.io.PrintWriter;
+import java.net.Socket;
+
 
 public class FragmentGps extends Fragment {
 
@@ -25,7 +33,8 @@ public class FragmentGps extends Fragment {
     EditText editTextAddress, editTextPort;
     private AnimationDrawable savinAnimation;
     Context context;
-    Cliente myClient;
+    LocationManager manager;
+    Cliente listener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,16 +61,31 @@ public class FragmentGps extends Fragment {
                             case "ENVIAR LOCALIZACIÓN":
                                 btnLocalizacion.setText("STOP LOCALIZACIÓN");
                                 btnLocalizacion.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_stop1, 0, 0, 0);
-                                myClient = new Cliente(btnLocalizacion,savinAnimation,context,editTextAddress.getText()
-                                        .toString(), Integer.parseInt(editTextPort
-                                        .getText().toString()), response);
-                                myClient.execute();
+
+                                manager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
+
+                                listener = new Cliente(btnLocalizacion, savinAnimation, getActivity(), editTextAddress.getText().toString(), Integer.parseInt(editTextPort.getText().toString()), response);
+                                long tiempo = 1000;
+                                float distancia = (float)0.1;
+
+                                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                    //Requiere permisos para Android 6.0
+                                    Log.e("Location", "No se tienen permisos necesarios!, se requieren.");
+                                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 225);
+                                    return;
+                                }else{
+                                    Log.i("Location", "Permisos necesarios OK!.");
+                                    manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, tiempo, distancia, listener);
+                                }
+
+                                listener.execute();
                                 savinAnimation.start();
                                 break;
                             case "STOP LOCALIZACIÓN":
                                 btnLocalizacion.setText("ENVIAR LOCALIZACIÓN");
                                 btnLocalizacion.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_localizacion, 0, 0, 0);
-                                myClient.cancel(true);
+                                listener.cancel(true);
+                                manager.removeUpdates(listener);
                                 savinAnimation.stop();
                         }
                     }
