@@ -13,14 +13,35 @@ namespace Mapa
 {
     public partial class Login : Form
     {
-        ServerClient server;
-
+        ServerClient server = null;
+        
         public Login()
         {
+            InitializeComponent();
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblNuevaCuenta_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+
+        }
+
+
+        private void ConectarServidor()
+        {
+            if (server == null)
+            {
+                return;
+            }
             var ip = Configuracion.App.Configuracion.GetConfiguracion("IpServidor");
             var puerto = Configuracion.App.Configuracion.GetConfiguracion("PuertoServidor");
+
+
             server = new ServerClient(ip, int.Parse(puerto));
-            InitializeComponent();
         }
     }
 }

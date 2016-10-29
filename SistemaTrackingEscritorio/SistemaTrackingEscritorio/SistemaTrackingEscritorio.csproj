@@ -62,6 +62,12 @@
     <Compile Include="EjemploMapa.Designer.cs">
       <DependentUpon>EjemploMapa.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmRegistroCuenta.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmRegistroCuenta.Designer.cs">
+      <DependentUpon>frmRegistroCuenta.cs</DependentUpon>
+    </Compile>
     <Compile Include="Login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -74,6 +80,9 @@
     <Compile Include="ServerClient.cs" />
     <EmbeddedResource Include="EjemploMapa.resx">
       <DependentUpon>EjemploMapa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmRegistroCuenta.resx">
+      <DependentUpon>frmRegistroCuenta.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login.resx">
       <DependentUpon>Login.cs</DependentUpon>

@@ -71,17 +71,24 @@ namespace ServidorTracking
 
         public ServerClient(String ip, int puerto)
         {
+            try
+            {
+                this.client = new TcpClient(ip, puerto);
+                service = new CommunicationService(this.client);
 
-            this.client = new TcpClient(ip, puerto);
-            service = new CommunicationService(this.client);
-	        
-            // Subscribe Events
-            service.Connect += service_Connect;
-            service.Disconnect += service_Disconnect;
-            service.LocationChanged += service_LocationChanged;
+                // Subscribe Events
+                service.Connect += service_Connect;
+                service.Disconnect += service_Disconnect;
+                service.LocationChanged += service_LocationChanged;
 
-            sending = new Thread(sendMessages);
-            sending.Start();
+                sending = new Thread(sendMessages);
+                sending.Start();
+            }
+            catch (Exception)
+            {
+                throw new Exception("No se pudo conectar");
+            }
+            
         }
 
         public void SendToServer(Mensaje message)
