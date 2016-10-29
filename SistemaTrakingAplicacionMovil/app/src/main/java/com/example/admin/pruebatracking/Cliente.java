@@ -10,9 +10,11 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Button;
@@ -25,7 +27,7 @@ import com.example.admin.pruebatracking.Serializacion.Serializacion;
 
 
 
-public class Cliente extends AsyncTask<Void, Void, Void> {
+public class Cliente extends AsyncTask<Void, Void, Void> implements LocationListener {
 
     Context context;
     String addr;
@@ -34,11 +36,9 @@ public class Cliente extends AsyncTask<Void, Void, Void> {
     TextView textRespuesta;
     AnimationDrawable savinAnimation;
     Button btnLocalizacion;
-    LocationManager manager;
-    ListenerPosicion listener;
-    Location posicion;
-    long tiempo = 5000;
-    float distancia = 10;
+    Socket socket;
+    PrintWriter writer;
+    BufferedReader r;
 
     public Cliente(Button btnLocalizacion, AnimationDrawable savinAnimation, Context context, String addr, int port, TextView textRespuesta) {
         this.addr = addr;
@@ -80,38 +80,10 @@ public class Cliente extends AsyncTask<Void, Void, Void> {
                         }
                     });
 
-                    manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-                    //LocationProvider proveedor = manager.getProvider(LocationManager.GPS_PROVIDER);
-
-                    listener = new ListenerPosicion(context);
-                    tiempo = 5000;
-                    distancia = 10;
-
-                    ((Activity)context).runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, tiempo, distancia, listener);
-                        }
-                    });
-
-
-                        while (socket.isConnected()) {
-
-                            posicion =  manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-                            writer.println(Serializacion.Serializar(new MsgLocalizacion("yo", "yo", "2016-10-27", posicion.getLatitude() + "", posicion.getLongitude() + "")));
-                            writer.flush();
-
-                            String jsonLocalizacion = r.readLine();
-                            MsgLocalizacion msjLocalizacion = (MsgLocalizacion) Serializacion.Deserealizar(jsonLocalizacion);
-
-                            Log.i("msg", "LLego: Latitud " + msjLocalizacion.getLatitud() + " Longitud: " + msjLocalizacion.getLongitud());
-                            //Toast.makeText(context, "LLego: Latitud " + msjLocalizacion.getLatitud() + " Longitud: " + msjLocalizacion.getLongitud(), Toast.LENGTH_LONG).show();
-
-                            Thread.sleep(5000);
-                        }
-
-
+                    while (socket.isConnected())
+                    {
+                        Thread.sleep(3000);
+                    }
                 }
                 else
                 {
@@ -129,10 +101,9 @@ public class Cliente extends AsyncTask<Void, Void, Void> {
                 @Override
                 public void run() {
                     Toast.makeText(context, "CONEXION CERRADA", Toast.LENGTH_LONG).show();
-                }
+            }
             });
             savinAnimation.stop();
-            manager.removeUpdates(listener);
 
             socket.close();
             writer.close();
@@ -140,7 +111,6 @@ public class Cliente extends AsyncTask<Void, Void, Void> {
             e.printStackTrace();
             savinAnimation.stop();
             respuesta = "Error! "+e.toString();
-            manager.removeUpdates(listener);
         }
         return null;
     }
@@ -152,6 +122,47 @@ public class Cliente extends AsyncTask<Void, Void, Void> {
         btnLocalizacion.setText("ENVIAR LOCALIZACIÓN");
         btnLocalizacion.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_localizacion, 0, 0, 0);
         super.onPostExecute(result);
+    }
+
+
+    @Override
+    public void onLocationChanged(Location location) {
+        Log.i("msg", "EVENTO");
+        Toast.makeText(context, "ENTRO AL EVENTO!!!!", Toast.LENGTH_LONG).show();
+
+        try {
+            if (socket.isConnected()) {
+
+                writer.println(Serializacion.Serializar(new MsgLocalizacion("yo", "yo", "2016-10-27", location.getLatitude() + "", location.getLongitude() + "")));
+                writer.flush();
+
+                String jsonLocalizacion = r.readLine();
+                MsgLocalizacion msjLocalizacion = (MsgLocalizacion) Serializacion.Deserealizar(jsonLocalizacion);
+
+                Log.i("msg", "LLego: Latitud " + msjLocalizacion.getLatitud() + " Longitud: " + msjLocalizacion.getLongitud());
+                Toast.makeText(context, "LLego: Latitud " + msjLocalizacion.getLatitud() + " Longitud: " + msjLocalizacion.getLongitud(), Toast.LENGTH_LONG).show();
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            savinAnimation.stop();
+        }
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
     }
 
 }

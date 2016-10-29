@@ -29,7 +29,7 @@
         android:id="@+id/textIP"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="10.75.60.145"
+        android:text="10.75.60.83"
         android:hint="Server ip address" />
 
     <EditText

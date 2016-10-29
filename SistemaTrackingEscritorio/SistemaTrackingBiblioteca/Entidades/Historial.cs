@@ -16,18 +16,12 @@ namespace SistemaTrackingBiblioteca.Entidades
     //    long decimal
     //);
 
-    public class Historial
+    public class Historial : DBEntidad
     {
-        public int IdHistorial { get; set; }
-
         public Grupo Grupo { get; set; }
-
         public Cuenta Cuenta { get; set; }
-
         public DateTime Fecha { get; set; }
-
         public decimal Lat { get; set; }
-
         public decimal Long { get; set; }
 
     }
