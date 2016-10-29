@@ -28,6 +28,7 @@ namespace Mapa
         private void lblNuevaCuenta_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
 
+            ConectarServidor();
         }
 
 
@@ -42,6 +43,12 @@ namespace Mapa
 
 
             server = new ServerClient(ip, int.Parse(puerto));
+
+        }
+
+        private void btnLogin_Click(object sender, EventArgs e)
+        {
+            ConectarServidor();
         }
     }
 }

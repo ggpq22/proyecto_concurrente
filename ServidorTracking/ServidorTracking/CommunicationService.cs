@@ -7,12 +7,15 @@ using SistemaTrackingBiblioteca.Mensajes;
 using System.Net.Sockets;
 using System.Threading;
 using SistemaTrackingBiblioteca.Serializacion;
+using ServidorTracking.DataBase;
+using SistemaTrackingBiblioteca.Entidades;
 
 namespace ServidorTracking
 {
     class CommunicationService
     {
         MessageDelivery delivery;
+        DBController dbcontrol;
 
         Thread events;
         String latitud = null, longitud = null;
@@ -40,10 +43,19 @@ namespace ServidorTracking
                 LocationChanged(this, e);
         }
 
+        // Events: DBRequested
+        public event CommunicationEventHandler DBRequested;
+        protected virtual void OnDBRequested(Mensaje e)
+        {
+            if (DBRequested != null)
+                DBRequested(this, e);
+        }
+
         // Constructor
         public CommunicationService(NetworkStream stream, TcpClient client)
         {
             delivery = new MessageDelivery(stream, client);
+            dbcontrol = new DBController("pbarco", "12345Pablo");
             delivery.OpenDelivery();
 
             events = new Thread(incomingMessage);
@@ -65,6 +77,7 @@ namespace ServidorTracking
                     // TODO: Descerializar a Mensaje, checkear el tipo y descerializar a el tipo que corresponde
                     MsgConexion menCon;
                     MsgLocalizacion menLoc;
+                    MsgDBPeticion menDB;
 
                     if (message is MsgConexion)
                     {
@@ -108,6 +121,65 @@ namespace ServidorTracking
                             Console.WriteLine("latitud distinta");
                         }
                         OnLocationChanged(menLoc);
+                    }
+                    else if (message is MsgDBPeticion)
+                    {
+                        menDB = message as MsgDBPeticion;
+
+                        if(menDB.CodigoPeticion == "Login")
+                        {
+                            Cuenta c =  menDB.Params[0] as Cuenta;
+                            Cuenta cres = dbcontrol.Login(c);
+
+                            MsgDBRespuesta res = new MsgDBRespuesta();
+                            res.From = menDB.From;
+                            res.To = menDB.To;
+                            res.Fecha = DateTime.Now;
+                            res.CodigoPeticion = menDB.CodigoPeticion;
+                            res.Return.Add(cres);
+
+                            OnDBRequested(res);
+                        }
+                        else if (menDB.CodigoPeticion == "CrearCuenta")
+                        {
+                            Cuenta c = menDB.Params[0] as Cuenta;
+                            Cuenta cres = dbcontrol.CreateCuenta(c);
+
+                            MsgDBRespuesta res = new MsgDBRespuesta();
+                            res.From = menDB.From;
+                            res.To = menDB.To;
+                            res.Fecha = DateTime.Now;
+                            res.CodigoPeticion = menDB.CodigoPeticion;
+                            res.Return.Add(cres);
+
+                            OnDBRequested(res);
+                        }
+                        else if (menDB.CodigoPeticion == "BorrarCuenta")
+                        {
+                            Cuenta c = menDB.Params[0] as Cuenta;
+                            dbcontrol.DeleteCuenta(c.Id);
+
+                            MsgDBRespuesta res = new MsgDBRespuesta();
+                            res.From = menDB.From;
+                            res.To = menDB.To;
+                            res.Fecha = DateTime.Now;
+                            res.CodigoPeticion = menDB.CodigoPeticion;
+
+                            OnDBRequested(res);
+                        }
+                        else if (menDB.CodigoPeticion == "CrearGrupo")
+                        {
+                            /*Cuenta c = menDB.Params[0] as Cuenta;
+                            dbcontrol.CreateGrupo();
+
+                            MsgDBRespuesta res = new MsgDBRespuesta();
+                            res.From = menDB.From;
+                            res.To = menDB.To;
+                            res.Fecha = DateTime.Now;
+                            res.CodigoPeticion = menDB.CodigoPeticion;
+
+                            OnDBRequested(res);*/
+                        }
                     }
                 }
                 else
