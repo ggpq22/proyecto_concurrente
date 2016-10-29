@@ -33,6 +33,8 @@
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,12 +43,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entidades\Cuenta.cs" />
+    <Compile Include="Entidades\DBEntidad.cs" />
     <Compile Include="Entidades\Grupo.cs" />
     <Compile Include="Entidades\Grupo_Cuentas.cs" />
     <Compile Include="Entidades\Historial.cs" />
     <Compile Include="Entidades\Servidor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Mensajes\IMensaje.cs" />
+    <Compile Include="Mensajes\Mensaje.cs" />
     <Compile Include="Mensajes\MsgConexion.cs" />
     <Compile Include="Mensajes\MsgLocalizacion.cs" />
     <Compile Include="Serializacion\SerializacionJson.cs" />

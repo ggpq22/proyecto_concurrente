@@ -12,9 +12,8 @@ namespace SistemaTrackingBiblioteca.Entidades
     //    usuario varchar(50),
     //    pass varchar(50)
     //);
-    public class Cuenta
+    public class Cuenta : DBEntidad
     {
-        public int IdCuenta { get; set; }
         public string Usuario { get; set; }
         public string Pass { get; set; }
     }

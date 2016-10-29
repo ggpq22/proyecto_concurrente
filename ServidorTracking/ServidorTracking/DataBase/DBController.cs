@@ -70,7 +70,7 @@ namespace ServidorTracking.DataBase
 
             foreach (DataRow dt in data.Rows)
             {
-                c.IdCuenta = Convert.ToInt32(dt["idCuenta"]);
+                c.Id = Convert.ToInt32(dt["idCuenta"]);
                 c.Usuario = Convert.ToString(dt["usuario"]);
                 c.Pass = Convert.ToString(dt["pass"]);
             }
@@ -80,7 +80,7 @@ namespace ServidorTracking.DataBase
 
         public Grupo CreateGrupo(Grupo grupo)
         {
-            int id = dbMan.execute("insert into Grupo(idAnfitrion, state) values(" + grupo.Anfitrion.IdCuenta + ", 1)", QueryType.INSERT);
+            int id = dbMan.execute("insert into Grupo(idAnfitrion, state) values(" + grupo.Anfitrion.Id + ", 1)", QueryType.INSERT);
 
             Grupo g = GetGrupo(id);
 
@@ -98,7 +98,7 @@ namespace ServidorTracking.DataBase
 
             foreach (DataRow dt in dataGrupo.Rows)
             {
-                g.IdGrupo = Convert.ToInt32(dt["idGrupo"]);
+                g.Id = Convert.ToInt32(dt["idGrupo"]);
                 g.Anfitrion = GetCuenta(Convert.ToInt32(dataGrupo.Rows[1]["idAnfitrion"]));
             }
 
@@ -180,7 +180,7 @@ namespace ServidorTracking.DataBase
             foreach (DataRow row in data.Rows)
             {
                 list.Add(new Historial());
-                list[list.Count - 1].IdHistorial = Convert.ToInt32(row["idHistorial"]);
+                list[list.Count - 1].Id = Convert.ToInt32(row["idHistorial"]);
                 list[list.Count - 1].Grupo = GetGrupo(Convert.ToInt32(row["idGrupo"]));
                 list[list.Count - 1].Fecha = Convert.ToDateTime(row["fecha"]);
                 list[list.Count - 1].Cuenta = GetCuenta(Convert.ToInt32(row["idCuenta"]));
@@ -202,7 +202,7 @@ namespace ServidorTracking.DataBase
             foreach (DataRow row in data.Rows)
             {
                 list.Add(new Historial());
-                list[list.Count - 1].IdHistorial = Convert.ToInt32(row["idHistorial"]);
+                list[list.Count - 1].Id = Convert.ToInt32(row["idHistorial"]);
                 list[list.Count - 1].Grupo = GetGrupo(Convert.ToInt32(row["idGrupo"]));
                 list[list.Count - 1].Fecha = Convert.ToDateTime(row["fecha"]);
                 list[list.Count - 1].Cuenta = GetCuenta(Convert.ToInt32(row["idCuenta"]));
@@ -215,7 +215,7 @@ namespace ServidorTracking.DataBase
 
         public void CreateHistorial(Historial entry)
         {
-            dbMan.execute("insert into historial(idGrupo, idCuenta, fecha, lat, long, state) values(" + entry.Grupo.IdGrupo + ", " + entry.Cuenta.IdCuenta + ", "+entry.Fecha+", "+entry.Lat+", "+entry.Long+", 1)", QueryType.INSERT);
+            dbMan.execute("insert into historial(idGrupo, idCuenta, fecha, lat, long, state) values(" + entry.Grupo.Id + ", " + entry.Cuenta.Id + ", "+entry.Fecha+", "+entry.Lat+", "+entry.Long+", 1)", QueryType.INSERT);
         }
     }
 }
