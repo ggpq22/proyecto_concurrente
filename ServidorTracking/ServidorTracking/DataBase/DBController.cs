@@ -30,7 +30,7 @@ namespace ServidorTracking.DataBase
             }
             else
             {
-                c = GetCuenta(Convert.ToInt32(data.Rows[0]["idCuenta"]));
+                c = GetCuentaById(Convert.ToInt32(data.Rows[0]["idCuenta"]));
                 return c;
             }
         }
@@ -49,7 +49,7 @@ namespace ServidorTracking.DataBase
                 int id;
                 id = dbMan.execute("insert into cuenta(usuario, pass, state) values(" + cuenta.Usuario + ", " + cuenta.Pass + ", 1)", QueryType.INSERT);
 
-                Cuenta c = GetCuenta(id);
+                Cuenta c = GetCuentaById(id);
 
                 return c;
             }
@@ -60,7 +60,7 @@ namespace ServidorTracking.DataBase
             dbMan.execute("update cuenta set state = 0 where idCuenta = " + idCuenta, QueryType.UPDATE);
         }
 
-        public Cuenta GetCuenta(int idCuenta)
+        public Cuenta GetCuentaById(int idCuenta)
         {
             DataTable data;
 
@@ -78,21 +78,39 @@ namespace ServidorTracking.DataBase
             return c;
         }
 
+        public Cuenta GetCuentaByUsuario(string nombreUsuario)
+        {
+            DataTable data;
+
+            data = dbMan.search("select * from cuenta where state = 1 and usuario = " + nombreUsuario);
+
+            Cuenta c = new Cuenta();
+
+            foreach (DataRow dt in data.Rows)
+            {
+                c.Id = Convert.ToInt32(dt["idCuenta"]);
+                c.Usuario = Convert.ToString(dt["usuario"]);
+                c.Pass = Convert.ToString(dt["pass"]);
+            }
+
+            return c;
+        }
+
         public Grupo CreateGrupo(Grupo grupo)
         {
-            int id = dbMan.execute("insert into Grupo(idAnfitrion, state) values(" + grupo.Anfitrion.Id + ", 1)", QueryType.INSERT);
+            int id = dbMan.execute("insert into Grupo(nombre, idAnfitrion, state) values(" + grupo.Nombre + ", " + grupo.Anfitrion.Id + ", 1)", QueryType.INSERT);
 
             foreach (Cuenta c in grupo.Integrantes)
             {
                 AddCuentaToGrupo(c.Id, id);
             }
 
-            Grupo g = GetGrupo(id);
+            Grupo g = GetGrupoById(id);
 
             return g;
         }
 
-        public Grupo GetGrupo(int idGrupo)
+        public Grupo GetGrupoById(int idGrupo)
         {
             DataTable dataGrupo, dataIntegrantes;
 
@@ -104,14 +122,43 @@ namespace ServidorTracking.DataBase
             foreach (DataRow dt in dataGrupo.Rows)
             {
                 g.Id = Convert.ToInt32(dt["idGrupo"]);
-                g.Anfitrion = GetCuenta(Convert.ToInt32(dataGrupo.Rows[1]["idAnfitrion"]));
+                g.Nombre = Convert.ToString(dt["nombre"]);
+                g.Anfitrion = GetCuentaById(Convert.ToInt32(dataGrupo.Rows[1]["idAnfitrion"]));
             }
 
             List<Cuenta> c = new List<Cuenta>();
 
             foreach (DataRow dt in dataIntegrantes.Rows)
             {
-                c.Add(GetCuenta(Convert.ToInt32(dt["idCuenta"])));
+                c.Add(GetCuentaById(Convert.ToInt32(dt["idCuenta"])));
+            }
+
+            g.Integrantes = c;
+
+            return g;
+        }
+
+        public Grupo GetGrupoByNombre(string nombreGrupo)
+        {
+            DataTable dataGrupo, dataIntegrantes;
+
+            dataGrupo = dbMan.search("select * from grupo where state = 1 and nombre = " + nombreGrupo);
+            dataIntegrantes = dbMan.search("select * from grupo_cuentas where state = 1 and idGrupo = " + Convert.ToString(dataGrupo.Rows[0]["idGrupo"]));
+
+            Grupo g = new Grupo();
+
+            foreach (DataRow dt in dataGrupo.Rows)
+            {
+                g.Id = Convert.ToInt32(dt["idGrupo"]);
+                g.Nombre = Convert.ToString(dt["nombre"]);
+                g.Anfitrion = GetCuentaById(Convert.ToInt32(dataGrupo.Rows[1]["idAnfitrion"]));
+            }
+
+            List<Cuenta> c = new List<Cuenta>();
+
+            foreach (DataRow dt in dataIntegrantes.Rows)
+            {
+                c.Add(GetCuentaById(Convert.ToInt32(dt["idCuenta"])));
             }
 
             g.Integrantes = c;
@@ -129,7 +176,7 @@ namespace ServidorTracking.DataBase
 
             foreach (DataRow dr in dataGrupo.Rows)
             {
-                g.Add(GetGrupo(Convert.ToInt32(dr["idGrupo"])));
+                g.Add(GetGrupoById(Convert.ToInt32(dr["idGrupo"])));
             }
 
             return g;
@@ -145,7 +192,7 @@ namespace ServidorTracking.DataBase
 
             foreach (DataRow dr in dataGrupo.Rows)
             {
-                g.Add(GetGrupo(Convert.ToInt32(dr["idGrupo"])));
+                g.Add(GetGrupoById(Convert.ToInt32(dr["idGrupo"])));
             }
 
             return g;
@@ -155,7 +202,7 @@ namespace ServidorTracking.DataBase
         {
             int id = dbMan.execute("insert into grupo_cuentas(idGrupo, idCuenta, state) values(" + idGrupo + ", " + idIntegrante + ", 1)", QueryType.INSERT);
 
-            Grupo g = GetGrupo(id);
+            Grupo g = GetGrupoById(id);
 
             return g;
         }
@@ -164,7 +211,7 @@ namespace ServidorTracking.DataBase
         {
             dbMan.execute("delete from grupo_cuentas where idGrupo = " + idGrupo + " and idCuenta = " + idIntegrante, QueryType.UPDATE);
 
-            Grupo grupo = GetGrupo(idGrupo);
+            Grupo grupo = GetGrupoById(idGrupo);
 
             return grupo;
         }
@@ -186,9 +233,9 @@ namespace ServidorTracking.DataBase
             {
                 list.Add(new Historial());
                 list[list.Count - 1].Id = Convert.ToInt32(row["idHistorial"]);
-                list[list.Count - 1].Grupo = GetGrupo(Convert.ToInt32(row["idGrupo"]));
+                list[list.Count - 1].Grupo = GetGrupoById(Convert.ToInt32(row["idGrupo"]));
                 list[list.Count - 1].Fecha = Convert.ToDateTime(row["fecha"]);
-                list[list.Count - 1].Cuenta = GetCuenta(Convert.ToInt32(row["idCuenta"]));
+                list[list.Count - 1].Cuenta = GetCuentaById(Convert.ToInt32(row["idCuenta"]));
                 list[list.Count - 1].Lat = Convert.ToInt32(row["lat"]);
                 list[list.Count - 1].Long = Convert.ToInt32(row["long"]);
             }
@@ -208,9 +255,9 @@ namespace ServidorTracking.DataBase
             {
                 list.Add(new Historial());
                 list[list.Count - 1].Id = Convert.ToInt32(row["idHistorial"]);
-                list[list.Count - 1].Grupo = GetGrupo(Convert.ToInt32(row["idGrupo"]));
+                list[list.Count - 1].Grupo = GetGrupoById(Convert.ToInt32(row["idGrupo"]));
                 list[list.Count - 1].Fecha = Convert.ToDateTime(row["fecha"]);
-                list[list.Count - 1].Cuenta = GetCuenta(Convert.ToInt32(row["idCuenta"]));
+                list[list.Count - 1].Cuenta = GetCuentaById(Convert.ToInt32(row["idCuenta"]));
                 list[list.Count - 1].Lat = Convert.ToInt32(row["lat"]);
                 list[list.Count - 1].Long = Convert.ToInt32(row["long"]);
             }

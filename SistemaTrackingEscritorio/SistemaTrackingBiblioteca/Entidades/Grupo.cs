@@ -13,6 +13,7 @@ namespace SistemaTrackingBiblioteca.Entidades
     //);
     public class Grupo : DBEntidad
     {
+        public string Nombre { get; set; }
         public Cuenta Anfitrion { get; set; }
         public List<Cuenta> Integrantes = new List<Cuenta>();
 
