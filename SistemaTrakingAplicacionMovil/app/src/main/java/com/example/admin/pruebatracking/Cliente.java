@@ -37,31 +37,26 @@ public class Cliente extends AsyncTask<Void, Void, Void> implements LocationList
     AnimationDrawable savinAnimation;
     Button btnLocalizacion;
     Socket socket;
-    PrintWriter writer;
-    BufferedReader r;
 
-    public Cliente(Button btnLocalizacion, AnimationDrawable savinAnimation, Context context, String addr, int port, TextView textRespuesta) {
+    public Cliente( Button btnLocalizacion, AnimationDrawable savinAnimation, final Context context, String addr, int port, TextView textRespuesta) {
         this.addr = addr;
         this.port = port;
         this.textRespuesta = textRespuesta;
         this.context = context;
         this.savinAnimation = savinAnimation;
         this.btnLocalizacion = btnLocalizacion;
+
     }
 
     @Override
     protected Void doInBackground(Void... arg0) {
 
-        Socket socket = null;
-
         try {
-            socket = new Socket( addr, port);
-            PrintWriter writer = new PrintWriter(socket.getOutputStream());
+                socket = new Socket(addr,port);
+                PrintWriter writer = new PrintWriter(socket.getOutputStream());
+                BufferedReader r = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-
-            BufferedReader r = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
-                writer.println(Serializacion.Serializar(new MsgConexion("yo", "yo", "2016-10-18", "conectar")));
+                writer.println(Serializacion.Serializar(new MsgConexion("escritorio", "yo", "2016-10-18", "conectar")));
                 writer.flush();
 
                 Log.i("msg","esperando respuesta");
@@ -111,6 +106,7 @@ public class Cliente extends AsyncTask<Void, Void, Void> implements LocationList
             e.printStackTrace();
             savinAnimation.stop();
             respuesta = "Error! "+e.toString();
+
         }
         return null;
     }
@@ -127,25 +123,29 @@ public class Cliente extends AsyncTask<Void, Void, Void> implements LocationList
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.i("msg", "EVENTO");
-        Toast.makeText(context, "ENTRO AL EVENTO!!!!", Toast.LENGTH_LONG).show();
 
         try {
-            if (socket.isConnected()) {
+            if(socket != null) {
+                if (socket.isConnected()) {
 
-                writer.println(Serializacion.Serializar(new MsgLocalizacion("yo", "yo", "2016-10-27", location.getLatitude() + "", location.getLongitude() + "")));
-                writer.flush();
+                    PrintWriter writer = new PrintWriter(socket.getOutputStream());
+                    BufferedReader r = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-                String jsonLocalizacion = r.readLine();
-                MsgLocalizacion msjLocalizacion = (MsgLocalizacion) Serializacion.Deserealizar(jsonLocalizacion);
+                    writer.println(Serializacion.Serializar(new MsgLocalizacion("yo", "yo", "2016-10-27", location.getLatitude() + "", location.getLongitude() + "")));
+                    writer.flush();
 
-                Log.i("msg", "LLego: Latitud " + msjLocalizacion.getLatitud() + " Longitud: " + msjLocalizacion.getLongitud());
-                Toast.makeText(context, "LLego: Latitud " + msjLocalizacion.getLatitud() + " Longitud: " + msjLocalizacion.getLongitud(), Toast.LENGTH_LONG).show();
+                    //String jsonLocalizacion = r.readLine();
+                    //MsgLocalizacion msjLocalizacion = (MsgLocalizacion) Serializacion.Deserealizar(jsonLocalizacion);
 
+                    //Log.i("msg", "LLego: Latitud " + msjLocalizacion.getLatitud() + " Longitud: " + msjLocalizacion.getLongitud());
+                    //Toast.makeText(context, "LLego: Latitud " + msjLocalizacion.getLatitud() + " Longitud: " + msjLocalizacion.getLongitud(), Toast.LENGTH_LONG).show();
+
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
             savinAnimation.stop();
+
         }
 
     }

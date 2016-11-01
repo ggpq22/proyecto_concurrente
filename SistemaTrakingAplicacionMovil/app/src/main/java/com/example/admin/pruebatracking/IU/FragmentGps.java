@@ -21,6 +21,8 @@ import android.widget.TextView;
 import com.example.admin.pruebatracking.Cliente;
 import com.example.admin.pruebatracking.R;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
@@ -62,24 +64,26 @@ public class FragmentGps extends Fragment {
                                 btnLocalizacion.setText("STOP LOCALIZACIÓN");
                                 btnLocalizacion.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_stop1, 0, 0, 0);
 
-                                manager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
 
                                 listener = new Cliente(btnLocalizacion, savinAnimation, getActivity(), editTextAddress.getText().toString(), Integer.parseInt(editTextPort.getText().toString()), response);
-                                long tiempo = 1000;
-                                float distancia = (float)0.1;
+                                listener.execute();
+
+                                manager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
+                                long tiempo = 5000;
+                                float distancia = 5;
 
                                 if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                                     //Requiere permisos para Android 6.0
                                     Log.e("Location", "No se tienen permisos necesarios!, se requieren.");
                                     ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 225);
+                                    manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, tiempo, distancia, listener);
                                     return;
                                 }else{
                                     Log.i("Location", "Permisos necesarios OK!.");
                                     manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, tiempo, distancia, listener);
                                 }
-
-                                listener.execute();
                                 savinAnimation.start();
+
                                 break;
                             case "STOP LOCALIZACIÓN":
                                 btnLocalizacion.setText("ENVIAR LOCALIZACIÓN");
