@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SistemaTrackingBiblioteca</RootNamespace>
     <AssemblyName>SistemaTrackingBiblioteca</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,6 +31,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GMap.NET.Core">
+      <HintPath>..\..\gmap\GMap.NET.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="GMap.NET.WindowsForms">
+      <HintPath>..\..\gmap\GMap.NET.WindowsForms.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -48,6 +55,9 @@
     <Compile Include="Entidades\Grupo_Cuentas.cs" />
     <Compile Include="Entidades\Historial.cs" />
     <Compile Include="Entidades\Servidor.cs" />
+    <Compile Include="MarcadorGoogle.cs" />
+    <Compile Include="Mensajes\MsgDBPeticion.cs" />
+    <Compile Include="Mensajes\MsgDBRespuesta.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Mensajes\Mensaje.cs" />
     <Compile Include="Mensajes\MsgConexion.cs" />

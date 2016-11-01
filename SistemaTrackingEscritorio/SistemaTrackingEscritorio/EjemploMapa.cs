@@ -13,6 +13,7 @@ using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.Markers;
 using ServidorTracking;
 using SistemaTrackingBiblioteca.Mensajes;
+using SistemaTrackingBiblioteca;
 
 namespace Mapa
 {
@@ -32,18 +33,18 @@ namespace Mapa
         {
             gMapControl1.DragButton = MouseButtons.Left;
             gMapControl1.CanDragMap = true;
-            gMapControl1.MapProvider = GMapProviders.GoogleChinaMap;
-            gMapControl1.Position = new PointLatLng(37.583, -1.133);
+            gMapControl1.MapProvider = GMapProviders.BingMap;
+            gMapControl1.Position = new PointLatLng(-33,-66);
             gMapControl1.MinZoom = 0;
             gMapControl1.MaxZoom = 24;
-            gMapControl1.Zoom = 9;
+            gMapControl1.Zoom = 12;
             gMapControl1.AutoScroll = true;
 
             GMapOverlay gmo = new GMapOverlay("marker");
-            GMapMarker gmm = new GMarkerGoogle(new PointLatLng(37.583, -1.133), GMarkerGoogleType.green);
-            gmo.Markers.Add(gmm);
+            //GMapMarker gmm = new GMarkerGoogle(new PointLatLng(-33, -66), GMarkerGoogleType.green);
+            MarcadorGoogle marca = new MarcadorGoogle(new PointLatLng(-33, -66), "lebel", GMarkerGoogleType.green);
+            gmo.Markers.Add(marca);
             gMapControl1.Overlays.Add(gmo);
-
             
         }
 
@@ -51,7 +52,7 @@ namespace Mapa
         {
             MsgLocalizacion localizacion = mensaje as MsgLocalizacion;
 
-            gMapControl1.Overlays[0].Markers[0].Position = new PointLatLng()
+            gMapControl1.Overlays[0].Markers[1].Position = new PointLatLng()
             {
                 Lat = Double.Parse(localizacion.Latitud),
                 Lng = Double.Parse(localizacion.Longitud)
