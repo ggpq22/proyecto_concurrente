@@ -9,6 +9,7 @@ create table cuenta
 create table grupo
 (
 	idGrupo integer IDENTITY(1,1) primary key,
+	nombre varchar(50),
 	idAnfitrion integer foreign key references cuenta,
 	state integer
 );
