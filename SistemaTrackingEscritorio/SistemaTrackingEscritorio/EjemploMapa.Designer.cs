@@ -35,6 +35,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.btnConectar = new System.Windows.Forms.Button();
+            this.listBox1 = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // gMapControl1
@@ -78,7 +79,7 @@
             this.tbIp.Name = "tbIp";
             this.tbIp.Size = new System.Drawing.Size(100, 20);
             this.tbIp.TabIndex = 2;
-            this.tbIp.Text = "10.75.60.145";
+            this.tbIp.Text = "10.75.60.148";
             // 
             // tbPuerto
             // 
@@ -116,11 +117,20 @@
             this.btnConectar.UseVisualStyleBackColor = true;
             this.btnConectar.Click += new System.EventHandler(this.btnConectar_Click);
             // 
+            // listBox1
+            // 
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.Location = new System.Drawing.Point(689, 121);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(120, 316);
+            this.listBox1.TabIndex = 7;
+            // 
             // EjemploMapa
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(829, 491);
+            this.Controls.Add(this.listBox1);
             this.Controls.Add(this.btnConectar);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -145,6 +155,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnConectar;
+        private System.Windows.Forms.ListBox listBox1;
     }
 }
 

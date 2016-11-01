@@ -41,9 +41,9 @@ namespace Mapa
             gMapControl1.AutoScroll = true;
 
             GMapOverlay gmo = new GMapOverlay("marker");
-            //GMapMarker gmm = new GMarkerGoogle(new PointLatLng(-33, -66), GMarkerGoogleType.green);
-            MarcadorGoogle marca = new MarcadorGoogle(new PointLatLng(-33, -66), "lebel", GMarkerGoogleType.green);
-            gmo.Markers.Add(marca);
+            GMapMarker gmm = new GMarkerGoogle(new PointLatLng(-33, -66), GMarkerGoogleType.green);
+            //MarcadorGoogle marca = new MarcadorGoogle(new PointLatLng(-33, -66), "lebel", GMarkerGoogleType.green);
+            gmo.Markers.Add(gmm);
             gMapControl1.Overlays.Add(gmo);
             
         }
@@ -52,12 +52,21 @@ namespace Mapa
         {
             MsgLocalizacion localizacion = mensaje as MsgLocalizacion;
 
-            gMapControl1.Overlays[0].Markers[1].Position = new PointLatLng()
-            {
-                Lat = Double.Parse(localizacion.Latitud),
-                Lng = Double.Parse(localizacion.Longitud)
-            };
+            double lat = Convert.ToDouble(localizacion.Latitud.Replace('.', ','));//"-33.15110316527337"
+            double lon = Convert.ToDouble(localizacion.Longitud.Replace('.', ','));//"-66.30665927637962"
 
+            listBox1.Invoke((Action)(() => { listBox1.Items.Add(lat);
+            listBox1.Items.Add(lon);
+                
+            }));
+
+            
+
+            gMapControl1.Overlays[0].Markers[0].Position = new PointLatLng()
+            {
+                Lat = lat,
+                Lng = lon
+            };
         }
 
         void cliente_Disconnect(object sender, Mensaje mensaje)
