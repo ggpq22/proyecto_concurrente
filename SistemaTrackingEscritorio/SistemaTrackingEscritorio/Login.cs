@@ -48,11 +48,11 @@ namespace Mapa
             MsgDBPeticion msg = new MsgDBPeticion()
             {
                 From = guid.ToString(),
-                To = guid.ToString(),
                 Fecha = DateTime.Now,
                 CodigoPeticion = "CrearCuenta",
             };
 
+            msg.To.Add(guid.ToString());
             msg.Params.Add(cuenta);
 
             server.SendToServer(msg);
