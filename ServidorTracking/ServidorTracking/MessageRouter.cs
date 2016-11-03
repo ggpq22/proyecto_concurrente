@@ -10,7 +10,7 @@ using System.Threading;
 using SistemaTrackingBiblioteca.Entidades;
 using ServidorTracking.DataBase;
 
-namespace ServidorTracking
+namespace SistemaTrackingBiblioteca
 {
     class MessageRouter
     {

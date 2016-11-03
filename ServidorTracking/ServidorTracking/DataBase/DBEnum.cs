@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ServidorTracking.DataBase
+namespace SistemaTrackingBiblioteca.DataBase
 {
     public enum QueryType { UPDATE, INSERT };
 }

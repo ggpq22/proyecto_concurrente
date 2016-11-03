@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using SistemaTrackingBiblioteca.Entidades;
 using System.Data;
 
-namespace ServidorTracking.DataBase
+namespace SistemaTrackingBiblioteca.DataBase
 {
     class DBController
     {
