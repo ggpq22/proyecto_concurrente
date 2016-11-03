@@ -62,7 +62,8 @@
     <Compile Include="MarcadorGoogle.cs" />
     <Compile Include="Mensajes\MsgDBPeticion.cs" />
     <Compile Include="Mensajes\MsgDBRespuesta.cs" />
-   <Compile Include="MessageDelivery.cs" />
+    <Compile Include="Mensajes\MsgNotificacion.cs" />
+    <Compile Include="MessageDelivery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Mensajes\Mensaje.cs" />
     <Compile Include="Mensajes\MsgConexion.cs" />

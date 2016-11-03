@@ -7,6 +7,11 @@ namespace SistemaTrackingBiblioteca
 {
     public class Secion
     {
+        public string Usuario { get; set; }
+        
+        private List<GMarkerGooglePers> Marcadores;
+        
+
 
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Data;
 
-namespace SistemaTrackingBiblioteca.DataBase
+namespace ServidorTracking.DataBase
 {
     public class DBManager
     {
@@ -15,31 +15,29 @@ namespace SistemaTrackingBiblioteca.DataBase
 
             SqlCommand cmd;
 
-            SqlTransaction transaction;
-
             string strcnn;
-            string user;
+            string user = "";
 
             public string User
             {
                 get { return user; }
                 set { user = value; }
             }
-            string password;
+            string password = "";
             public string Password
             {
                 get { return password; }
                 set { password = value; }
             }
 
-            string server = "PABLO-PC\\SQLEXPRESS";
+            string server = "tcp:pbarco.database.windows.net,1433";
 
             public string Server
             {
                 get { return server; }
                 set { server = value; }
             }
-            string dataBase = "ProjectManager";
+            string dataBase = "ProgConcurrente";
 
             public string DataBase
             {
@@ -60,11 +58,11 @@ namespace SistemaTrackingBiblioteca.DataBase
             {
                 if (user == "" && password == "")
                 {
-                    strcnn = "Data Source=" + server + ";Initial Catalog=" + dataBase + ";Integrated Security=True";
+                    strcnn = "Server=" + server + ";Initial Catalog=" + dataBase + ";Integrated Security=True";
                 }
                 else
                 {
-                    strcnn = "Data Source=" + server + ";Initial Catalog=" + dataBase + ";User ID=" + User + ";Password=" + Password;
+                    strcnn = "Server=" + server + ";Initial Catalog=" + dataBase + ";User ID=" + User + ";Password=" + Password;
                 }
 
                 return strcnn;
@@ -126,12 +124,12 @@ namespace SistemaTrackingBiblioteca.DataBase
                 int valor;
 
                 cmd = new SqlCommand();
-                cmd.CommandType = System.Data.CommandType.Text;
-                cmd.CommandText = query;
-                cmd.CommandTimeout = 10;
 
                 try
                 {
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.CommandText = query;
+                    cmd.CommandTimeout = 10;
                     cmd.Connection = getConnection();
                     if (action == QueryType.UPDATE || action == QueryType.INSERT)
                     {

@@ -36,7 +36,7 @@ namespace Mapa
             if (!respuesta)
             {
                 MessageBox.Show("Hay problemas de coneccion");
-                return;                
+                return;
             }
 
             var cuenta = new Cuenta()
@@ -56,7 +56,7 @@ namespace Mapa
             msg.Params.Add(cuenta);
 
             server.SendToServer(msg);
-            
+
         }
 
 
@@ -84,11 +84,12 @@ namespace Mapa
             var msg = new MsgConexion()
             {
                 From = guid.ToString(),
-                To = guid.ToString(),
                 Mensaje = "conectar",
                 Fecha = DateTime.Now,
 
             };
+
+            msg.To.Add(guid.ToString());
 
             server.SendToServer(msg);
 
@@ -109,14 +110,14 @@ namespace Mapa
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-             var respuesta = ConectarServidor();
+            var respuesta = ConectarServidor();
 
-             if (!respuesta)
-             {
-                 MessageBox.Show("Hay problemas de coneccion");
-                 return;
-             }
-            
+            if (!respuesta)
+            {
+                MessageBox.Show("Hay problemas de coneccion");
+                return;
+            }
+
             var cuenta = new Cuenta()
             {
                 Usuario = tbUsuario.Text,
@@ -126,11 +127,11 @@ namespace Mapa
             MsgDBPeticion msg = new MsgDBPeticion()
             {
                 From = guid.ToString(),
-                To = guid.ToString(),
                 Fecha = DateTime.Now,
                 CodigoPeticion = "Login",
             };
 
+            msg.To.Add(guid.ToString());
             msg.Params.Add(cuenta);
 
             server.SendToServer(msg);

@@ -7,10 +7,10 @@ using SistemaTrackingBiblioteca.Mensajes;
 using System.Net.Sockets;
 using System.Threading;
 using SistemaTrackingBiblioteca.Serializacion;
-using SistemaTrackingBiblioteca.DataBase;
+using ServidorTracking.DataBase;
 using SistemaTrackingBiblioteca.Entidades;
 
-namespace SistemaTrackingBiblioteca
+namespace ServidorTracking
 {
     class CommunicationService
     {
@@ -18,7 +18,7 @@ namespace SistemaTrackingBiblioteca
         DBController dbcontrol;
 
         Thread events;
-        String latitud = null, longitud = null;
+        
         // Events: Connect
         public delegate void CommunicationEventHandler(object sender, Mensaje mensaje);
         public event CommunicationEventHandler Connect;
