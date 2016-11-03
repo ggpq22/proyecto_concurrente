@@ -10,11 +10,13 @@ namespace SistemaTrackingBiblioteca.Entidades
     //(
     //    idCuenta integer primary key,
     //    usuario varchar(50),
-    //    pass varchar(50)
+    //    pass varchar(50),
+    //    recibeLocalizacion integer
     //);
     public class Cuenta : DBEntidad
     {
         public string Usuario { get; set; }
         public string Pass { get; set; }
+        public int RecibeLocalizacion { get; set; }
     }
 }

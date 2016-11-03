@@ -3,6 +3,7 @@ create table cuenta
 	idCuenta integer IDENTITY(1,1) primary key,
 	usuario varchar(50),
 	pass varchar(50),
+	recibeLocalizaciones integer,
 	state integer
 );
 

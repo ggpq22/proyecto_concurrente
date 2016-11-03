@@ -93,7 +93,7 @@ namespace Mapa
             cliente.SendToServer(new MsgConexion()
             {
                 From = "Escritorio",
-                To = "Escritorio",
+                To = {"Escritorio"},
                 Fecha = DateTime.Now,
                 Mensaje = "conectar"
             });

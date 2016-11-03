@@ -95,15 +95,18 @@ namespace ServidorTracking
                     else if (message is MsgLocalizacion)
                     {
                         menLoc = message as MsgLocalizacion;
-                        
-                        Historial h = new Historial();
-                        h.Fecha = menLoc.Fecha;
-                        h.Lat = Convert.ToDecimal(menLoc.Latitud.Replace('.', ','));
-                        h.Long = Convert.ToDecimal(menLoc.Longitud.Replace('.', ','));
-                        h.Cuenta = dbcontrol.GetCuentaByUsuario(menLoc.From);
-                        h.Grupo = dbcontrol.GetGrupoByNombre(menLoc.To);
 
-                        dbcontrol.CreateHistorial(h);
+                        foreach (string to in menLoc.To)
+                        {
+                            Historial h = new Historial();
+                            h.Fecha = menLoc.Fecha;
+                            h.Lat = Convert.ToDecimal(menLoc.Latitud.Replace('.', ','));
+                            h.Long = Convert.ToDecimal(menLoc.Longitud.Replace('.', ','));
+                            h.Cuenta = dbcontrol.GetCuentaByUsuario(menLoc.From);
+                            h.Grupo = dbcontrol.GetGrupoByNombre(to);
+
+                            dbcontrol.CreateHistorial(h);
+                        }
 
                         OnLocationChanged(menLoc);
                     }
@@ -196,18 +199,31 @@ namespace ServidorTracking
                         }
                         else if (menDB.CodigoPeticion == "AgregarCuentaAGrupo")
                         {
-                            Cuenta c = menDB.Params[0] as Cuenta;
-                            Grupo g = menDB.Params[1] as Grupo;
-                            Grupo gr = dbcontrol.AddCuentaToGrupo(c.Id, g.Id);
+                            if (!menDB.Notificacion)
+                            {
+                                Cuenta c = menDB.Params[0] as Cuenta;
+                                Grupo g = menDB.Params[1] as Grupo;
+                                Grupo gr = dbcontrol.AddCuentaToGrupo(c.Id, g.Id);
 
-                            MsgDBRespuesta res = new MsgDBRespuesta();
-                            res.From = menDB.From;
-                            res.To = menDB.To;
-                            res.Fecha = DateTime.Now;
-                            res.CodigoPeticion = menDB.CodigoPeticion;
-                            res.Return.Add(gr);
+                                MsgDBRespuesta res = new MsgDBRespuesta();
+                                res.From = menDB.From;
+                                res.To = menDB.To;
+                                res.Fecha = DateTime.Now;
+                                res.CodigoPeticion = menDB.CodigoPeticion;
+                                res.Return.Add(gr);
 
-                            OnDBRequested(res);
+                                OnDBRequested(res);
+                            }
+                            else
+                            {
+                                MsgNotificacion not = new MsgNotificacion();
+                                not.Fecha = DateTime.Now;
+                                not.From = menDB.From;
+                                not.To = menDB.To;
+                                not.Peticion = menDB;
+
+                                OnDBRequested(not);
+                            }
                         }
                         else if (menDB.CodigoPeticion == "BorrarCuentaDeGrupo")
                         {

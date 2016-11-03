@@ -7,17 +7,24 @@ using System.Collections.Concurrent;
 using SistemaTrackingBiblioteca.Mensajes;
 using SistemaTrackingBiblioteca.Serializacion;
 using System.Threading;
+using SistemaTrackingBiblioteca.Entidades;
+using ServidorTracking.DataBase;
 
 namespace ServidorTracking
 {
     class MessageRouter
     {
         List<ServerClient> clientes = new List<ServerClient>();
+        List<Grupo> grupos = new List<Grupo>();
+        DBController dbCon;
         ConcurrentQueue<Mensaje> mensajes = new ConcurrentQueue<Mensaje>();
         Thread routing;
 
         public MessageRouter()
         {
+            dbCon = new DBController("pbarco", "12345Pablo");
+
+            grupos = dbCon.GetAllGrupos();
             routing = new Thread(route);
 
             routing.Start();
@@ -33,11 +40,49 @@ namespace ServidorTracking
 
                     while (mensajes.TryDequeue(out m))
                     {
-                        foreach (ServerClient sc in clientes)
+                        foreach (string to in m.To)
                         {
-                            if (sc.Name == m.To)
+                            if (m is MsgLocalizacion)
                             {
-                                sc.SendToClient(m);
+                                foreach (Grupo g in grupos)
+                                {
+                                    if (g.Nombre == to)
+                                    {
+                                        List<Cuenta> cList = g.Integrantes;
+                                        cList.Add(g.Anfitrion);
+
+                                        foreach (Cuenta c in cList)
+                                        {
+                                            foreach (ServerClient sc in clientes)
+                                            {
+                                                if (sc.Name == c.Usuario)
+                                                {
+                                                    if (m is MsgLocalizacion)
+                                                    {
+                                                        if (sc.GetsLocations == 1)
+                                                        {
+                                                            sc.SendToClient(m);
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        sc.SendToClient(m);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                foreach (ServerClient sc in clientes)
+                                {
+                                    if (sc.Name == to)
+                                    {
+                                        sc.SendToClient(m);
+                                    }
+                                }
                             }
                         }
                     }
@@ -53,6 +98,11 @@ namespace ServidorTracking
         public void RemoveClient(ServerClient client)
         {
             clientes.Remove(client);
+        }
+
+        public void UpdateGrupos(List<Grupo> grupos)
+        {
+            this.grupos = grupos;
         }
 
         public void RouteMessage(Mensaje message)

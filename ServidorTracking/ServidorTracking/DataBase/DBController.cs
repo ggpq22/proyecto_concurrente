@@ -40,7 +40,7 @@ namespace ServidorTracking.DataBase
             DataTable data;
             data = dbMan.search("select * from cuenta where state = 1 and usuario = " + cuenta.Usuario);
 
-            if (data.Rows.Count < 1)
+            if (data.Rows.Count > 0)
             {
                 throw new Exception("Ese usuario ya existe.");
             }
@@ -98,16 +98,26 @@ namespace ServidorTracking.DataBase
 
         public Grupo CreateGrupo(Grupo grupo)
         {
-            int id = dbMan.execute("insert into Grupo(nombre, idAnfitrion, state) values(" + grupo.Nombre + ", " + grupo.Anfitrion.Id + ", 1)", QueryType.INSERT);
+            DataTable data;
+            data = dbMan.search("select * from grupo where state = 1 and nombre = " + grupo.Nombre);
 
-            foreach (Cuenta c in grupo.Integrantes)
+            if (data.Rows.Count > 0)
             {
-                AddCuentaToGrupo(c.Id, id);
+                throw new Exception("Ese grupo ya existe.");
             }
+            else
+            {
+                int id = dbMan.execute("insert into Grupo(nombre, idAnfitrion, state) values(" + grupo.Nombre + ", " + grupo.Anfitrion.Id + ", 1)", QueryType.INSERT);
 
-            Grupo g = GetGrupoById(id);
+                foreach (Cuenta c in grupo.Integrantes)
+                {
+                    AddCuentaToGrupo(c.Id, id);
+                }
 
-            return g;
+                Grupo g = GetGrupoById(id);
+
+                return g;
+            }
         }
 
         public Grupo GetGrupoById(int idGrupo)
@@ -268,6 +278,20 @@ namespace ServidorTracking.DataBase
         public void CreateHistorial(Historial entry)
         {
             dbMan.execute("insert into historial(idGrupo, idCuenta, fecha, lat, long, state) values(" + entry.Grupo.Id + ", " + entry.Cuenta.Id + ", "+entry.Fecha+", "+entry.Lat+", "+entry.Long+", 1)", QueryType.INSERT);
+        }
+
+        public List<Grupo> GetAllGrupos()
+        {
+            DataTable data;
+            data = dbMan.search("select idGrupo from grupo");
+
+            List<Grupo> gl = new List<Grupo>();
+            foreach (DataRow dt in data.Rows)
+            {
+                gl.Add(GetGrupoById(Convert.ToInt32(dt["idGrupo"])));
+            }
+
+            return gl;
         }
     }
 }
