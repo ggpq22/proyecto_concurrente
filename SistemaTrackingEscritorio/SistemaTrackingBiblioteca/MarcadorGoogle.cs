@@ -15,38 +15,52 @@ namespace SistemaTrackingBiblioteca
     {
         public string Usuario { get; set; }
 
-        private GMarkerGoogle innerMarker;
+        //private GMarkerGoogle innerMarker;
 
         public Font Font { get; set; }
 
-        public MarcadorGoogle(PointLatLng p, string usuario, GMarkerGoogleType type)
-            : base(p)
+        private GMarkerGoogleType type;
+
+        public MarcadorGoogle(PointLatLng p, string usuario, GMarkerGoogleType type): base(p)
         {
             Font = new Font("Arial", 14);
 
             this.Usuario = usuario;
 
-            this.innerMarker = new GMarkerGoogle(p, type);
+            this.type = type;
 
+            //this.innerMarker = new GMarkerGoogle(p, type);
+
+        }
+
+        public void NuevoPunto(PointLatLng p)
+        {
+            base.Position = p;
+            //this.innerMarker.Position = p;
         }
 
         public override void OnRender(Graphics g)
         {
-            if (innerMarker != null)
-            {
-                innerMarker.OnRender(g);
-            }
+            base.OnRender(g);
 
-            g.DrawString(Usuario, Font, Brushes.Black, new PointF(0.0f, innerMarker.Size.Height));
+            //if (innerMarker != null)
+            //{
+              //  innerMarker.OnRender(g);
+            //}
+
+            //g.DrawString(Usuario, Font, Brushes.Black, new PointF(0.0f, innerMarker.Size.Height));
+            g.DrawString(Usuario, Font, Brushes.Black, new PointF(0.0f, 15));
+
+
         }
 
         public override void Dispose()
         {
-            if (innerMarker != null)
-            {
-                innerMarker.Dispose();
-                innerMarker = null;
-            }
+            //if (innerMarker != null)
+            //{
+            //    innerMarker.Dispose();
+            //    innerMarker = null;
+            //}
 
             base.Dispose();
         }

@@ -7,10 +7,10 @@ using SistemaTrackingBiblioteca.Mensajes;
 using System.Net.Sockets;
 using System.Threading;
 using SistemaTrackingBiblioteca.Serializacion;
-using ServidorTracking.DataBase;
+using SistemaTrackingBiblioteca.DataBase;
 using SistemaTrackingBiblioteca.Entidades;
 
-namespace ServidorTracking
+namespace SistemaTrackingBiblioteca
 {
     class CommunicationService
     {

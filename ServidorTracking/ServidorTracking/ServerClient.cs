@@ -9,7 +9,7 @@ using SistemaTrackingBiblioteca.Serializacion;
 using SistemaTrackingBiblioteca.Mensajes;
 using ServidorTracking.DataBase;
 
-namespace ServidorTracking
+namespace SistemaTrackingBiblioteca
 {
     class ServerClient
     {

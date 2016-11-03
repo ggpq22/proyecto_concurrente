@@ -7,7 +7,7 @@
     <ProjectGuid>{8143839F-BA11-404B-9D68-03AF4B37F0ED}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ServidorTracking</RootNamespace>
+    <RootNamespace>SistemaTrackingBiblioteca</RootNamespace>
     <AssemblyName>ServidorTracking</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
