@@ -5,15 +5,14 @@ import java.util.ArrayList;
 /**
  * Created by Mario on 25/10/2016.
  */
-public class Grupo {
-
-    private int IdGrupo;
+public class Grupo extends DBEntidad{
 
     private Cuenta Anfitrion;
 
     public ArrayList<Cuenta> Integrantes = new ArrayList<>();
 
-    public Grupo() {
+    public Grupo(int Id) {
+        super(Id);
     }
 
     public Cuenta getAnfitrion() {
@@ -22,13 +21,5 @@ public class Grupo {
 
     public void setAnfitrion(Cuenta anfitrion) {
         Anfitrion = anfitrion;
-    }
-
-    public int getIdGrupo() {
-        return IdGrupo;
-    }
-
-    public void setIdGrupo(int idGrupo) {
-        this.IdGrupo = idGrupo;
     }
 }

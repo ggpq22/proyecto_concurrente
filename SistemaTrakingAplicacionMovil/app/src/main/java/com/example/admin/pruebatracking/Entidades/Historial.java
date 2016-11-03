@@ -5,9 +5,7 @@ import java.util.Date;
 /**
  * Created by Mario on 25/10/2016.
  */
-public class Historial {
-
-    private int IdHistorial;
+public class Historial extends DBEntidad{
 
     private int IdGrupo;
 
@@ -19,15 +17,8 @@ public class Historial {
 
     private float Longitud;
 
-    public Historial() {
-    }
-
-    public int getIdHistorial() {
-        return IdHistorial;
-    }
-
-    public void setIdHistorial(int idHistorial) {
-        this.IdHistorial = idHistorial;
+    public Historial(int Id) {
+        super(Id);
     }
 
     public int getIdGrupo() {

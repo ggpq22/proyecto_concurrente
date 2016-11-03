@@ -14,11 +14,12 @@ public class Mensaje {
     private boolean IsValido;
     public ArrayList<String> Errores = new ArrayList<>();
 
-    public Mensaje(String to, String from, String fecha, String tipo) {
+    public Mensaje(String to, String from, String fecha, String tipo, boolean IsValido) {
         this.To = to;
         this.From = from;
         this.Tipo = tipo;
         this.Fecha = fecha;
+        this.IsValido = IsValido;
     }
 
     public String getFecha(){
@@ -51,6 +52,14 @@ public class Mensaje {
 
     public void setTipo(String tipo) {
         this.Tipo = tipo;
+    }
+
+    public boolean getIsValido() {
+        return IsValido;
+    }
+
+    public void setIsValido(boolean IsValido) {
+        this.IsValido = IsValido;
     }
 
 
