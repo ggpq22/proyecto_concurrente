@@ -11,7 +11,7 @@ using GMap.NET.MapProviders;
 using GMap.NET;
 using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.Markers;
-using ServidorTracking;
+using SistemaTrackingBiblioteca;
 using SistemaTrackingBiblioteca.Mensajes;
 using SistemaTrackingBiblioteca;
 
@@ -41,9 +41,12 @@ namespace Mapa
             gMapControl1.AutoScroll = true;
 
             GMapOverlay gmo = new GMapOverlay("marker");
-            //GMapMarker gmm = new GMarkerGoogle(new PointLatLng(-33, -66), GMarkerGoogleType.green);
-            MarcadorGoogle marca = new MarcadorGoogle(new PointLatLng(-33, -66), "lebel", GMarkerGoogleType.green);
-            gmo.Markers.Add(marca);
+            GMapMarker gmm = new GMarkerGoogle(new PointLatLng(-33, -66), GMarkerGoogleType.green);
+            //MarcadorGoogle marca = new MarcadorGoogle(new PointLatLng(-33, -66), "lllll", GMarkerGoogleType.green);
+            //MarcadorGoogle marc = new MarcadorGoogle(new PointLatLng(-34, -66), "ttrrqwrq", GMarkerGoogleType.green);
+
+            gmo.Markers.Add(new GMarkerGooglePers(new PointLatLng(-33, -66), GMarkerGoogleType.green, "mario"));
+            //gmo.Markers.Add(marc);
             gMapControl1.Overlays.Add(gmo);
             
         }
@@ -52,12 +55,9 @@ namespace Mapa
         {
             MsgLocalizacion localizacion = mensaje as MsgLocalizacion;
 
-            gMapControl1.Overlays[0].Markers[1].Position = new PointLatLng()
-            {
-                Lat = Double.Parse(localizacion.Latitud),
-                Lng = Double.Parse(localizacion.Longitud)
-            };
-
+            var marker = gMapControl1.Overlays[0].Markers[0] as MarcadorGoogle;            
+            
+            marker.NuevoPunto(new PointLatLng(-33,-66));
         }
 
         void cliente_Disconnect(object sender, Mensaje mensaje)
@@ -71,7 +71,13 @@ namespace Mapa
 
         private void button1_Click(object sender, EventArgs e)
         {
-            gMapControl1.Overlays[0].Markers[0].Position = new PointLatLng(37.800, -1.133);
+            //gMapControl1.Overlays[0].Markers[0].Position = new PointLatLng(37.800, -1.133);
+            //var marker = gMapControl1.Overlays[0].Markers[0] as MarcadorGoogle;
+            var marker = gMapControl1.Overlays[0].Markers.FirstOrDefault(x => ((GMarkerGooglePers)x).nombre == "mario");
+            marker.Position = new PointLatLng(-34, -67);
+            //marker.NuevoPunto(new PointLatLng(37.800, -1.133));
+
+            //gMapControl1.Overlays[0].Markers[0] = marker;
         }
 
         private void btnConectar_Click(object sender, EventArgs e)
@@ -83,11 +89,16 @@ namespace Mapa
 
             cliente.SendToServer(new MsgConexion()
             {
-                From = "Escritorio",
-                To = "Escritorio",
+                From = "escritorio",
+                To = "escritorio",
                 Fecha = DateTime.Now,
                 Mensaje = "conectar"
             });
+        }
+
+        private void tbIp_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

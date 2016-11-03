@@ -8,7 +8,7 @@ using SistemaTrackingBiblioteca.Mensajes;
 using SistemaTrackingBiblioteca.Serializacion;
 using System.Threading;
 
-namespace ServidorTracking
+namespace SistemaTrackingBiblioteca
 {
     class MessageRouter
     {

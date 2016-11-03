@@ -77,7 +77,6 @@
             this.btnLogin.TabIndex = 4;
             this.btnLogin.Text = "Iniciar Sesion";
             this.btnLogin.UseVisualStyleBackColor = true;
-
             this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
             // 
             // lblNuevaCuenta
@@ -104,6 +103,7 @@
             this.Controls.Add(this.tbUsuario);
             this.Name = "Login";
             this.Text = "Login";
+            this.Load += new System.EventHandler(this.Login_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

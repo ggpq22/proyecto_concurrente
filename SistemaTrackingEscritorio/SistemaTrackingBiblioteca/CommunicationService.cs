@@ -8,7 +8,7 @@ using System.Net.Sockets;
 using System.Threading;
 using SistemaTrackingBiblioteca.Serializacion;
 
-namespace ServidorTracking
+namespace SistemaTrackingBiblioteca
 {
     class CommunicationService
     {

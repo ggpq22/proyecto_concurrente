@@ -8,7 +8,7 @@ using System.Collections.Concurrent;
 using SistemaTrackingBiblioteca.Serializacion;
 using SistemaTrackingBiblioteca.Mensajes;
 
-namespace ServidorTracking
+namespace SistemaTrackingBiblioteca
 {
     class ServerClient
     {

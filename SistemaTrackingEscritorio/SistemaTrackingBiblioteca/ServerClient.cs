@@ -7,10 +7,11 @@ using System.Threading;
 using System.Collections.Concurrent;
 using SistemaTrackingBiblioteca.Serializacion;
 using SistemaTrackingBiblioteca.Mensajes;
+using SistemaTrackingBiblioteca;
 
-namespace ServidorTracking
+namespace SistemaTrackingBiblioteca
 {
-    class ServerClient
+    public class ServerClient
     {
         string name;
 
@@ -84,11 +85,12 @@ namespace ServidorTracking
                 sending = new Thread(sendMessages);
                 sending.Start();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception("No se pudo conectar");
+                Configuracion.GrabarEnDisco(ex);
+                throw ex;
             }
-            
+
         }
 
         public void SendToServer(Mensaje message)
