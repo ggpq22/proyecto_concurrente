@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Data;
 
-namespace SistemaTrackingBiblioteca.DataBase
+namespace ServidorTracking.DataBase
 {
     public class DBManager
     {

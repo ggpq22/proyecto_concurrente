@@ -13,7 +13,6 @@ using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.Markers;
 using SistemaTrackingBiblioteca;
 using SistemaTrackingBiblioteca.Mensajes;
-using SistemaTrackingBiblioteca;
 
 namespace Mapa
 {
