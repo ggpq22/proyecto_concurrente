@@ -3,12 +3,14 @@ create table cuenta
 	idCuenta integer IDENTITY(1,1) primary key,
 	usuario varchar(50),
 	pass varchar(50),
+	recibeLocalizaciones integer,
 	state integer
 );
 
 create table grupo
 (
 	idGrupo integer IDENTITY(1,1) primary key,
+	nombre varchar(50),
 	idAnfitrion integer foreign key references cuenta,
 	state integer
 );

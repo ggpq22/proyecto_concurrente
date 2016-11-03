@@ -7,6 +7,7 @@ using System.Threading;
 using System.Collections.Concurrent;
 using SistemaTrackingBiblioteca.Serializacion;
 using SistemaTrackingBiblioteca.Mensajes;
+using ServidorTracking.DataBase;
 
 namespace ServidorTracking
 {
@@ -20,11 +21,20 @@ namespace ServidorTracking
             set { name = value; }
         }
 
+        int getsLocations;
+
+        public int GetsLocations
+        {
+            get { return getsLocations; }
+            set { getsLocations = value; }
+        }
+
         //TODO: Serializacion y logica para los tipos de mensaje
 
         TcpClient client;
         CommunicationService service;
         MessageRouter router;
+        DBController dbCon;
         ConcurrentQueue<Mensaje> mensajes = new ConcurrentQueue<Mensaje>();
 
         Thread sending;
@@ -34,6 +44,7 @@ namespace ServidorTracking
         {
             MsgConexion msn = message as MsgConexion;
             this.name = msn.From;
+            this.getsLocations = dbCon.GetCuentaByUsuario(msn.From).RecibeLocalizacion;
             router.RouteMessage(msn);
         }
         void service_Disconnect(object sender, Mensaje message)
@@ -48,17 +59,32 @@ namespace ServidorTracking
             MsgLocalizacion msn = message as MsgLocalizacion;
             router.RouteMessage(msn);
         }
+        void service_DBRecuested(object sender, Mensaje message)
+        {
+            if (message is MsgDBRespuesta)
+            {
+                MsgDBRespuesta msn = message as MsgDBRespuesta;
+
+                if (msn.CodigoPeticion == "CrearGrupo" || msn.CodigoPeticion == "AgregarCuentaAGrupo" || msn.CodigoPeticion == "BorrarCuentaDeGrupo" || msn.CodigoPeticion == "BorrarGrupo")
+                {
+                    router.UpdateGrupos(dbCon.GetAllGrupos());
+                }
+            }
+            router.RouteMessage(message);
+        }
 
         public ServerClient(TcpClient client, MessageRouter router)
         {
             this.client = client;
             this.router = router;
+            dbCon = new DBController("pbarco", "12345Pablo");
             service = new CommunicationService(this.client.GetStream(), this.client);
 	        
             // Subscribe Events
             service.Connect += service_Connect;
             service.Disconnect += service_Disconnect;
             service.LocationChanged += service_LocationChanged;
+            service.DBRequested += service_DBRecuested;
 
             sending = new Thread(sendMessages);
             sending.Start();

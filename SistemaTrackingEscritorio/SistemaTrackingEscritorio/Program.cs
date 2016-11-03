@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ServidorTracking;
+using SistemaTrackingBiblioteca;
 
 namespace Mapa
 {
@@ -22,7 +22,7 @@ namespace Mapa
             //ServerClient servidor = new ServerClient(ip, int.Parse(pueto));
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Login());
+            Application.Run(new EjemploMapa());
         }
 
     }

@@ -18,7 +18,7 @@ namespace ServidorTracking
         DBController dbcontrol;
 
         Thread events;
-        String latitud = null, longitud = null;
+        
         // Events: Connect
         public delegate void CommunicationEventHandler(object sender, Mensaje mensaje);
         public event CommunicationEventHandler Connect;
@@ -95,31 +95,19 @@ namespace ServidorTracking
                     else if (message is MsgLocalizacion)
                     {
                         menLoc = message as MsgLocalizacion;
-                        if (longitud == null)
-                        {
-                            longitud = menLoc.Longitud;
-                            latitud = menLoc.Latitud;
-                        }
-                        String newlongitud = menLoc.Longitud;
-                        String newlatitud = menLoc.Latitud;
 
-                        if (longitud == newlongitud)
+                        foreach (string to in menLoc.To)
                         {
-                            Console.WriteLine("longitud igual");
-                        }
-                        else
-                        {
-                            Console.WriteLine("longitud distinta");
+                            Historial h = new Historial();
+                            h.Fecha = menLoc.Fecha;
+                            h.Lat = Convert.ToDecimal(menLoc.Latitud.Replace('.', ','));
+                            h.Long = Convert.ToDecimal(menLoc.Longitud.Replace('.', ','));
+                            h.Cuenta = dbcontrol.GetCuentaByUsuario(menLoc.From);
+                            h.Grupo = dbcontrol.GetGrupoByNombre(to);
+
+                            dbcontrol.CreateHistorial(h);
                         }
 
-                        if (latitud== newlatitud)
-                        {
-                            Console.WriteLine("latitud igual");
-                        }
-                        else
-                        {
-                            Console.WriteLine("latitud distinta");
-                        }
                         OnLocationChanged(menLoc);
                     }
                     else if (message is MsgDBPeticion)
@@ -169,8 +157,93 @@ namespace ServidorTracking
                         }
                         else if (menDB.CodigoPeticion == "CrearGrupo")
                         {
-                            /*Cuenta c = menDB.Params[0] as Cuenta;
-                            dbcontrol.CreateGrupo();
+                            Grupo g = menDB.Params[0] as Grupo;
+                            g = dbcontrol.CreateGrupo(g);
+
+                            MsgDBRespuesta res = new MsgDBRespuesta();
+                            res.From = menDB.From;
+                            res.To = menDB.To;
+                            res.Fecha = DateTime.Now;
+                            res.CodigoPeticion = menDB.CodigoPeticion;
+                            res.Return.Add(g);
+
+                            OnDBRequested(res);
+                        }
+                        else if (menDB.CodigoPeticion == "GetGrupoPorAnfitrion")
+                        {
+                            Cuenta c = menDB.Params[0] as Cuenta;
+                            List<Grupo> g = dbcontrol.GetGrupoByAnfitrion(c.Id);
+
+                            MsgDBRespuesta res = new MsgDBRespuesta();
+                            res.From = menDB.From;
+                            res.To = menDB.To;
+                            res.Fecha = DateTime.Now;
+                            res.CodigoPeticion = menDB.CodigoPeticion;
+                            res.Return.AddRange(g);
+
+                            OnDBRequested(res);
+                        }
+                        else if (menDB.CodigoPeticion == "GetGrupoPorIntegrante")
+                        {
+                            Cuenta c = menDB.Params[0] as Cuenta;
+                            List<Grupo> g = dbcontrol.GetGrupoByIntegrante(c.Id);
+
+                            MsgDBRespuesta res = new MsgDBRespuesta();
+                            res.From = menDB.From;
+                            res.To = menDB.To;
+                            res.Fecha = DateTime.Now;
+                            res.CodigoPeticion = menDB.CodigoPeticion;
+                            res.Return.AddRange(g);
+
+                            OnDBRequested(res);
+                        }
+                        else if (menDB.CodigoPeticion == "AgregarCuentaAGrupo")
+                        {
+                            if (!menDB.Notificacion)
+                            {
+                                Cuenta c = menDB.Params[0] as Cuenta;
+                                Grupo g = menDB.Params[1] as Grupo;
+                                Grupo gr = dbcontrol.AddCuentaToGrupo(c.Id, g.Id);
+
+                                MsgDBRespuesta res = new MsgDBRespuesta();
+                                res.From = menDB.From;
+                                res.To = menDB.To;
+                                res.Fecha = DateTime.Now;
+                                res.CodigoPeticion = menDB.CodigoPeticion;
+                                res.Return.Add(gr);
+
+                                OnDBRequested(res);
+                            }
+                            else
+                            {
+                                MsgNotificacion not = new MsgNotificacion();
+                                not.Fecha = DateTime.Now;
+                                not.From = menDB.From;
+                                not.To = menDB.To;
+                                not.Peticion = menDB;
+
+                                OnDBRequested(not);
+                            }
+                        }
+                        else if (menDB.CodigoPeticion == "BorrarCuentaDeGrupo")
+                        {
+                            Cuenta c = menDB.Params[0] as Cuenta;
+                            Grupo g = menDB.Params[1] as Grupo;
+                            Grupo gr = dbcontrol.DeleteCuentaFromGrupo(c.Id, g.Id);
+
+                            MsgDBRespuesta res = new MsgDBRespuesta();
+                            res.From = menDB.From;
+                            res.To = menDB.To;
+                            res.Fecha = DateTime.Now;
+                            res.CodigoPeticion = menDB.CodigoPeticion;
+                            res.Return.Add(gr);
+
+                            OnDBRequested(res);
+                        }
+                        else if (menDB.CodigoPeticion == "BorrarGrupo")
+                        {
+                            Grupo g = menDB.Params[0] as Grupo;
+                            dbcontrol.DeleteGrupo(g.Id);
 
                             MsgDBRespuesta res = new MsgDBRespuesta();
                             res.From = menDB.From;
@@ -178,7 +251,35 @@ namespace ServidorTracking
                             res.Fecha = DateTime.Now;
                             res.CodigoPeticion = menDB.CodigoPeticion;
 
-                            OnDBRequested(res);*/
+                            OnDBRequested(res);
+                        }
+                        else if (menDB.CodigoPeticion == "GetHistorialPorGrupo")
+                        {
+                            Grupo g = menDB.Params[0] as Grupo;
+                            List<Historial> hr = dbcontrol.GetHistorialByGrupo(g.Id);
+
+                            MsgDBRespuesta res = new MsgDBRespuesta();
+                            res.From = menDB.From;
+                            res.To = menDB.To;
+                            res.Fecha = DateTime.Now;
+                            res.CodigoPeticion = menDB.CodigoPeticion;
+                            res.Return.AddRange(hr);
+
+                            OnDBRequested(res);
+                        }
+                        else if (menDB.CodigoPeticion == "GetHistorialPorCuenta")
+                        {
+                            Cuenta c = menDB.Params[0] as Cuenta;
+                            List<Historial> hr = dbcontrol.GetHistorialByCuenta(c.Id);
+
+                            MsgDBRespuesta res = new MsgDBRespuesta();
+                            res.From = menDB.From;
+                            res.To = menDB.To;
+                            res.Fecha = DateTime.Now;
+                            res.CodigoPeticion = menDB.CodigoPeticion;
+                            res.Return.AddRange(hr);
+
+                            OnDBRequested(res);
                         }
                     }
                 }

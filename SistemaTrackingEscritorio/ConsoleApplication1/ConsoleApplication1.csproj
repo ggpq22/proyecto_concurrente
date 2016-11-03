@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8143839F-BA11-404B-9D68-03AF4B37F0ED}</ProjectGuid>
+    <ProjectGuid>{A71C6E32-CAD9-4579-BFAE-155BCE5D2A8B}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SistemaTrackingBiblioteca</RootNamespace>
-    <AssemblyName>ServidorTracking</AssemblyName>
+    <RootNamespace>ConsoleApplication1</RootNamespace>
+    <AssemblyName>ConsoleApplication1</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -41,25 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommunicationService.cs" />
-    <Compile Include="DataBase\DBController.cs" />
-    <Compile Include="DataBase\DBEnum.cs" />
-    <Compile Include="DataBase\DBManager.cs" />
-    <Compile Include="MessageDelivery.cs" />
-    <Compile Include="MessageRouter.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServerClient.cs" />
-    <Compile Include="TcpServer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\SistemaTrackingEscritorio\SistemaTrackingBiblioteca\SistemaTrackingBiblioteca.csproj">
-      <Project>{edda7f28-5ae1-4960-b905-a3a91eff6409}</Project>
-      <Name>SistemaTrackingBiblioteca</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

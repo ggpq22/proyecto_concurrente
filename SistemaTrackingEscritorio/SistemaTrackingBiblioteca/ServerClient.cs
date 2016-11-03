@@ -7,10 +7,11 @@ using System.Threading;
 using System.Collections.Concurrent;
 using SistemaTrackingBiblioteca.Serializacion;
 using SistemaTrackingBiblioteca.Mensajes;
+using SistemaTrackingBiblioteca;
 
-namespace ServidorTracking
+namespace SistemaTrackingBiblioteca
 {
-    class ServerClient
+    public class ServerClient
     {
         string name;
 
@@ -71,17 +72,25 @@ namespace ServidorTracking
 
         public ServerClient(String ip, int puerto)
         {
+            try
+            {
+                this.client = new TcpClient(ip, puerto);
+                service = new CommunicationService(this.client);
 
-            this.client = new TcpClient(ip, puerto);
-            service = new CommunicationService(this.client);
-	        
-            // Subscribe Events
-            service.Connect += service_Connect;
-            service.Disconnect += service_Disconnect;
-            service.LocationChanged += service_LocationChanged;
+                // Subscribe Events
+                service.Connect += service_Connect;
+                service.Disconnect += service_Disconnect;
+                service.LocationChanged += service_LocationChanged;
 
-            sending = new Thread(sendMessages);
-            sending.Start();
+                sending = new Thread(sendMessages);
+                sending.Start();
+            }
+            catch (Exception ex)
+            {
+                Configuracion.GrabarEnDisco(ex);
+                throw ex;
+            }
+
         }
 
         public void SendToServer(Mensaje message)
