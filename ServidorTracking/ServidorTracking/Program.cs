@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using System.Net;
 
 namespace ServidorTracking
 {
@@ -11,11 +12,8 @@ namespace ServidorTracking
     {
         static void Main(string[] args)
         {
-<<<<<<< HEAD
-            string ip = "10.75.60.148";
-=======
-            string ip = "10.75.20.86";
->>>>>>> 64a722b7e94eb4ef2ee6158d99104c1ff8c04a2a
+            string ip = "10.75.61.201";
+
             int port = 8999;
 
             TcpServer server = new TcpServer(ip, port);
@@ -23,21 +21,49 @@ namespace ServidorTracking
 
             Thread runningServer = new Thread(() => {
 
-                server.StartServer();
-
-                while(true)
+                try
                 {
-                    TcpClient tcpclient = server.AcceptClient();
+                    server.StartServer();
+                    
+                    while(true)
+                    {
+                        TcpClient tcpclient = server.AcceptClient();
+                        Console.WriteLine("Cliente nuevo");
 
-                    ServerClient client = new ServerClient(tcpclient, router);
+                        ServerClient client = new ServerClient(tcpclient, router);
 
-                    router.AddClient(client);
+                        router.AddClient(client);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("== ERROR == -" + e.Message);
                 }
             });
 
-            runningServer.Start();
+            try
+            {
+                runningServer.Start();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("== ERROR == -" + e.Message);
+            }
 
             Console.WriteLine("Server running...");
+
+            string command;
+
+            while (true)
+            {
+                command = Console.ReadLine();
+
+                if (command == "shutdown")
+                {
+                    //Console.Beep();
+                    Environment.Exit(0);
+                }
+            }
         }
     }
 }

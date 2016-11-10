@@ -56,25 +56,47 @@ namespace ServidorTracking
         {
             delivery = new MessageDelivery(stream, client);
             dbcontrol = new DBController("pbarco", "12345Pablo");
-            delivery.OpenDelivery();
+            try
+            {
+                delivery.OpenDelivery();
 
-            events = new Thread(incomingMessage);
-            events.Start();
+                events = new Thread(incomingMessage);
+                events.Start();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         // Thread Method
         private void incomingMessage()
         {
-            string str;
+            string str = null;
             Mensaje message;
 
             while (true)
             {
-                str = delivery.RecieveMessage();
+                try
+                {
+                    str = delivery.RecieveMessage();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("== ERROR == -" + e.Message);
+                }
+
                 if (str != null)
                 {
-                    message = SerializarcionJson.Deserializar(str) as Mensaje;
-                    // TODO: Descerializar a Mensaje, checkear el tipo y descerializar a el tipo que corresponde
+                    try
+                    {
+                        message = SerializarcionJson.Deserializar(str) as Mensaje;
+                    }
+                    catch (Exception e)
+                    {
+                        throw e;
+                    }
+                    
                     MsgConexion menCon;
                     MsgLocalizacion menLoc;
                     MsgDBPeticion menDB;
@@ -95,20 +117,30 @@ namespace ServidorTracking
                     else if (message is MsgLocalizacion)
                     {
                         menLoc = message as MsgLocalizacion;
+                        Historial h = new Historial();
 
-                        foreach (string to in menLoc.To)
+                        try
                         {
-                            Historial h = new Historial();
-                            h.Fecha = menLoc.Fecha;
-                            h.Lat = Convert.ToDecimal(menLoc.Latitud.Replace('.', ','));
-                            h.Long = Convert.ToDecimal(menLoc.Longitud.Replace('.', ','));
-                            h.Cuenta = dbcontrol.GetCuentaByUsuario(menLoc.From);
-                            h.Grupo = dbcontrol.GetGrupoByNombre(to);
+                            foreach (string to in menLoc.To)
+                            {
+                                h.Fecha = menLoc.Fecha;
+                                h.Lat = Convert.ToDecimal(menLoc.Latitud.Replace('.', ','));
+                                h.Long = Convert.ToDecimal(menLoc.Longitud.Replace('.', ','));
+                                h.Cuenta = dbcontrol.GetCuentaByUsuario(menLoc.From);
+                                h.Grupo = dbcontrol.GetGrupoByNombre(to);
 
-                            dbcontrol.CreateHistorial(h);
+                                dbcontrol.CreateHistorial(h);
+                            }
                         }
-
-                        OnLocationChanged(menLoc);
+                        catch (Exception e)
+                        {
+                            menLoc.IsValido = false;
+                            menLoc.Errores.Add(e.Message);
+                        }
+                        finally
+                        {
+                            OnLocationChanged(menLoc);
+                        }
                     }
                     else if (message is MsgDBPeticion)
                     {
@@ -117,85 +149,156 @@ namespace ServidorTracking
                         if(menDB.CodigoPeticion == "Login")
                         {
                             Cuenta c =  menDB.Params[0] as Cuenta;
-                            Cuenta cres = dbcontrol.Login(c);
-
+                            Cuenta cres;
                             MsgDBRespuesta res = new MsgDBRespuesta();
-                            res.From = menDB.From;
-                            res.To = menDB.To;
-                            res.Fecha = DateTime.Now;
-                            res.CodigoPeticion = menDB.CodigoPeticion;
-                            res.Return.Add(cres);
 
-                            OnDBRequested(res);
+                            try
+                            {
+                                cres = dbcontrol.Login(c);
+
+                                res.Return.Add(cres);
+                            }
+                            catch(Exception e)
+                            {
+                                res.IsValido = false;
+                                res.Errores.Add(e.Message);
+                            }
+                            finally
+                            {
+                                res.From = menDB.From;
+                                res.To = menDB.To;
+                                res.Fecha = DateTime.Now;
+                                res.CodigoPeticion = menDB.CodigoPeticion;
+                                OnDBRequested(res);
+                            }
                         }
                         else if (menDB.CodigoPeticion == "CrearCuenta")
                         {
                             Cuenta c = menDB.Params[0] as Cuenta;
-                            Cuenta cres = dbcontrol.CreateCuenta(c);
-
                             MsgDBRespuesta res = new MsgDBRespuesta();
-                            res.From = menDB.From;
-                            res.To = menDB.To;
-                            res.Fecha = DateTime.Now;
-                            res.CodigoPeticion = menDB.CodigoPeticion;
-                            res.Return.Add(cres);
+                            Cuenta cres;
+                            
+                            try
+                            {
+                                cres = dbcontrol.CreateCuenta(c);
 
-                            OnDBRequested(res);
+                                res.Return.Add(cres);
+                            }
+                            catch (Exception e)
+                            {
+                                res.IsValido = false;
+                                res.Errores.Add(e.Message);
+                            }
+                            finally
+                            {
+                                res.From = menDB.From;
+                                res.To = menDB.To;
+                                res.Fecha = DateTime.Now;
+                                res.CodigoPeticion = menDB.CodigoPeticion;
+                                OnDBRequested(res);
+                            }
                         }
                         else if (menDB.CodigoPeticion == "BorrarCuenta")
                         {
                             Cuenta c = menDB.Params[0] as Cuenta;
-                            dbcontrol.DeleteCuenta(c.Id);
-
                             MsgDBRespuesta res = new MsgDBRespuesta();
-                            res.From = menDB.From;
-                            res.To = menDB.To;
-                            res.Fecha = DateTime.Now;
-                            res.CodigoPeticion = menDB.CodigoPeticion;
 
-                            OnDBRequested(res);
+                            try
+                            {
+                                dbcontrol.DeleteCuenta(c.Id);
+                            }
+                            catch (Exception e)
+                            {
+                                res.IsValido = false;
+                                res.Errores.Add(e.Message);
+                            }
+                            finally
+                            {
+                                res.From = menDB.From;
+                                res.To = menDB.To;
+                                res.Fecha = DateTime.Now;
+                                res.CodigoPeticion = menDB.CodigoPeticion;
+
+                                OnDBRequested(res);
+                            }
                         }
                         else if (menDB.CodigoPeticion == "CrearGrupo")
                         {
                             Grupo g = menDB.Params[0] as Grupo;
-                            g = dbcontrol.CreateGrupo(g);
-
+                            Grupo gres;
                             MsgDBRespuesta res = new MsgDBRespuesta();
-                            res.From = menDB.From;
-                            res.To = menDB.To;
-                            res.Fecha = DateTime.Now;
-                            res.CodigoPeticion = menDB.CodigoPeticion;
-                            res.Return.Add(g);
 
-                            OnDBRequested(res);
+                            try
+                            {
+                                gres = dbcontrol.CreateGrupo(g);
+                            }
+                            catch (Exception e)
+                            {
+                                res.IsValido = false;
+                                res.Errores.Add(e.Message);
+                            }
+                            finally
+                            {
+                                res.From = menDB.From;
+                                res.To = menDB.To;
+                                res.Fecha = DateTime.Now;
+                                res.CodigoPeticion = menDB.CodigoPeticion;
+                                res.Return.Add(g);
+
+                                OnDBRequested(res);
+                            }
                         }
                         else if (menDB.CodigoPeticion == "GetGrupoPorAnfitrion")
                         {
                             Cuenta c = menDB.Params[0] as Cuenta;
-                            List<Grupo> g = dbcontrol.GetGrupoByAnfitrion(c.Id);
-
+                            List<Grupo> g = new List<Grupo>();
                             MsgDBRespuesta res = new MsgDBRespuesta();
-                            res.From = menDB.From;
-                            res.To = menDB.To;
-                            res.Fecha = DateTime.Now;
-                            res.CodigoPeticion = menDB.CodigoPeticion;
-                            res.Return.AddRange(g);
 
-                            OnDBRequested(res);
+                            try
+                            {
+                                g = dbcontrol.GetGrupoByAnfitrion(c.Id);
+                            }
+                            catch (Exception e)
+                            {
+                                res.IsValido = false;
+                                res.Errores.Add(e.Message);
+                            }
+                            finally
+                            {
+                                res.From = menDB.From;
+                                res.To = menDB.To;
+                                res.Fecha = DateTime.Now;
+                                res.CodigoPeticion = menDB.CodigoPeticion;
+                                res.Return.AddRange(g);
+
+                                OnDBRequested(res);
+                            }
                         }
                         else if (menDB.CodigoPeticion == "GetGrupoPorIntegrante")
                         {
                             Cuenta c = menDB.Params[0] as Cuenta;
-                            List<Grupo> g = dbcontrol.GetGrupoByIntegrante(c.Id);
-
                             MsgDBRespuesta res = new MsgDBRespuesta();
-                            res.From = menDB.From;
-                            res.To = menDB.To;
-                            res.Fecha = DateTime.Now;
-                            res.CodigoPeticion = menDB.CodigoPeticion;
-                            res.Return.AddRange(g);
+                            List<Grupo> g = new List<Grupo>();
 
-                            OnDBRequested(res);
+                            try
+                            {
+                                g = dbcontrol.GetGrupoByIntegrante(c.Id);
+                            }
+                            catch (Exception e)
+                            {
+                                res.IsValido = false;
+                                res.Errores.Add(e.Message);
+                            }
+                            finally
+                            {
+                                res.From = menDB.From;
+                                res.To = menDB.To;
+                                res.Fecha = DateTime.Now;
+                                res.CodigoPeticion = menDB.CodigoPeticion;
+                                res.Return.AddRange(g);
+
+                                OnDBRequested(res);
+                            }
                         }
                         else if (menDB.CodigoPeticion == "AgregarCuentaAGrupo")
                         {
@@ -203,16 +306,28 @@ namespace ServidorTracking
                             {
                                 Cuenta c = menDB.Params[0] as Cuenta;
                                 Grupo g = menDB.Params[1] as Grupo;
-                                Grupo gr = dbcontrol.AddCuentaToGrupo(c.Id, g.Id);
-
+                                Grupo gr = new Grupo();
                                 MsgDBRespuesta res = new MsgDBRespuesta();
-                                res.From = menDB.From;
-                                res.To = menDB.To;
-                                res.Fecha = DateTime.Now;
-                                res.CodigoPeticion = menDB.CodigoPeticion;
-                                res.Return.Add(gr);
 
-                                OnDBRequested(res);
+                                try
+                                {
+                                    gr = dbcontrol.AddCuentaToGrupo(c.Id, g.Id);
+                                }
+                                catch (Exception e)
+                                {
+                                    res.IsValido = false;
+                                    res.Errores.Add(e.Message);
+                                }
+                                finally
+                                {
+                                    res.From = menDB.From;
+                                    res.To = menDB.To;
+                                    res.Fecha = DateTime.Now;
+                                    res.CodigoPeticion = menDB.CodigoPeticion;
+                                    res.Return.Add(gr);
+
+                                    OnDBRequested(res);
+                                }
                             }
                             else
                             {
@@ -229,57 +344,136 @@ namespace ServidorTracking
                         {
                             Cuenta c = menDB.Params[0] as Cuenta;
                             Grupo g = menDB.Params[1] as Grupo;
-                            Grupo gr = dbcontrol.DeleteCuentaFromGrupo(c.Id, g.Id);
-
+                            Grupo gr = new Grupo();
                             MsgDBRespuesta res = new MsgDBRespuesta();
-                            res.From = menDB.From;
-                            res.To = menDB.To;
-                            res.Fecha = DateTime.Now;
-                            res.CodigoPeticion = menDB.CodigoPeticion;
-                            res.Return.Add(gr);
 
-                            OnDBRequested(res);
+                            try
+                            {
+                                gr = dbcontrol.DeleteCuentaFromGrupo(c.Id, g.Id);
+                            }
+                            catch (Exception e)
+                            {
+                                res.IsValido = false;
+                                res.Errores.Add(e.Message);
+                            }
+                            finally
+                            {
+                                res.From = menDB.From;
+                                res.To = menDB.To;
+                                res.Fecha = DateTime.Now;
+                                res.CodigoPeticion = menDB.CodigoPeticion;
+                                res.Return.Add(gr);
+
+                                OnDBRequested(res);
+                            }
                         }
                         else if (menDB.CodigoPeticion == "BorrarGrupo")
                         {
                             Grupo g = menDB.Params[0] as Grupo;
-                            dbcontrol.DeleteGrupo(g.Id);
-
                             MsgDBRespuesta res = new MsgDBRespuesta();
-                            res.From = menDB.From;
-                            res.To = menDB.To;
-                            res.Fecha = DateTime.Now;
-                            res.CodigoPeticion = menDB.CodigoPeticion;
 
-                            OnDBRequested(res);
+                            try
+                            {
+                                dbcontrol.DeleteGrupo(g.Id);
+                            }
+                            catch (Exception e)
+                            {
+                                res.IsValido = false;
+                                res.Errores.Add(e.Message);
+                            }
+                            finally
+                            {
+                                res.From = menDB.From;
+                                res.To = menDB.To;
+                                res.Fecha = DateTime.Now;
+                                res.CodigoPeticion = menDB.CodigoPeticion;
+
+                                OnDBRequested(res);
+                            }
                         }
                         else if (menDB.CodigoPeticion == "GetHistorialPorGrupo")
                         {
                             Grupo g = menDB.Params[0] as Grupo;
-                            List<Historial> hr = dbcontrol.GetHistorialByGrupo(g.Id);
-
+                            List<Historial> hr = new List<Historial>();
                             MsgDBRespuesta res = new MsgDBRespuesta();
-                            res.From = menDB.From;
-                            res.To = menDB.To;
-                            res.Fecha = DateTime.Now;
-                            res.CodigoPeticion = menDB.CodigoPeticion;
-                            res.Return.AddRange(hr);
 
-                            OnDBRequested(res);
+                            try
+                            {
+                                hr = dbcontrol.GetHistorialByGrupo(g.Id);
+                            }
+                            catch (Exception e)
+                            {
+                                res.IsValido = false;
+                                res.Errores.Add(e.Message);
+                            }
+                            finally
+                            {
+                                res.From = menDB.From;
+                                res.To = menDB.To;
+                                res.Fecha = DateTime.Now;
+                                res.CodigoPeticion = menDB.CodigoPeticion;
+                                res.Return.AddRange(hr);
+
+                                OnDBRequested(res);
+                            }
                         }
                         else if (menDB.CodigoPeticion == "GetHistorialPorCuenta")
                         {
                             Cuenta c = menDB.Params[0] as Cuenta;
-                            List<Historial> hr = dbcontrol.GetHistorialByCuenta(c.Id);
-
+                            List<Historial> hr = new List<Historial>();
                             MsgDBRespuesta res = new MsgDBRespuesta();
-                            res.From = menDB.From;
-                            res.To = menDB.To;
-                            res.Fecha = DateTime.Now;
-                            res.CodigoPeticion = menDB.CodigoPeticion;
-                            res.Return.AddRange(hr);
 
-                            OnDBRequested(res);
+                            try
+                            {
+                                hr = dbcontrol.GetHistorialByCuenta(c.Id);
+                            }
+                            catch (Exception e)
+                            {
+                                res.IsValido = false;
+                                res.Errores.Add(e.Message);
+                            }
+                            finally
+                            {
+                                res.From = menDB.From;
+                                res.To = menDB.To;
+                                res.Fecha = DateTime.Now;
+                                res.CodigoPeticion = menDB.CodigoPeticion;
+                                res.Return.AddRange(hr);
+
+                                OnDBRequested(res);
+                            }
+                        }
+                        else if (menDB.CodigoPeticion == "GetCuentas")
+                        {
+                            List<Cuenta> lr = new List<Cuenta>();
+                            MsgDBRespuesta res = new MsgDBRespuesta();
+
+                            try
+                            {
+                                lr = dbcontrol.GetAllCuentas();
+                            }
+                            catch (Exception e)
+                            {
+                                res.IsValido = false;
+                                res.Errores.Add(e.Message);
+                            }
+                            finally
+                            {
+                                res.From = menDB.From;
+                                res.To = menDB.To;
+                                res.Fecha = DateTime.Now;
+                                res.CodigoPeticion = menDB.CodigoPeticion;
+                                res.Return.AddRange(lr);
+
+                                OnDBRequested(res);
+                            }
+                        }
+                        else
+                        {
+                            menDB.IsValido = false;
+                            menDB.Errores.Add("Este codigo de peticion no es valido.");
+
+                            OnDBRequested(menDB);
                         }
                     }
                 }
@@ -292,14 +486,28 @@ namespace ServidorTracking
 
         public void SendToClient(Mensaje message)
         {
-            string str = SerializarcionJson.Serializar<Mensaje>(message);
-            Console.WriteLine(str);
-            delivery.SendMessage(str);
+            try
+            {
+                string str = SerializarcionJson.Serializar<Mensaje>(message);
+                Console.WriteLine(str);
+                delivery.SendMessage(str);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("== ERROR == -" + e.Message);
+            }
         }
 
         public void CloseCommunications()
         {
-            delivery.CloseDelivery();
+            try
+            {
+                delivery.CloseDelivery();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("== ERROR == -" + e.Message);
+            }
         }
     }
 }
