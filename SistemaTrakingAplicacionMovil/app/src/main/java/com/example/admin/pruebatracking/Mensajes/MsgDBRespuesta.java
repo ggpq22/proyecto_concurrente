@@ -12,7 +12,7 @@ public class MsgDBRespuesta extends Mensaje {
     private String CodigoPeticion;
     private ArrayList<DBEntidad> Return = new ArrayList<DBEntidad>();
 
-    public MsgDBRespuesta(String to, String from, String fecha) {
+    public MsgDBRespuesta(ArrayList<String> to, String from, String fecha) {
         super(to, from, fecha, "MsgDBRespuesta", true);
     }
 

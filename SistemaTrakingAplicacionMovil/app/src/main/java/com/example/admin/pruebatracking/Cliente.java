@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
 import android.location.LocationManager;
+import android.os.AsyncTask;
+import android.os.StrictMode;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.widget.Button;
@@ -20,17 +22,14 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 
-/**
- * Created by Admin on 3/11/2016.
- */
-public class Cliente {
+
+public class Cliente extends AsyncTask<Void, Void, Void>{
 
     Context context;
-    String addr;
-    int port;
-    Button btnLocalizacion;
-    AnimationDrawable savinAnimation;
+    //Button btnLocalizacion;
+    //AnimationDrawable savinAnimation;
     Socket socket = null;
     boolean conectado = false;
     PrintWriter writer;
@@ -40,29 +39,33 @@ public class Cliente {
     LocationManager manager = null;
     ServicioEnviar servicioEnviar = null;
     ServicioRecibir servicioRecibir = null;
+    ArrayList<String> TO;
+    String FROM;
+    String fecha;
 
-    public Cliente(Button btnLocalizacion, AnimationDrawable savinAnimation, Context context, String addr, int port) {
-        this.addr = addr;
-        this.port = port;
+    public Cliente(Context context, ArrayList<String> TO, String FROM, String fecha) {
         this.context = context;
-        this.btnLocalizacion = btnLocalizacion;
-        this.savinAnimation = savinAnimation;
 
-        servicioEnviar = new ServicioEnviar(socket, context, conectado);
-        servicioRecibir = new ServicioRecibir(socket, context, conectado);
-        manager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+        servicioEnviar = new ServicioEnviar(context);
+        servicioRecibir = new ServicioRecibir(context);
+        //manager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
         tiempo = 5000;
         distancia = 5;
+
+        this.TO = TO;
+        this.FROM = FROM;
+        this.fecha = fecha;
     }
 
-    public void iniciarConexion()
-    {
+    protected Void doInBackground(Void... arg0) {
         try {
-            socket = new Socket(addr, port);
+            Log.e("msg","entro en abrir conexion");
+            socket = new Socket("192.168.0.103", 8999);
             writer = new PrintWriter(socket.getOutputStream());
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            Log.e("msg","creo el socket");
 
-            writer.println(Serializacion.Serializar(new MsgConexion("yo", "yo", "2016-10-18", "conectar")));
+            writer.println(Serializacion.Serializar(new MsgConexion(TO, FROM, fecha, "conectar")));
             writer.flush();
 
             Log.i("msg", "esperando respuesta");
@@ -74,7 +77,10 @@ public class Cliente {
             Log.i("msg", "ya deserialice " + msj.getMensaje());
             if (msj != null) {
                 Log.i("msg", "SE CONECTO AL SERVIDOR CON EXITO");
-                conectado = true;
+
+                ((AplicacionPrincipal) context).setSocket(socket);
+                ((AplicacionPrincipal) context).setConectado(true);
+
                 ((Activity) context).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -101,14 +107,17 @@ public class Cliente {
             });
 
         } catch (Exception e) {
-            e.printStackTrace();
-            ((Activity) context).runOnUiThread(new Runnable() {
+            Log.e("msg", e.toString());
+/*            ((Activity) context).runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     Toast.makeText(context, "ERROR EN EL SERVIDOR ", Toast.LENGTH_LONG).show();
                 }
-            });
+            });*/
+            e.printStackTrace();
         }
+
+        return null;
     }
 
     public void cerrarConexion()
@@ -175,4 +184,8 @@ public class Cliente {
         }
     }
 
+    @Override
+    protected void onPostExecute(Void result) {
+        super.onPostExecute(result);
+    }
 }
