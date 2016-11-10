@@ -10,7 +10,6 @@ namespace ServidorTracking.DataBase
 {
     public class DBManager
     {
-        
             SqlConnection cnn;
 
             SqlCommand cmd;

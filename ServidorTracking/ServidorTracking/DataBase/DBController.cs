@@ -181,7 +181,7 @@ namespace ServidorTracking.DataBase
                 {
                     g.Id = Convert.ToInt32(dt["idGrupo"]);
                     g.Nombre = Convert.ToString(dt["nombre"]);
-                    g.Anfitrion = GetCuentaById(Convert.ToInt32(dataGrupo.Rows[1]["idAnfitrion"]));
+                    g.Anfitrion = GetCuentaById(Convert.ToInt32(dataGrupo.Rows[0]["idAnfitrion"]));
                 }
             
                 foreach (DataRow dt in dataIntegrantes.Rows)
@@ -214,7 +214,7 @@ namespace ServidorTracking.DataBase
                 {
                     g.Id = Convert.ToInt32(dt["idGrupo"]);
                     g.Nombre = Convert.ToString(dt["nombre"]);
-                    g.Anfitrion = GetCuentaById(Convert.ToInt32(dataGrupo.Rows[1]["idAnfitrion"]));
+                    g.Anfitrion = GetCuentaById(Convert.ToInt32(dataGrupo.Rows[0]["idAnfitrion"]));
                 }
             
                 foreach (DataRow dt in dataIntegrantes.Rows)
