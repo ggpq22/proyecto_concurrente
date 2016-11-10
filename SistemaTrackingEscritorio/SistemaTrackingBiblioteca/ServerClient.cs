@@ -119,5 +119,15 @@ namespace SistemaTrackingBiblioteca
                 }
             }
         }
+
+        public bool Conectado()
+        {
+            return this.client.Connected;
+        }
+
+        public void BeginInvoke()
+        {
+
+        }
     }
 }

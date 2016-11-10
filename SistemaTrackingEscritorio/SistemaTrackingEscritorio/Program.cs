@@ -22,7 +22,7 @@ namespace Mapa
             //ServerClient servidor = new ServerClient(ip, int.Parse(pueto));
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new EjemploMapa());
+            Application.Run(new Login());
         }
 
     }
