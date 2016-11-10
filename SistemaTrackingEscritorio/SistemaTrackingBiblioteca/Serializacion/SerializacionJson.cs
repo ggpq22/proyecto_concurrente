@@ -37,6 +37,15 @@ namespace SistemaTrackingBiblioteca.Serializacion
                 case "MsgLocalizacion":
                     obj = JsonConvert.DeserializeObject<MsgLocalizacion>(json);
                     break;
+                case "MsgDBPeticion":
+                    obj = JsonConvert.DeserializeObject<MsgDBPeticion>(json);
+                    break;
+                case "MsgDBRespuesta":
+                    obj = JsonConvert.DeserializeObject<MsgDBRespuesta>(json);
+                    break;
+                case "MsgDBNotificacion":
+                    obj = JsonConvert.DeserializeObject<MsgNotificacion>(json);
+                    break;
                 default:
                     break;
             }

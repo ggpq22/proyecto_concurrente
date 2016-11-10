@@ -10,7 +10,6 @@ namespace ServidorTracking.DataBase
 {
     public class DBManager
     {
-        
             SqlConnection cnn;
 
             SqlCommand cmd;
@@ -131,14 +130,18 @@ namespace ServidorTracking.DataBase
                     cmd.CommandText = query;
                     cmd.CommandTimeout = 10;
                     cmd.Connection = getConnection();
-                    if (action == QueryType.UPDATE || action == QueryType.INSERT)
+                    if (action == QueryType.UPDATE)
                     {
                         valor = cmd.ExecuteNonQuery();
                     }
-                    else
+                    else if (action == QueryType.INSERT)
                     {
                         cmd.CommandText += ";SELECT SCOPE_IDENTITY();";
                         valor = Convert.ToInt32(cmd.ExecuteScalar());
+                    }
+                    else
+                    {
+                        valor = cmd.ExecuteNonQuery();
                     }
 
                 }
@@ -173,7 +176,7 @@ namespace ServidorTracking.DataBase
                 }
                 catch (Exception ex)
                 {
-                    //throw ex;
+                    throw ex;
                 }
                 finally
                 {
@@ -201,14 +204,18 @@ namespace ServidorTracking.DataBase
                     returnParameter.Direction = ParameterDirection.ReturnValue;
 
                     cmd.Connection = getConnection();
-                    if (action == QueryType.UPDATE || action == QueryType.INSERT)
+                    if (action == QueryType.UPDATE)
                     {
                         valor = cmd.ExecuteNonQuery();
                     }
-                    else
+                    else if (action == QueryType.INSERT)
                     {
                         cmd.ExecuteNonQuery();
                         valor = Convert.ToInt32(returnParameter.Value);
+                    }
+                    else
+                    {
+                        valor = cmd.ExecuteNonQuery();
                     }
                 }
                 catch (Exception ex)

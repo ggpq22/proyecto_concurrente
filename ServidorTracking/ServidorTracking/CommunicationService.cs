@@ -100,7 +100,7 @@ namespace ServidorTracking
                     MsgConexion menCon;
                     MsgLocalizacion menLoc;
                     MsgDBPeticion menDB;
-                    Console.WriteLine(str);
+                    Console.WriteLine("RECIBIENDO: " + str);
                     if (message is MsgConexion)
                     {
                         menCon = message as MsgConexion;
@@ -148,7 +148,7 @@ namespace ServidorTracking
 
                         if(menDB.CodigoPeticion == "Login")
                         {
-                            Cuenta c =  menDB.Params[0] as Cuenta;
+                            Cuenta c =  menDB.ParamsCuenta[0];
                             Cuenta cres;
                             MsgDBRespuesta res = new MsgDBRespuesta();
 
@@ -156,7 +156,7 @@ namespace ServidorTracking
                             {
                                 cres = dbcontrol.Login(c);
 
-                                res.Return.Add(cres);
+                                res.ReturnCuenta.Add(cres);
                             }
                             catch(Exception e)
                             {
@@ -174,7 +174,7 @@ namespace ServidorTracking
                         }
                         else if (menDB.CodigoPeticion == "CrearCuenta")
                         {
-                            Cuenta c = menDB.Params[0] as Cuenta;
+                            Cuenta c = menDB.ParamsCuenta[0];
                             MsgDBRespuesta res = new MsgDBRespuesta();
                             Cuenta cres;
                             
@@ -182,7 +182,7 @@ namespace ServidorTracking
                             {
                                 cres = dbcontrol.CreateCuenta(c);
 
-                                res.Return.Add(cres);
+                                res.ReturnCuenta.Add(cres);
                             }
                             catch (Exception e)
                             {
@@ -200,7 +200,7 @@ namespace ServidorTracking
                         }
                         else if (menDB.CodigoPeticion == "BorrarCuenta")
                         {
-                            Cuenta c = menDB.Params[0] as Cuenta;
+                            Cuenta c = menDB.ParamsCuenta[0];
                             MsgDBRespuesta res = new MsgDBRespuesta();
 
                             try
@@ -224,7 +224,7 @@ namespace ServidorTracking
                         }
                         else if (menDB.CodigoPeticion == "CrearGrupo")
                         {
-                            Grupo g = menDB.Params[0] as Grupo;
+                            Grupo g = menDB.ParamsGrupo[0];
                             Grupo gres;
                             MsgDBRespuesta res = new MsgDBRespuesta();
 
@@ -243,14 +243,14 @@ namespace ServidorTracking
                                 res.To = menDB.To;
                                 res.Fecha = DateTime.Now;
                                 res.CodigoPeticion = menDB.CodigoPeticion;
-                                res.Return.Add(g);
+                                res.ReturnGrupo.Add(g);
 
                                 OnDBRequested(res);
                             }
                         }
                         else if (menDB.CodigoPeticion == "GetGrupoPorAnfitrion")
                         {
-                            Cuenta c = menDB.Params[0] as Cuenta;
+                            Cuenta c = menDB.ParamsCuenta[0];
                             List<Grupo> g = new List<Grupo>();
                             MsgDBRespuesta res = new MsgDBRespuesta();
 
@@ -269,14 +269,14 @@ namespace ServidorTracking
                                 res.To = menDB.To;
                                 res.Fecha = DateTime.Now;
                                 res.CodigoPeticion = menDB.CodigoPeticion;
-                                res.Return.AddRange(g);
+                                res.ReturnGrupo.AddRange(g);
 
                                 OnDBRequested(res);
                             }
                         }
                         else if (menDB.CodigoPeticion == "GetGrupoPorIntegrante")
                         {
-                            Cuenta c = menDB.Params[0] as Cuenta;
+                            Cuenta c = menDB.ParamsCuenta[0];
                             MsgDBRespuesta res = new MsgDBRespuesta();
                             List<Grupo> g = new List<Grupo>();
 
@@ -295,7 +295,7 @@ namespace ServidorTracking
                                 res.To = menDB.To;
                                 res.Fecha = DateTime.Now;
                                 res.CodigoPeticion = menDB.CodigoPeticion;
-                                res.Return.AddRange(g);
+                                res.ReturnGrupo.AddRange(g);
 
                                 OnDBRequested(res);
                             }
@@ -304,8 +304,8 @@ namespace ServidorTracking
                         {
                             if (!menDB.Notificacion)
                             {
-                                Cuenta c = menDB.Params[0] as Cuenta;
-                                Grupo g = menDB.Params[1] as Grupo;
+                                Cuenta c = menDB.ParamsCuenta[0];
+                                Grupo g = menDB.ParamsGrupo[0];
                                 Grupo gr = new Grupo();
                                 MsgDBRespuesta res = new MsgDBRespuesta();
 
@@ -324,7 +324,7 @@ namespace ServidorTracking
                                     res.To = menDB.To;
                                     res.Fecha = DateTime.Now;
                                     res.CodigoPeticion = menDB.CodigoPeticion;
-                                    res.Return.Add(gr);
+                                    res.ReturnGrupo.Add(gr);
 
                                     OnDBRequested(res);
                                 }
@@ -342,8 +342,8 @@ namespace ServidorTracking
                         }
                         else if (menDB.CodigoPeticion == "BorrarCuentaDeGrupo")
                         {
-                            Cuenta c = menDB.Params[0] as Cuenta;
-                            Grupo g = menDB.Params[1] as Grupo;
+                            Cuenta c = menDB.ParamsCuenta[0];
+                            Grupo g = menDB.ParamsGrupo[0];
                             Grupo gr = new Grupo();
                             MsgDBRespuesta res = new MsgDBRespuesta();
 
@@ -362,14 +362,14 @@ namespace ServidorTracking
                                 res.To = menDB.To;
                                 res.Fecha = DateTime.Now;
                                 res.CodigoPeticion = menDB.CodigoPeticion;
-                                res.Return.Add(gr);
+                                res.ReturnGrupo.Add(gr);
 
                                 OnDBRequested(res);
                             }
                         }
                         else if (menDB.CodigoPeticion == "BorrarGrupo")
                         {
-                            Grupo g = menDB.Params[0] as Grupo;
+                            Grupo g = menDB.ParamsGrupo[0];
                             MsgDBRespuesta res = new MsgDBRespuesta();
 
                             try
@@ -393,7 +393,7 @@ namespace ServidorTracking
                         }
                         else if (menDB.CodigoPeticion == "GetHistorialPorGrupo")
                         {
-                            Grupo g = menDB.Params[0] as Grupo;
+                            Grupo g = menDB.ParamsGrupo[0];
                             List<Historial> hr = new List<Historial>();
                             MsgDBRespuesta res = new MsgDBRespuesta();
 
@@ -412,14 +412,14 @@ namespace ServidorTracking
                                 res.To = menDB.To;
                                 res.Fecha = DateTime.Now;
                                 res.CodigoPeticion = menDB.CodigoPeticion;
-                                res.Return.AddRange(hr);
+                                res.ReturnHistorial.AddRange(hr);
 
                                 OnDBRequested(res);
                             }
                         }
                         else if (menDB.CodigoPeticion == "GetHistorialPorCuenta")
                         {
-                            Cuenta c = menDB.Params[0] as Cuenta;
+                            Cuenta c = menDB.ParamsCuenta[0] as Cuenta;
                             List<Historial> hr = new List<Historial>();
                             MsgDBRespuesta res = new MsgDBRespuesta();
 
@@ -438,7 +438,7 @@ namespace ServidorTracking
                                 res.To = menDB.To;
                                 res.Fecha = DateTime.Now;
                                 res.CodigoPeticion = menDB.CodigoPeticion;
-                                res.Return.AddRange(hr);
+                                res.ReturnHistorial.AddRange(hr);
 
                                 OnDBRequested(res);
                             }
@@ -463,7 +463,7 @@ namespace ServidorTracking
                                 res.To = menDB.To;
                                 res.Fecha = DateTime.Now;
                                 res.CodigoPeticion = menDB.CodigoPeticion;
-                                res.Return.AddRange(lr);
+                                res.ReturnCuenta.AddRange(lr);
 
                                 OnDBRequested(res);
                             }
@@ -489,7 +489,7 @@ namespace ServidorTracking
             try
             {
                 string str = SerializarcionJson.Serializar<Mensaje>(message);
-                Console.WriteLine(str);
+                Console.WriteLine("ENVIANDO: " + str);
                 delivery.SendMessage(str);
             }
             catch (Exception e)

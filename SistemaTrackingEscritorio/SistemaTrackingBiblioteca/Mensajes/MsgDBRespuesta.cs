@@ -28,9 +28,14 @@ namespace SistemaTrackingBiblioteca.Mensajes
         /// <para>- "BorrarGrupo" = return: void</para>
         /// <para>- "GetHistorialPorGrupo" = return: Historial(s)</para>
         /// <para>- "GetHistorialPorCuenta" = return: Historial(s)</para>
+        /// <para>- "GetCuentas" = return: Cuenta(s)</para>
         /// </summary>
         public string CodigoPeticion { get; set; }
 
-        public List<DBEntidad> Return= new List<DBEntidad>();
+        public List<Cuenta> ReturnCuenta = new List<Cuenta>();
+
+        public List<Grupo> ReturnGrupo = new List<Grupo>();
+
+        public List<Historial> ReturnHistorial = new List<Historial>();
     }
 }
