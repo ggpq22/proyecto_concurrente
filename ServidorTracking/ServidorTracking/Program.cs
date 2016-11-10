@@ -12,7 +12,8 @@ namespace ServidorTracking
     {
         static void Main(string[] args)
         {
-            string ip = "10.75.61.201";
+
+            string ip = "10.75.61.199";
 
             int port = 8999;
 
@@ -24,7 +25,7 @@ namespace ServidorTracking
                 try
                 {
                     server.StartServer();
-                    
+
                     while(true)
                     {
                         TcpClient tcpclient = server.AcceptClient();

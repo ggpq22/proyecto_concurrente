@@ -7,14 +7,14 @@ import java.util.List;
  * Created by Mario on 18/10/2016.
  */
 public class Mensaje {
-    private String To;
+    private ArrayList<String> To;
     private String From;
     private String Fecha;
     private String Tipo;
     private boolean IsValido;
     public ArrayList<String> Errores = new ArrayList<>();
 
-    public Mensaje(String to, String from, String fecha, String tipo, boolean IsValido) {
+    public Mensaje(ArrayList<String> to, String from, String fecha, String tipo, boolean IsValido) {
         this.To = to;
         this.From = from;
         this.Tipo = tipo;
@@ -30,11 +30,11 @@ public class Mensaje {
         this.Fecha = fecha;
     }
 
-    public String getTo() {
+    public ArrayList<String> getTo() {
         return To;
     }
 
-    public void setTo(String to) {
+    public void setTo(ArrayList<String> to) {
         this.To = to;
     }
 

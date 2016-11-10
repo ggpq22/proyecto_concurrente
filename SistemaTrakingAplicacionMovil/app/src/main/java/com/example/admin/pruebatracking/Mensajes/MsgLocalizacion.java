@@ -1,11 +1,13 @@
 package com.example.admin.pruebatracking.Mensajes;
 
+import java.util.ArrayList;
+
 /**
  * Created by Mario on 18/10/2016.
  */
 public class MsgLocalizacion extends Mensaje {
 
-    public MsgLocalizacion(String to, String from, String fecha, String latitud, String longitud) {
+    public MsgLocalizacion(ArrayList<String> to, String from, String fecha, String latitud, String longitud) {
         super(to, from, fecha, "MsgLocalizacion", true);
         this.Latitud = latitud;
         this.Longitud = longitud;

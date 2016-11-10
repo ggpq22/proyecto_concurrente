@@ -31,8 +31,6 @@ public class FragmentGps extends Fragment {
 
     private Button btnLocalizacion;
     private ImageView imageView;
-    TextView response;
-    EditText editTextAddress, editTextPort;
     private AnimationDrawable savinAnimation;
     Context context;
     Cliente cliente;
@@ -45,9 +43,6 @@ public class FragmentGps extends Fragment {
         context = getActivity();
 
         imageView = (ImageView)view.findViewById(R.id.animacion);
-        editTextAddress = (EditText) view.findViewById(R.id.textIP);
-        editTextPort = (EditText) view.findViewById(R.id.textPuerto);
-        //response = (TextView) view.findViewById(R.id.respuesta);
         imageView.setBackgroundResource(R.drawable.animacion_desplazamiento);
         savinAnimation = (AnimationDrawable)imageView.getBackground();
 
@@ -60,10 +55,10 @@ public class FragmentGps extends Fragment {
                         switch (btnLocalizacion.getText().toString())
                         {
                             case "ENVIAR LOCALIZACIÓN":
-                                btnLocalizacion.setText("STOP LOCALIZACIÓN");
+                                /*btnLocalizacion.setText("STOP LOCALIZACIÓN");
                                 btnLocalizacion.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_stop1, 0, 0, 0);
-                                cliente = new Cliente(btnLocalizacion, savinAnimation, context, editTextAddress.getText().toString(), Integer.parseInt(editTextPort.getText().toString()));
-                                cliente.iniciarConexion();
+                                cliente = new Cliente(btnLocalizacion, savinAnimation, context, "192.168.0.100", 8999);
+                                cliente.execute();
                                 cliente.iniciarLocalizacion();
                                 cliente.recibirMensajes();
                                 ArrayList<DBEntidad> arrayCuenta = new ArrayList<DBEntidad>();
@@ -72,15 +67,16 @@ public class FragmentGps extends Fragment {
                                 cuenta.setPass("123");
                                 arrayCuenta.add(cuenta);
                                 cliente.enviarMensajes(new MsgDBPeticion("yo", "yo", "2016-10-18", "GetGrupoPorIntegrante", arrayCuenta));
+                                */
                                 savinAnimation.start();
 
                                 break;
                             case "STOP LOCALIZACIÓN":
                                 btnLocalizacion.setText("ENVIAR LOCALIZACIÓN");
                                 btnLocalizacion.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_localizacion, 0, 0, 0);
-                                cliente.cerrarConexion();
+                                /*cliente.cerrarConexion();
                                 cliente.pararLocalizacion();
-                                cliente.pararRecibirMensajes();
+                                cliente.pararRecibirMensajes();*/
                                 savinAnimation.stop();
                         }
                     }
