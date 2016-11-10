@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using System.Net;
 
 namespace ServidorTracking
 {
@@ -12,6 +13,7 @@ namespace ServidorTracking
         static void Main(string[] args)
         {
             string ip = "10.75.32.60";
+
             int port = 8999;
 
             TcpServer server = new TcpServer(ip, port);
@@ -19,21 +21,49 @@ namespace ServidorTracking
 
             Thread runningServer = new Thread(() => {
 
-                server.StartServer();
-
-                while(true)
+                try
                 {
-                    TcpClient tcpclient = server.AcceptClient();
+                    server.StartServer();
 
-                    ServerClient client = new ServerClient(tcpclient, router);
+                    while(true)
+                    {
+                        TcpClient tcpclient = server.AcceptClient();
+                        Console.WriteLine("Cliente nuevo");
 
-                    router.AddClient(client);
+                        ServerClient client = new ServerClient(tcpclient, router);
+
+                        router.AddClient(client);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("== ERROR == -" + e.Message);
                 }
             });
 
-            runningServer.Start();
+            try
+            {
+                runningServer.Start();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("== ERROR == -" + e.Message);
+            }
 
             Console.WriteLine("Server running...");
+
+            string command;
+
+            while (true)
+            {
+                command = Console.ReadLine();
+
+                if (command == "shutdown")
+                {
+                    //Console.Beep();
+                    Environment.Exit(0);
+                }
+            }
         }
     }
 }

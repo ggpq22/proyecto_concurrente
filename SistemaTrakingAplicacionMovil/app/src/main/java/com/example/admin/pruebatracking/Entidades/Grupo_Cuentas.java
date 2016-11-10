@@ -3,12 +3,14 @@ package com.example.admin.pruebatracking.Entidades;
 /**
  * Created by Mario on 25/10/2016.
  */
-public class Grupo_Cuentas {
+public class Grupo_Cuentas extends DBEntidad{
+
     public int IdGrupo;
 
     public int IdCuenta;
 
-    public Grupo_Cuentas() {
+    public Grupo_Cuentas(int Id) {
+        super(Id);
     }
 
     public int getIdGrupo() {

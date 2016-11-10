@@ -160,12 +160,12 @@ namespace ServidorTracking.DataBase
                 DataTable dt = new DataTable();
 
                 cmd = new SqlCommand();
-                cmd.CommandType = System.Data.CommandType.Text;
-                cmd.CommandText = query;
-                cmd.CommandTimeout = 10;
 
                 try
                 {
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.CommandText = query;
+                    cmd.CommandTimeout = 10;
                     cmd.Connection = getConnection();
                     SqlDataAdapter da = new SqlDataAdapter(cmd);
                     da.FillSchema(dt, SchemaType.Source);
@@ -189,16 +189,17 @@ namespace ServidorTracking.DataBase
                 int valor;
 
                 cmd = new SqlCommand();
-                cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                cmd.CommandText = procedure;
-                cmd.Parameters.AddRange(param);
-                cmd.CommandTimeout = 10;
-
-                var returnParameter = cmd.Parameters.Add("@ReturnVal", SqlDbType.Int);
-                returnParameter.Direction = ParameterDirection.ReturnValue;
 
                 try
                 {
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.CommandText = procedure;
+                    cmd.Parameters.AddRange(param);
+                    cmd.CommandTimeout = 10;
+
+                    var returnParameter = cmd.Parameters.Add("@ReturnVal", SqlDbType.Int);
+                    returnParameter.Direction = ParameterDirection.ReturnValue;
+
                     cmd.Connection = getConnection();
                     if (action == QueryType.UPDATE || action == QueryType.INSERT)
                     {
@@ -227,14 +228,14 @@ namespace ServidorTracking.DataBase
                 DataTable dt = new DataTable();
 
                 cmd = new SqlCommand();
-                cmd.CommandType = System.Data.CommandType.Text;
-                cmd.CommandText = procedure;
-                cmd.Parameters.AddRange(param);
-                cmd.CommandTimeout = 10;
-
 
                 try
                 {
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.CommandText = procedure;
+                    cmd.Parameters.AddRange(param);
+                    cmd.CommandTimeout = 10;
+
                     cmd.Connection = getConnection();
                     SqlDataAdapter da = new SqlDataAdapter(cmd);
                     da.FillSchema(dt, SchemaType.Source);
@@ -250,7 +251,6 @@ namespace ServidorTracking.DataBase
                 }
 
                 return dt;
-            
         }
     }
 }

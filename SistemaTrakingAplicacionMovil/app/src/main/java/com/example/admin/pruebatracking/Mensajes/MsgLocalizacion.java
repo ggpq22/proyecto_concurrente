@@ -1,36 +1,36 @@
 package com.example.admin.pruebatracking.Mensajes;
 
+import java.util.ArrayList;
+
 /**
  * Created by Mario on 18/10/2016.
  */
 public class MsgLocalizacion extends Mensaje {
 
-
-
-    public MsgLocalizacion(String to, String from, String fecha, String latitud, String longitud) {
-        super(to, from, fecha, "MsgLocalizacion");
-        this.latitud = latitud;
-        this.longitud = longitud;
+    public MsgLocalizacion(ArrayList<String> to, String from, String fecha, String latitud, String longitud) {
+        super(to, from, fecha, "MsgLocalizacion", true);
+        this.Latitud = latitud;
+        this.Longitud = longitud;
 
     }
 
-    private String latitud;
-    private String longitud;
+    private String Latitud;
+    private String Longitud;
 
     public String getLatitud() {
-        return latitud;
+        return Latitud;
     }
 
     public void setLatitud(String latitud) {
-        this.latitud = latitud;
+        this.Latitud = latitud;
     }
 
     public String getLongitud() {
-        return longitud;
+        return Longitud;
     }
 
     public void setLongitud(String longitud) {
-        this.longitud = longitud;
+        this.Longitud = longitud;
     }
 
 

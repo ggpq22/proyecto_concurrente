@@ -3,23 +3,16 @@ package com.example.admin.pruebatracking.Entidades;
 /**
  * Created by Mario on 25/10/2016.
  */
-public class Cuenta {
-
-    private int IdCuenta;
+public class Cuenta extends DBEntidad{
 
     private String Usuario;
 
     private String Pass;
 
-    public Cuenta() {
-    }
-
-    public int getIdCuenta() {
-        return IdCuenta;
-    }
-
-    public void setIdCuenta(int idCuenta) {
-        this.IdCuenta = idCuenta;
+    public Cuenta(int Id, String Usuario, String Pass) {
+        super(Id);
+        this.Usuario = Usuario;
+        this.Pass = Pass;
     }
 
     public String getUsuario() {

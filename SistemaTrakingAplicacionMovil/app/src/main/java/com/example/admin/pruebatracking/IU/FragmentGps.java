@@ -2,7 +2,6 @@ package com.example.admin.pruebatracking.IU;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
 import android.location.LocationManager;
@@ -19,24 +18,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.admin.pruebatracking.Cliente;
+import com.example.admin.pruebatracking.Entidades.Cuenta;
+import com.example.admin.pruebatracking.Entidades.DBEntidad;
+import com.example.admin.pruebatracking.Mensajes.MsgDBPeticion;
+import com.example.admin.pruebatracking.ServicioEnviar;
 import com.example.admin.pruebatracking.R;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
+import java.util.ArrayList;
 
 
 public class FragmentGps extends Fragment {
 
     private Button btnLocalizacion;
     private ImageView imageView;
-    TextView response;
-    EditText editTextAddress, editTextPort;
     private AnimationDrawable savinAnimation;
     Context context;
-    LocationManager manager;
-    Cliente listener;
+    Cliente cliente;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,9 +43,6 @@ public class FragmentGps extends Fragment {
         context = getActivity();
 
         imageView = (ImageView)view.findViewById(R.id.animacion);
-        editTextAddress = (EditText) view.findViewById(R.id.textIP);
-        editTextPort = (EditText) view.findViewById(R.id.textPuerto);
-        response = (TextView) view.findViewById(R.id.respuesta);
         imageView.setBackgroundResource(R.drawable.animacion_desplazamiento);
         savinAnimation = (AnimationDrawable)imageView.getBackground();
 
@@ -61,35 +55,28 @@ public class FragmentGps extends Fragment {
                         switch (btnLocalizacion.getText().toString())
                         {
                             case "ENVIAR LOCALIZACIÓN":
-                                btnLocalizacion.setText("STOP LOCALIZACIÓN");
+                                /*btnLocalizacion.setText("STOP LOCALIZACIÓN");
                                 btnLocalizacion.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_stop1, 0, 0, 0);
-
-
-                                listener = new Cliente(btnLocalizacion, savinAnimation, getActivity(), editTextAddress.getText().toString(), Integer.parseInt(editTextPort.getText().toString()), response);
-                                listener.execute();
-
-                                manager = (LocationManager)getActivity().getSystemService(Context.LOCATION_SERVICE);
-                                long tiempo = 5000;
-                                float distancia = 5;
-
-                                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                                    //Requiere permisos para Android 6.0
-                                    Log.e("Location", "No se tienen permisos necesarios!, se requieren.");
-                                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 225);
-                                    manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, tiempo, distancia, listener);
-                                    return;
-                                }else{
-                                    Log.i("Location", "Permisos necesarios OK!.");
-                                    manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, tiempo, distancia, listener);
-                                }
+                                cliente = new Cliente(btnLocalizacion, savinAnimation, context, "192.168.0.100", 8999);
+                                cliente.execute();
+                                cliente.iniciarLocalizacion();
+                                cliente.recibirMensajes();
+                                ArrayList<DBEntidad> arrayCuenta = new ArrayList<DBEntidad>();
+                                Cuenta cuenta = new Cuenta(1, "pablo", "123");
+                                cuenta.setUsuario("pablo");
+                                cuenta.setPass("123");
+                                arrayCuenta.add(cuenta);
+                                cliente.enviarMensajes(new MsgDBPeticion("yo", "yo", "2016-10-18", "GetGrupoPorIntegrante", arrayCuenta));
+                                */
                                 savinAnimation.start();
 
                                 break;
                             case "STOP LOCALIZACIÓN":
                                 btnLocalizacion.setText("ENVIAR LOCALIZACIÓN");
                                 btnLocalizacion.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_localizacion, 0, 0, 0);
-                                listener.cancel(true);
-                                manager.removeUpdates(listener);
+                                /*cliente.cerrarConexion();
+                                cliente.pararLocalizacion();
+                                cliente.pararRecibirMensajes();*/
                                 savinAnimation.stop();
                         }
                     }

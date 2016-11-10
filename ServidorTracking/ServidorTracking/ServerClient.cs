@@ -8,6 +8,7 @@ using System.Collections.Concurrent;
 using SistemaTrackingBiblioteca.Serializacion;
 using SistemaTrackingBiblioteca.Mensajes;
 using ServidorTracking.DataBase;
+using SistemaTrackingBiblioteca.Entidades;
 
 namespace ServidorTracking
 {
@@ -29,7 +30,21 @@ namespace ServidorTracking
             set { getsLocations = value; }
         }
 
-        //TODO: Serializacion y logica para los tipos de mensaje
+        CancellationToken token;
+
+        public CancellationToken Token
+        {
+            get { return token; }
+            set { token = value; }
+        }
+
+        CountdownEvent countdownEvent;
+
+        public CountdownEvent CountdownEvent
+        {
+            get { return countdownEvent; }
+            set { countdownEvent = value; }
+        }
 
         TcpClient client;
         CommunicationService service;
@@ -44,7 +59,10 @@ namespace ServidorTracking
         {
             MsgConexion msn = message as MsgConexion;
             this.name = msn.From;
-            this.getsLocations = dbCon.GetCuentaByUsuario(msn.From).RecibeLocalizacion;
+            Cuenta cuenta = null;
+            cuenta = dbCon.GetCuentaByUsuario(msn.From);
+            if(cuenta != null)
+                this.getsLocations = cuenta.RecibeLocalizacion;
             router.RouteMessage(msn);
         }
         void service_Disconnect(object sender, Mensaje message)
@@ -114,7 +132,14 @@ namespace ServidorTracking
                         service.SendToClient(m);
                     }
                 }
+
+                if (token.IsCancellationRequested)
+                {
+                    break;
+                }
             }
+            
+            countdownEvent.Signal();
         }
     }
 }

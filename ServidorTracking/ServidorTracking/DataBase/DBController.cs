@@ -22,75 +22,111 @@ namespace ServidorTracking.DataBase
             DataTable data;
             Cuenta c;
 
-            data = dbMan.search("select * from cuenta where state = 1 and usuario = " + cuenta.Usuario + " and pass = " + cuenta.Pass);
+            try
+            {
+                data = dbMan.search("select * from cuenta where state = 1 and usuario = '" + cuenta.Usuario + "' and pass = '" + cuenta.Pass + "'");
 
-            if (data.Rows.Count < 1)
-            {
-                throw new Exception("Su combinacion de Usuario y Contraseña no existen.");
+                if (data.Rows.Count < 1)
+                {
+                    throw new Exception("Su combinacion de Usuario y Contraseña no existen.");
+                }
+                else
+                {
+                    c = GetCuentaById(Convert.ToInt32(data.Rows[0]["idCuenta"]));
+                }
             }
-            else
+            catch(Exception e)
             {
-                c = GetCuentaById(Convert.ToInt32(data.Rows[0]["idCuenta"]));
-                return c;
+                throw e;
             }
+            
+            return c;
         }
 
         public Cuenta CreateCuenta(Cuenta cuenta)
         {
             DataTable data;
-            data = dbMan.search("select * from cuenta where state = 1 and usuario = " + cuenta.Usuario);
+            Cuenta c;
+            int id;
 
-            if (data.Rows.Count > 0)
+            try
             {
-                throw new Exception("Ese usuario ya existe.");
+                data = dbMan.search("select * from cuenta where state = 1 and usuario = '" + cuenta.Usuario + "'");
+            
+                if (data.Rows.Count > 0)
+                {
+                    throw new Exception("Ese usuario ya existe.");
+                }
+                else
+                {
+                    id = dbMan.execute("insert into cuenta(usuario, pass, state) values('" + cuenta.Usuario + "', '" + cuenta.Pass + "', 1)", QueryType.INSERT);
+
+                    c = GetCuentaById(id);
+                }
             }
-            else
+            catch (Exception e)
             {
-                int id;
-                id = dbMan.execute("insert into cuenta(usuario, pass, state) values(" + cuenta.Usuario + ", " + cuenta.Pass + ", 1)", QueryType.INSERT);
-
-                Cuenta c = GetCuentaById(id);
-
-                return c;
+                throw e;
             }
+            
+            return c;
         }
 
         public void DeleteCuenta(int idCuenta)
         {
-            dbMan.execute("update cuenta set state = 0 where idCuenta = " + idCuenta, QueryType.UPDATE);
+            try
+            {
+                dbMan.execute("update cuenta set state = 0 where idCuenta = " + idCuenta, QueryType.UPDATE);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         public Cuenta GetCuentaById(int idCuenta)
         {
             DataTable data;
-
-            data = dbMan.search("select * from cuenta where state = 1 and idCuenta = " + idCuenta);
-
             Cuenta c = new Cuenta();
 
-            foreach (DataRow dt in data.Rows)
+            try
             {
-                c.Id = Convert.ToInt32(dt["idCuenta"]);
-                c.Usuario = Convert.ToString(dt["usuario"]);
-                c.Pass = Convert.ToString(dt["pass"]);
+                data = dbMan.search("select * from cuenta where state = 1 and idCuenta = " + idCuenta);
+            
+                foreach (DataRow dt in data.Rows)
+                {
+                    c.Id = Convert.ToInt32(dt["idCuenta"]);
+                    c.Usuario = Convert.ToString(dt["usuario"]);
+                    c.Pass = Convert.ToString(dt["pass"]);
+                }
             }
-
+            catch (Exception e)
+            {
+                throw e;
+            }
+                
             return c;
         }
 
         public Cuenta GetCuentaByUsuario(string nombreUsuario)
         {
             DataTable data;
-
-            data = dbMan.search("select * from cuenta where state = 1 and usuario = " + nombreUsuario);
-
             Cuenta c = new Cuenta();
 
-            foreach (DataRow dt in data.Rows)
+            try
             {
-                c.Id = Convert.ToInt32(dt["idCuenta"]);
-                c.Usuario = Convert.ToString(dt["usuario"]);
-                c.Pass = Convert.ToString(dt["pass"]);
+                data = dbMan.search("select * from cuenta where state = 1 and usuario = '" + nombreUsuario + "'");
+            
+                foreach (DataRow dt in data.Rows)
+                {
+                    c.Id = Convert.ToInt32(dt["idCuenta"]);
+                    c.Usuario = Convert.ToString(dt["usuario"]);
+                    c.Pass = Convert.ToString(dt["pass"]);
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
             }
 
             return c;
@@ -99,51 +135,66 @@ namespace ServidorTracking.DataBase
         public Grupo CreateGrupo(Grupo grupo)
         {
             DataTable data;
-            data = dbMan.search("select * from grupo where state = 1 and nombre = " + grupo.Nombre);
+            Grupo g;
+            int id;
 
-            if (data.Rows.Count > 0)
+            try
             {
-                throw new Exception("Ese grupo ya existe.");
-            }
-            else
-            {
-                int id = dbMan.execute("insert into Grupo(nombre, idAnfitrion, state) values(" + grupo.Nombre + ", " + grupo.Anfitrion.Id + ", 1)", QueryType.INSERT);
+                data = dbMan.search("select * from grupo where state = 1 and nombre = '" + grupo.Nombre + "'");
 
-                foreach (Cuenta c in grupo.Integrantes)
+                if (data.Rows.Count > 0)
                 {
-                    AddCuentaToGrupo(c.Id, id);
+                    throw new Exception("Ese grupo ya existe.");
                 }
+                else
+                {
+                    id = dbMan.execute("insert into Grupo(nombre, idAnfitrion, state) values('" + grupo.Nombre + "', " + grupo.Anfitrion.Id + ", 1)", QueryType.INSERT);
 
-                Grupo g = GetGrupoById(id);
+                    foreach (Cuenta c in grupo.Integrantes)
+                    {
+                        AddCuentaToGrupo(c.Id, id);
+                    }
 
-                return g;
+                    g = GetGrupoById(id);
+                }
             }
+            catch (Exception e)
+            {
+                throw e;
+            }
+            
+            return g;
         }
 
         public Grupo GetGrupoById(int idGrupo)
         {
             DataTable dataGrupo, dataIntegrantes;
-
-            dataGrupo = dbMan.search("select * from grupo where state = 1 and idGrupo = " + idGrupo);
-            dataIntegrantes = dbMan.search("select * from grupo_cuentas where state = 1 and idGrupo = " + idGrupo);
-
             Grupo g = new Grupo();
-
-            foreach (DataRow dt in dataGrupo.Rows)
-            {
-                g.Id = Convert.ToInt32(dt["idGrupo"]);
-                g.Nombre = Convert.ToString(dt["nombre"]);
-                g.Anfitrion = GetCuentaById(Convert.ToInt32(dataGrupo.Rows[1]["idAnfitrion"]));
-            }
-
             List<Cuenta> c = new List<Cuenta>();
 
-            foreach (DataRow dt in dataIntegrantes.Rows)
+            try
             {
-                c.Add(GetCuentaById(Convert.ToInt32(dt["idCuenta"])));
-            }
+                dataGrupo = dbMan.search("select * from grupo where state = 1 and idGrupo = " + idGrupo);
+                dataIntegrantes = dbMan.search("select * from grupo_cuentas where state = 1 and idGrupo = " + idGrupo);
+            
+                foreach (DataRow dt in dataGrupo.Rows)
+                {
+                    g.Id = Convert.ToInt32(dt["idGrupo"]);
+                    g.Nombre = Convert.ToString(dt["nombre"]);
+                    g.Anfitrion = GetCuentaById(Convert.ToInt32(dataGrupo.Rows[1]["idAnfitrion"]));
+                }
+            
+                foreach (DataRow dt in dataIntegrantes.Rows)
+                {
+                    c.Add(GetCuentaById(Convert.ToInt32(dt["idCuenta"])));
+                }
 
-            g.Integrantes = c;
+                g.Integrantes = c;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
 
             return g;
         }
@@ -151,27 +202,32 @@ namespace ServidorTracking.DataBase
         public Grupo GetGrupoByNombre(string nombreGrupo)
         {
             DataTable dataGrupo, dataIntegrantes;
-
-            dataGrupo = dbMan.search("select * from grupo where state = 1 and nombre = " + nombreGrupo);
-            dataIntegrantes = dbMan.search("select * from grupo_cuentas where state = 1 and idGrupo = " + Convert.ToString(dataGrupo.Rows[0]["idGrupo"]));
-
             Grupo g = new Grupo();
-
-            foreach (DataRow dt in dataGrupo.Rows)
-            {
-                g.Id = Convert.ToInt32(dt["idGrupo"]);
-                g.Nombre = Convert.ToString(dt["nombre"]);
-                g.Anfitrion = GetCuentaById(Convert.ToInt32(dataGrupo.Rows[1]["idAnfitrion"]));
-            }
-
             List<Cuenta> c = new List<Cuenta>();
 
-            foreach (DataRow dt in dataIntegrantes.Rows)
+            try
             {
-                c.Add(GetCuentaById(Convert.ToInt32(dt["idCuenta"])));
-            }
+                dataGrupo = dbMan.search("select * from grupo where state = 1 and nombre = '" + nombreGrupo + "'");
+                dataIntegrantes = dbMan.search("select * from grupo_cuentas where state = 1 and idGrupo = " + Convert.ToString(dataGrupo.Rows[0]["idGrupo"]));
+            
+                foreach (DataRow dt in dataGrupo.Rows)
+                {
+                    g.Id = Convert.ToInt32(dt["idGrupo"]);
+                    g.Nombre = Convert.ToString(dt["nombre"]);
+                    g.Anfitrion = GetCuentaById(Convert.ToInt32(dataGrupo.Rows[1]["idAnfitrion"]));
+                }
+            
+                foreach (DataRow dt in dataIntegrantes.Rows)
+                {
+                    c.Add(GetCuentaById(Convert.ToInt32(dt["idCuenta"])));
+                }
 
-            g.Integrantes = c;
+                g.Integrantes = c;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
 
             return g;
         }
@@ -179,14 +235,20 @@ namespace ServidorTracking.DataBase
         public List<Grupo> GetGrupoByAnfitrion(int idAnfitrion)
         {
             DataTable dataGrupo;
-
-            dataGrupo = dbMan.search("select * from grupo where state = 1 and idAnfitrion = " + idAnfitrion);
-
             List<Grupo> g = new List<Grupo>();
 
-            foreach (DataRow dr in dataGrupo.Rows)
+            try
             {
-                g.Add(GetGrupoById(Convert.ToInt32(dr["idGrupo"])));
+                dataGrupo = dbMan.search("select * from grupo where state = 1 and idAnfitrion = " + idAnfitrion);
+
+                foreach (DataRow dr in dataGrupo.Rows)
+                {
+                    g.Add(GetGrupoById(Convert.ToInt32(dr["idGrupo"])));
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
             }
 
             return g;
@@ -195,14 +257,20 @@ namespace ServidorTracking.DataBase
         public List<Grupo> GetGrupoByIntegrante(int idIntegrante)
         {
             DataTable dataGrupo;
-
-            dataGrupo = dbMan.search("select * from grupo_cuentas where state = 1 and idCuenta = " + idIntegrante);
-
             List<Grupo> g = new List<Grupo>();
 
-            foreach (DataRow dr in dataGrupo.Rows)
+            try
             {
-                g.Add(GetGrupoById(Convert.ToInt32(dr["idGrupo"])));
+                dataGrupo = dbMan.search("select * from grupo_cuentas where state = 1 and idCuenta = " + idIntegrante);
+
+                foreach (DataRow dr in dataGrupo.Rows)
+                {
+                    g.Add(GetGrupoById(Convert.ToInt32(dr["idGrupo"])));
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
             }
 
             return g;
@@ -210,44 +278,76 @@ namespace ServidorTracking.DataBase
 
         public Grupo AddCuentaToGrupo(int idIntegrante, int idGrupo)
         {
-            int id = dbMan.execute("insert into grupo_cuentas(idGrupo, idCuenta, state) values(" + idGrupo + ", " + idIntegrante + ", 1)", QueryType.INSERT);
+            int id;
+            Grupo g;
 
-            Grupo g = GetGrupoById(id);
-
+            try
+            {
+                id = dbMan.execute("insert into grupo_cuentas(idGrupo, idCuenta, state) values(" + idGrupo + ", " + idIntegrante + ", 1)", QueryType.INSERT);
+            
+                g = GetGrupoById(id);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+                
             return g;
         }
         
         public Grupo DeleteCuentaFromGrupo(int idIntegrante, int idGrupo)
         {
-            dbMan.execute("delete from grupo_cuentas where idGrupo = " + idGrupo + " and idCuenta = " + idIntegrante, QueryType.UPDATE);
+            Grupo grupo;
 
-            Grupo grupo = GetGrupoById(idGrupo);
+            try
+            {
+                dbMan.execute("delete from grupo_cuentas where idGrupo = " + idGrupo + " and idCuenta = " + idIntegrante, QueryType.UPDATE);
+
+                grupo = GetGrupoById(idGrupo);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
 
             return grupo;
         }
 
         public void DeleteGrupo(int idGrupo)
         {
-            dbMan.execute("delete from grupo where idGrupo = " + idGrupo, QueryType.UPDATE);
+            try
+            {
+                dbMan.execute("delete from grupo where idGrupo = " + idGrupo, QueryType.UPDATE);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         public List<Historial> GetHistorialByGrupo(int idGrupo)
         {
             DataTable data;
-
-            data = dbMan.search("select * from historial where state = 1 and idGrupo = " + idGrupo);
-
             List<Historial> list = new List<Historial>();
 
-            foreach (DataRow row in data.Rows)
+            try
             {
-                list.Add(new Historial());
-                list[list.Count - 1].Id = Convert.ToInt32(row["idHistorial"]);
-                list[list.Count - 1].Grupo = GetGrupoById(Convert.ToInt32(row["idGrupo"]));
-                list[list.Count - 1].Fecha = Convert.ToDateTime(row["fecha"]);
-                list[list.Count - 1].Cuenta = GetCuentaById(Convert.ToInt32(row["idCuenta"]));
-                list[list.Count - 1].Lat = Convert.ToInt32(row["lat"]);
-                list[list.Count - 1].Long = Convert.ToInt32(row["long"]);
+                data = dbMan.search("select * from historial where state = 1 and idGrupo = " + idGrupo);
+
+                foreach (DataRow row in data.Rows)
+                {
+                    list.Add(new Historial());
+                    list[list.Count - 1].Id = Convert.ToInt32(row["idHistorial"]);
+                    list[list.Count - 1].Grupo = GetGrupoById(Convert.ToInt32(row["idGrupo"]));
+                    list[list.Count - 1].Fecha = Convert.ToDateTime(row["fecha"]);
+                    list[list.Count - 1].Cuenta = GetCuentaById(Convert.ToInt32(row["idCuenta"]));
+                    list[list.Count - 1].Lat = Convert.ToInt32(row["lat"]);
+                    list[list.Count - 1].Long = Convert.ToInt32(row["long"]);
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
             }
 
             return list;
@@ -256,20 +356,26 @@ namespace ServidorTracking.DataBase
         public List<Historial> GetHistorialByCuenta(int idCuenta)
         {
             DataTable data;
-
-            data = dbMan.search("select * from historial where state = 1 and idCuenta = " + idCuenta);
-
             List<Historial> list = new List<Historial>();
 
-            foreach (DataRow row in data.Rows)
+            try
             {
-                list.Add(new Historial());
-                list[list.Count - 1].Id = Convert.ToInt32(row["idHistorial"]);
-                list[list.Count - 1].Grupo = GetGrupoById(Convert.ToInt32(row["idGrupo"]));
-                list[list.Count - 1].Fecha = Convert.ToDateTime(row["fecha"]);
-                list[list.Count - 1].Cuenta = GetCuentaById(Convert.ToInt32(row["idCuenta"]));
-                list[list.Count - 1].Lat = Convert.ToInt32(row["lat"]);
-                list[list.Count - 1].Long = Convert.ToInt32(row["long"]);
+                data = dbMan.search("select * from historial where state = 1 and idCuenta = " + idCuenta);
+
+                foreach (DataRow row in data.Rows)
+                {
+                    list.Add(new Historial());
+                    list[list.Count - 1].Id = Convert.ToInt32(row["idHistorial"]);
+                    list[list.Count - 1].Grupo = GetGrupoById(Convert.ToInt32(row["idGrupo"]));
+                    list[list.Count - 1].Fecha = Convert.ToDateTime(row["fecha"]);
+                    list[list.Count - 1].Cuenta = GetCuentaById(Convert.ToInt32(row["idCuenta"]));
+                    list[list.Count - 1].Lat = Convert.ToInt32(row["lat"]);
+                    list[list.Count - 1].Long = Convert.ToInt32(row["long"]);
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
             }
 
             return list;
@@ -277,21 +383,58 @@ namespace ServidorTracking.DataBase
 
         public void CreateHistorial(Historial entry)
         {
-            dbMan.execute("insert into historial(idGrupo, idCuenta, fecha, lat, long, state) values(" + entry.Grupo.Id + ", " + entry.Cuenta.Id + ", "+entry.Fecha+", "+entry.Lat+", "+entry.Long+", 1)", QueryType.INSERT);
+            try
+            {
+                dbMan.execute("insert into historial(idGrupo, idCuenta, fecha, lat, long, state) values(" + entry.Grupo.Id + ", " + entry.Cuenta.Id + ", " + entry.Fecha + ", " + entry.Lat + ", " + entry.Long + ", 1)", QueryType.INSERT);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         public List<Grupo> GetAllGrupos()
         {
             DataTable data;
-            data = dbMan.search("select idGrupo from grupo");
-
             List<Grupo> gl = new List<Grupo>();
-            foreach (DataRow dt in data.Rows)
+
+            try
             {
-                gl.Add(GetGrupoById(Convert.ToInt32(dt["idGrupo"])));
+                data = dbMan.search("select idGrupo from grupo");
+
+                foreach (DataRow dt in data.Rows)
+                {
+                    gl.Add(GetGrupoById(Convert.ToInt32(dt["idGrupo"])));
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
             }
 
             return gl;
+        }
+
+        public List<Cuenta> GetAllCuentas()
+        {
+            DataTable data;
+            List<Cuenta> cl = new List<Cuenta>();
+
+            try
+            {
+                data = dbMan.search("select idCuenta from cuenta");
+
+                foreach (DataRow dt in data.Rows)
+                {
+                    cl.Add(GetCuentaById(Convert.ToInt32(dt["idCuenta"])));
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+            return cl;
         }
     }
 }

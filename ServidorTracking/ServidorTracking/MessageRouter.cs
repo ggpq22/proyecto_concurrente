@@ -20,14 +20,37 @@ namespace ServidorTracking
         ConcurrentQueue<Mensaje> mensajes = new ConcurrentQueue<Mensaje>();
         Thread routing;
 
+        CancellationToken token;
+
+        public CancellationToken Token
+        {
+            get { return token; }
+            set { token = value; }
+        }
+
+        CountdownEvent countdownEvent;
+
+        public CountdownEvent CountdownEvent
+        {
+            get { return countdownEvent; }
+            set { countdownEvent = value; }
+        }
+
         public MessageRouter()
         {
             dbCon = new DBController("pbarco", "12345Pablo");
 
-            grupos = dbCon.GetAllGrupos();
-            routing = new Thread(route);
+            try
+            {
+                grupos = dbCon.GetAllGrupos();
+                routing = new Thread(route);
 
-            routing.Start();
+                routing.Start();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("== ERROR == -" + e.Message);
+            }
         }
 
         private void route()

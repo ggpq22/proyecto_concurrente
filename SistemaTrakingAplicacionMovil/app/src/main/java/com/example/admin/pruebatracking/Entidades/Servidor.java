@@ -3,8 +3,7 @@ package com.example.admin.pruebatracking.Entidades;
 /**
  * Created by Mario on 25/10/2016.
  */
-public class Servidor {
-    public int IdServidor;
+public class Servidor extends DBEntidad{
 
     public String Nombre;
 
@@ -12,15 +11,8 @@ public class Servidor {
 
     public String Puerto;
 
-    public Servidor() {
-    }
-
-    public int getIdServidor() {
-        return IdServidor;
-    }
-
-    public void setIdServidor(int idServidor) {
-        IdServidor = idServidor;
+    public Servidor(int Id) {
+        super(Id);
     }
 
     public String getNombre() {
