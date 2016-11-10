@@ -29,6 +29,7 @@ namespace SistemaTrackingBiblioteca.Mensajes
         /// <para>- "BorrarGrupo" = params: Grupo</para>
         /// <para>- "GetHistorialPorGrupo" = params: Grupo</para>
         /// <para>- "GetHistorialPorCuenta" = params: Cuenta</para>
+        /// <para>- "GetCuentas" = params:</para>
         /// </summary>
         public string CodigoPeticion { get; set; }
 
