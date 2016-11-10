@@ -173,7 +173,7 @@ namespace ServidorTracking.DataBase
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    //throw ex;
                 }
                 finally
                 {

@@ -100,7 +100,7 @@ namespace ServidorTracking
                     MsgConexion menCon;
                     MsgLocalizacion menLoc;
                     MsgDBPeticion menDB;
-
+                    Console.WriteLine(str);
                     if (message is MsgConexion)
                     {
                         menCon = message as MsgConexion;
