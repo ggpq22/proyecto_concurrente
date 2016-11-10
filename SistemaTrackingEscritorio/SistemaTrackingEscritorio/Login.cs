@@ -158,7 +158,7 @@ namespace Mapa
                                 var puerto = Configuracion.GetConfiguracion("PuertoServidor");
                                 var retorno = new ServerClient(ip, int.Parse(puerto));
                                 server = retorno;
-                                //conectado = true;
+                                conectado = true;
                                 server.Connect +=server_Connect;
                                 server.Disconnect +=server_Disconnect;
 
