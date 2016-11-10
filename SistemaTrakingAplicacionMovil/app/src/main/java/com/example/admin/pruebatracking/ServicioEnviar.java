@@ -32,7 +32,7 @@ import com.example.admin.pruebatracking.Serializacion.Serializacion;
 
 
 
-public class ServicioEnviar implements LocationListener {
+public class ServicioEnviar extends AsyncTask<Mensaje, Void, Void> implements LocationListener {
 
     Context context;
 
@@ -41,29 +41,32 @@ public class ServicioEnviar implements LocationListener {
         this.context = context;
     }
 
-    public void enviarMensaje(Mensaje msg)
+    protected Void doInBackground(Mensaje... arg)
     {
+        Log.e("msg","entro al servicio enviar");
         try {
             if(((AplicacionPrincipal) context).getSocket() != null) {
                 if (((AplicacionPrincipal) context).getSocket().isConnected() && ((AplicacionPrincipal) context).getConectado()) {
 
                     PrintWriter writer = new PrintWriter(((AplicacionPrincipal) context).getSocket().getOutputStream());
-
-                    switch (msg.getTipo()){
+                    Log.e("msg","el tipo es: "+arg[0].getTipo());
+                    switch (arg[0].getTipo()){
                         case "MsgConexion":
-                             writer.println(Serializacion.Serializar((MsgConexion)msg));
+                             writer.println(Serializacion.Serializar((MsgConexion)arg[0]));
                             break;
                         case "MsgLocalizacion":
-                            writer.println(Serializacion.Serializar((MsgLocalizacion) msg));
+                            writer.println(Serializacion.Serializar((MsgLocalizacion) arg[0]));
                             break;
                         case "MsgDBPeticion":
-                            writer.println(Serializacion.Serializar((MsgDBPeticion) msg));
+                            writer.println(Serializacion.Serializar((MsgDBPeticion) arg[0]));
+                            ((AplicacionPrincipal) context).setCrearCuenta(true);
+                            Log.e("msg","Envio el mensaje de peticion");
                             break;
                         case "MsgDBRespuesta":
-                            writer.println(Serializacion.Serializar((MsgDBRespuesta) msg));
+                            writer.println(Serializacion.Serializar((MsgDBRespuesta) arg[0]));
                             break;
                         case "MsgNotificacion":
-                            writer.println(Serializacion.Serializar((MsgNotificacion) msg));
+                            writer.println(Serializacion.Serializar((MsgNotificacion) arg[0]));
                             break;
                     }
                     writer.flush();
@@ -72,13 +75,10 @@ public class ServicioEnviar implements LocationListener {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            /*((Activity) context).runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(context, "ERROR EN SERVICIO ENVIAR", Toast.LENGTH_LONG).show();
-                }
-            });*/
+            Log.e("msg", " se rompio en ServicioEnviar Excepcion: " + e.toString());
         }
+
+        return null;
     }
 
     @Override

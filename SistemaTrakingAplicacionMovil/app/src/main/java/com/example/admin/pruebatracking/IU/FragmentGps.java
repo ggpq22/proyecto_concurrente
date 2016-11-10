@@ -8,6 +8,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,14 +18,18 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.admin.pruebatracking.AplicacionPrincipal;
 import com.example.admin.pruebatracking.Cliente;
 import com.example.admin.pruebatracking.Entidades.Cuenta;
 import com.example.admin.pruebatracking.Entidades.DBEntidad;
+import com.example.admin.pruebatracking.Entidades.Grupo;
 import com.example.admin.pruebatracking.Mensajes.MsgDBPeticion;
+import com.example.admin.pruebatracking.Mensajes.MsgDBRespuesta;
 import com.example.admin.pruebatracking.ServicioEnviar;
 import com.example.admin.pruebatracking.R;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 
 public class FragmentGps extends Fragment {
@@ -55,29 +60,41 @@ public class FragmentGps extends Fragment {
                         switch (btnLocalizacion.getText().toString())
                         {
                             case "ENVIAR LOCALIZACIÓN":
-                                /*btnLocalizacion.setText("STOP LOCALIZACIÓN");
+                                btnLocalizacion.setText("STOP LOCALIZACIÓN");
                                 btnLocalizacion.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_stop1, 0, 0, 0);
-                                cliente = new Cliente(btnLocalizacion, savinAnimation, context, "192.168.0.100", 8999);
+
+                                ArrayList<String> arrayDestino = new ArrayList<String>();
+                                arrayDestino.add(((AplicacionPrincipal) context).getCuenta());
+
+                                String fecha = (DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString());
+
+
+                                cliente = new Cliente(context, arrayDestino, ((AplicacionPrincipal) context).getCuenta(), fecha);
                                 cliente.execute();
+
+                                while (!((AplicacionPrincipal) context).getConectado()) {
+                                    try {
+                                        Thread.sleep(1);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        Log.e("msg", "Error en esperando conexion: " + e.toString());
+                                    }
+                                }
+
+                                Log.e("msg", "PASO EN CREAR CONEXION");
+
                                 cliente.iniciarLocalizacion();
-                                cliente.recibirMensajes();
-                                ArrayList<DBEntidad> arrayCuenta = new ArrayList<DBEntidad>();
-                                Cuenta cuenta = new Cuenta(1, "pablo", "123");
-                                cuenta.setUsuario("pablo");
-                                cuenta.setPass("123");
-                                arrayCuenta.add(cuenta);
-                                cliente.enviarMensajes(new MsgDBPeticion("yo", "yo", "2016-10-18", "GetGrupoPorIntegrante", arrayCuenta));
-                                */
+
                                 savinAnimation.start();
 
                                 break;
                             case "STOP LOCALIZACIÓN":
                                 btnLocalizacion.setText("ENVIAR LOCALIZACIÓN");
                                 btnLocalizacion.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_localizacion, 0, 0, 0);
-                                /*cliente.cerrarConexion();
-                                cliente.pararLocalizacion();
-                                cliente.pararRecibirMensajes();*/
                                 savinAnimation.stop();
+                                cliente.pararLocalizacion();
+                                ((AplicacionPrincipal) context).setConectado(false);
+
                         }
                     }
                 }

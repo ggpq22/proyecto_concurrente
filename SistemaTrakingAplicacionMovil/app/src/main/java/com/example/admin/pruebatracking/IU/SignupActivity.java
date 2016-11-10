@@ -16,6 +16,7 @@ import com.example.admin.pruebatracking.AplicacionPrincipal;
 import com.example.admin.pruebatracking.Cliente;
 import com.example.admin.pruebatracking.Entidades.Cuenta;
 import com.example.admin.pruebatracking.Entidades.DBEntidad;
+import com.example.admin.pruebatracking.Entidades.Grupo;
 import com.example.admin.pruebatracking.Mensajes.MsgDBPeticion;
 import com.example.admin.pruebatracking.Mensajes.MsgDBRespuesta;
 import com.example.admin.pruebatracking.R;
@@ -34,7 +35,7 @@ public class SignupActivity extends AppCompatActivity {
     EditText _rePasswordText;
     Button _signupButton;
     TextView _loginLink;
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +84,7 @@ public class SignupActivity extends AppCompatActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        String nombre = _nombreText.getText().toString();
+        final String nombre = _nombreText.getText().toString();
         String apellido = _apellidoText.getText().toString();
         final String email = _emailText.getText().toString();
         final String password = _passwordText.getText().toString();
@@ -92,43 +93,67 @@ public class SignupActivity extends AppCompatActivity {
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {
-                        String  uniqueID = UUID.randomUUID().toString();
+                        String uniqueID = UUID.randomUUID().toString();
                         ArrayList<String> arrayDestino = new ArrayList<String>();
                         arrayDestino.add(uniqueID);
 
                         String fecha = (DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString());
 
-                        Cuenta cuenta = new Cuenta(1,email, password);
-                        ArrayList<DBEntidad> arrayCuenta = new ArrayList<DBEntidad>();
+                        Cuenta cuenta = new Cuenta(1, email, password, 0);
+                        ArrayList<Cuenta> arrayCuenta = new ArrayList<Cuenta>();
                         arrayCuenta.add(cuenta);
 
-                        Cliente cliente = new Cliente(getApplicationContext(),arrayDestino,uniqueID, fecha);
+                        Cliente cliente = new Cliente(getApplicationContext(), arrayDestino, uniqueID, fecha);
                         cliente.execute();
-                        
 
-                        cliente.recibirMensajes();
+                        while (!((AplicacionPrincipal) getApplicationContext()).getConectado()) {
+                            try {
+                                Thread.sleep(1);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Log.e("msg", "Error en esperando conexion: " + e.toString());
+                            }
+                        }
 
-                        MsgDBPeticion peticion = new MsgDBPeticion(arrayDestino, uniqueID, fecha, "CrearCuenta", arrayCuenta, false);
+                        Log.e("msg", "PASO EN CREAR CONEXION");
+
+                        MsgDBPeticion peticion = new MsgDBPeticion(arrayDestino, uniqueID, fecha, "CrearCuenta", arrayCuenta, new ArrayList<Grupo>(), false);
                         cliente.enviarMensajes(peticion);
 
-                        try {
-                            this.wait();
-                            MsgDBRespuesta msg = ((AplicacionPrincipal) getApplicationContext()).getMsgRespuesta();
-                            if(msg != null && msg.getIsValido())
-                            {
-                                onSignupSuccess();
+                        while (!((AplicacionPrincipal) getApplicationContext()).getCrearCuenta()) {
+                            try {
+                                Thread.sleep(1);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Log.e("msg", "Error en esperando enviar peticion Crear Cuenta: " + e.toString());
                             }
-                            else
-                            {
-                                onSignupFailed();
-                            }
-                            progressDialog.dismiss();
                         }
-                        catch (Exception e)
-                        {
-                            e.printStackTrace();
+
+                        Log.e("msg", "PASO PETICION CREAR CUENTA");
+                        ((AplicacionPrincipal) getApplicationContext()).setCrearCuenta(false);
+
+                        while (!((AplicacionPrincipal) getApplicationContext()).getRespuestaCrearCuenta()) {
+                            try {
+                                Thread.sleep(1);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Log.e("msg", "Error en esperando Respuesta crear cuenta: " + e.toString());
+                            }
+                        }
+
+                        Log.e("msg", "PASO RESPUESTA CUENTA");
+                        ((AplicacionPrincipal) getApplicationContext()).setRespuestaCrearCuenta(false);
+                        ((AplicacionPrincipal) getApplicationContext()).setConectado(false);
+
+                        MsgDBRespuesta msg = ((AplicacionPrincipal) getApplicationContext()).getMsgRespuesta();
+                        if (msg != null && msg.getIsValido()) {
+                            ((AplicacionPrincipal) getApplicationContext()).setCuenta(email);
+                            onSignupSuccess();
+                        } else {
                             onSignupFailed();
                         }
+                        progressDialog.dismiss();
+
                     }
                 }, 2500);
     }

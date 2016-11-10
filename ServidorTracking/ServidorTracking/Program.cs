@@ -12,7 +12,7 @@ namespace ServidorTracking
     {
         static void Main(string[] args)
         {
-            string ip = "10.75.32.60";
+            string ip = "10.75.61.231";
 
             int port = 8999;
 

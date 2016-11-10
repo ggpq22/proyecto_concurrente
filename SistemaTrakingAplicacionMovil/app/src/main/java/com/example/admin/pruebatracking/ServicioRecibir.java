@@ -18,7 +18,7 @@ import java.net.Socket;
 /**
  * Created by Admin on 1/11/2016.
  */
-public class ServicioRecibir extends AsyncTask<Void, Void, Void> {
+public class ServicioRecibir implements Runnable {
 
     Context context;
 
@@ -27,83 +27,55 @@ public class ServicioRecibir extends AsyncTask<Void, Void, Void> {
         this.context = context;
     }
 
-    @Override
-    protected Void doInBackground(Void... arg0) {
+    public void run() {
 
                 try {
-                    PrintWriter writer = new PrintWriter(((AplicacionPrincipal) context).getSocket().getOutputStream());
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(((AplicacionPrincipal) context).getSocket().getInputStream()));
+                    if(((AplicacionPrincipal) context).getSocket().isConnected() && ((AplicacionPrincipal) context).getConectado()) {
+                        Log.e("msg", "entro a servicio recibir");
+                        PrintWriter writer = new PrintWriter(((AplicacionPrincipal) context).getSocket().getOutputStream());
+                        Log.e("msg", "paso el writer");
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(((AplicacionPrincipal) context).getSocket().getInputStream()));
 
-                    while (((AplicacionPrincipal) context).getSocket().isConnected())
-                    {
-                        Log.i("msg", "esperando respuesta");
-                        String json = reader.readLine();
-                        Log.i("msg", "llego: " + json);
-                        Mensaje msg = (Mensaje)Serializacion.Deserealizar(json);
+                        while (((AplicacionPrincipal) context).getSocket().isConnected()) {
+                            Log.e("msg", "esperando respuesta");
+                            String json = reader.readLine();
+                            Log.e("msg", "llego: " + json);
+                            Mensaje msg = (Mensaje) Serializacion.Deserealizar(json);
 
-                switch (msg.getTipo()){
-                        case "MsgConexion":
-                            ((Activity) context).runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(context, "Llego un mensaje de conexion", Toast.LENGTH_LONG).show();
-                                }
-                            });
+                            switch (msg.getTipo()) {
+                                case "MsgConexion":
+                                    Log.e("msg", "Llego mensaje de conexion");
 
-                            break;
-                        case "MsgLocalizacion":
-                            ((Activity) context).runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(context, "Llego un mensaje de localización", Toast.LENGTH_LONG).show();
-                                }
-                            });
+                                    break;
+                                case "MsgLocalizacion":
+                                    Log.e("msg", "Llego mensaje de conexion");
 
-                            break;
-                    case "MsgDBPeticion":
-                        ((Activity) context).runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(context, "Llego un mensaje de peticion", Toast.LENGTH_LONG).show();
+                                    break;
+                                case "MsgDBPeticion":
+                                    Log.e("msg", "Llego mensaje de peticion");
+
+                                    break;
+                                case "MsgDBRespuesta":
+                                    Log.e("msg", "Llego mensaje de respuesta");
+                                    ((AplicacionPrincipal) context).setMsgRespuesta((MsgDBRespuesta) msg);
+                                    ((AplicacionPrincipal) context).setRespuestaCrearCuenta(true);
+                                    break;
+
+                                case "MsgNotificacion":
+                                    Log.e("msg", "Llego mensaje de notificacion");
+
+                                    break;
+
                             }
-                        });
+                        }
+                    }
 
-                        break;
-                    case "MsgDBRespuesta":
-                        ((AplicacionPrincipal) context).setMsgRespuesta((MsgDBRespuesta)msg);
-                        notifyAll();
-                        break;
-
-                    case "MsgNotificacion":
-                        ((Activity) context).runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(context, "Llego un mensaje de notificacion", Toast.LENGTH_LONG).show();
-                            }
-                        });
-
-                        break;
-
-                }
-            }
-
-            writer.close();
         } catch (Exception e) {
-            /*((Activity) context).runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(context, "ERROR EN SERVICIO RECIBIR MENSAJES", Toast.LENGTH_LONG).show();
-                }
-            });*/
             e.printStackTrace();
+            Log.e("msg", " se rompio en ServicioRecibir Excepcion: "+e.toString());
         }
-        return null;
     }
 
 
-    @Override
-    protected void onPostExecute(Void result) {
-        super.onPostExecute(result);
-    }
 }
 

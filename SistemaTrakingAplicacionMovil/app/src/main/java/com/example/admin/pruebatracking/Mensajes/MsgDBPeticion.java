@@ -2,7 +2,9 @@ package com.example.admin.pruebatracking.Mensajes;
 
 import android.app.Notification;
 
+import com.example.admin.pruebatracking.Entidades.Cuenta;
 import com.example.admin.pruebatracking.Entidades.DBEntidad;
+import com.example.admin.pruebatracking.Entidades.Grupo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,13 +15,15 @@ import java.util.List;
 public class MsgDBPeticion extends Mensaje {
 
     private String CodigoPeticion;
-    private ArrayList<DBEntidad> Params;
+    private ArrayList<Cuenta> ParamsCuenta;
+    private ArrayList<Grupo> ParamsGrupo;
     private boolean Notificacion;
 
-    public MsgDBPeticion(ArrayList<String> to, String from, String fecha, String CodigoPeticion, ArrayList<DBEntidad> Params, boolean Notificacion) {
+    public MsgDBPeticion(ArrayList<String> to, String from, String fecha, String CodigoPeticion, ArrayList<Cuenta> ParamsCuenta, ArrayList<Grupo> ParamsGrupo, boolean Notificacion) {
         super(to, from, fecha, "MsgDBPeticion", true);
         this.CodigoPeticion = CodigoPeticion;
-        this.Params = Params;
+        this.ParamsCuenta = ParamsCuenta;
+        this.ParamsGrupo = ParamsGrupo;
         this.Notificacion = Notificacion;
     }
 
