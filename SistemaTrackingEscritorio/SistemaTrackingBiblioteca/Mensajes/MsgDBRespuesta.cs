@@ -32,6 +32,10 @@ namespace SistemaTrackingBiblioteca.Mensajes
         /// </summary>
         public string CodigoPeticion { get; set; }
 
-        public List<DBEntidad> Return= new List<DBEntidad>();
+        public List<Cuenta> ReturnCuenta = new List<Cuenta>();
+
+        public List<Grupo> ReturnGrupo = new List<Grupo>();
+
+        public List<Historial> ReturnHistorial = new List<Historial>();
     }
 }

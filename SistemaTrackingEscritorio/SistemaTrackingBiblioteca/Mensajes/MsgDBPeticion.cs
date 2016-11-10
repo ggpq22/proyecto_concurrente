@@ -33,7 +33,9 @@ namespace SistemaTrackingBiblioteca.Mensajes
         /// </summary>
         public string CodigoPeticion { get; set; }
 
-        public List<DBEntidad> Params = new List<DBEntidad>();
+        public List<Cuenta> ParamsCuenta = new List<Cuenta>();
+
+        public List<Grupo> ParamsGrupo = new List<Grupo>();
 
         /// <summary>
         /// True = Envia un mensaje de notificacion al destinatario para que confirme la operacion
