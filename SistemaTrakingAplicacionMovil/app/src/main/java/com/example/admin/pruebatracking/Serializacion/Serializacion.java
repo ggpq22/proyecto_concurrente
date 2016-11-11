@@ -37,7 +37,7 @@ public class Serializacion{
                 o = gson.fromJson(json,MsgLocalizacion.class);
                 break;
             case "MsgDBRespuesta":
-                o = gson.fromJson(json,MsgLocalizacion.class);
+                o = gson.fromJson(json,MsgDBRespuesta.class);
                 break;
             case "MsgNotificacion":
                 o = gson.fromJson(json,MsgLocalizacion.class);
