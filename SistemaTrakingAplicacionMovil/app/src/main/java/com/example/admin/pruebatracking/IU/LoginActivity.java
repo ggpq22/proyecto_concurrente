@@ -99,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
                         ArrayList<Cuenta> arrayCuenta = new ArrayList<Cuenta>();
                         arrayCuenta.add(cuenta);
 
-                        Cliente cliente = new Cliente(getApplicationContext(), arrayDestino, uniqueID, fecha);
+                        Cliente cliente = new Cliente(getBaseContext(), arrayDestino, uniqueID, fecha);
                         cliente.execute();
 
                         while (!((AplicacionPrincipal) getApplicationContext()).getConectado()) {

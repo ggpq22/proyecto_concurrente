@@ -29,10 +29,13 @@ namespace SistemaTrackingBiblioteca.Mensajes
         /// <para>- "BorrarGrupo" = params: Grupo</para>
         /// <para>- "GetHistorialPorGrupo" = params: Grupo</para>
         /// <para>- "GetHistorialPorCuenta" = params: Cuenta</para>
+        /// <para>- "GetCuentas" = params:</para>
         /// </summary>
         public string CodigoPeticion { get; set; }
 
-        public List<DBEntidad> Params = new List<DBEntidad>();
+        public List<Cuenta> ParamsCuenta = new List<Cuenta>();
+
+        public List<Grupo> ParamsGrupo = new List<Grupo>();
 
         /// <summary>
         /// True = Envia un mensaje de notificacion al destinatario para que confirme la operacion

@@ -35,20 +35,22 @@ import com.example.admin.pruebatracking.Serializacion.Serializacion;
 public class ServicioEnviar extends AsyncTask<Mensaje, Void, Void> implements LocationListener {
 
     Context context;
+    AplicacionPrincipal global;
 
     public ServicioEnviar(Context context) {
 
         this.context = context;
+        global = (AplicacionPrincipal) context.getApplicationContext();
     }
 
     protected Void doInBackground(Mensaje... arg)
     {
         Log.e("msg","entro al servicio enviar");
         try {
-            if(((AplicacionPrincipal) context).getSocket() != null) {
-                if (((AplicacionPrincipal) context).getSocket().isConnected() && ((AplicacionPrincipal) context).getConectado()) {
+            if(global.getSocket() != null) {
+                if (global.getSocket().isConnected() && (global.getConectado())) {
 
-                    PrintWriter writer = new PrintWriter(((AplicacionPrincipal) context).getSocket().getOutputStream());
+                    PrintWriter writer = new PrintWriter(global.getSocket().getOutputStream());
                     Log.e("msg","el tipo es: "+arg[0].getTipo());
                     switch (arg[0].getTipo()){
                         case "MsgConexion":
@@ -59,7 +61,7 @@ public class ServicioEnviar extends AsyncTask<Mensaje, Void, Void> implements Lo
                             break;
                         case "MsgDBPeticion":
                             writer.println(Serializacion.Serializar((MsgDBPeticion) arg[0]));
-                            ((AplicacionPrincipal) context).setCrearCuenta(true);
+                            ((AplicacionPrincipal) context.getApplicationContext()).setCrearCuenta(true);
                             Log.e("msg","Envio el mensaje de peticion");
                             break;
                         case "MsgDBRespuesta":
@@ -85,25 +87,22 @@ public class ServicioEnviar extends AsyncTask<Mensaje, Void, Void> implements Lo
     public void onLocationChanged(Location location) {
 
         try {
-            if(((AplicacionPrincipal) context).getSocket() != null) {
-                if (((AplicacionPrincipal) context).getSocket().isConnected() && ((AplicacionPrincipal) context).getConectado()) {
+            if(global.getSocket() != null) {
+                if (global.getSocket().isConnected() && global.getConectado()) {
 
-                    PrintWriter writer = new PrintWriter(((AplicacionPrincipal) context).getSocket().getOutputStream());
+                    PrintWriter writer = new PrintWriter(global.getSocket().getOutputStream());
                     ArrayList<String> arrayDestino = new ArrayList<String>();
-                    arrayDestino.add("Escritorio");
+                    arrayDestino.add("escritorio");
                     writer.println(Serializacion.Serializar(new MsgLocalizacion(arrayDestino, "yo", "2016-10-27", location.getLatitude() + "", location.getLongitude() + "")));
                     writer.flush();
+
+                    Log.e("msg","Se envio un punto...");
 
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
-            /*((Activity) context).runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(context, "ERROR EN SERVICIO ENVIAR LOCALIZACION", Toast.LENGTH_LONG).show();
-                }
-            });*/
+            Log.e("msg", "Se rompio cuando enviaba puntos");
         }
 
     }

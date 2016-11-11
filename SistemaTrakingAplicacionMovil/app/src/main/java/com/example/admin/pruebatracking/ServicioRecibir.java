@@ -21,22 +21,24 @@ import java.net.Socket;
 public class ServicioRecibir implements Runnable {
 
     Context context;
+    AplicacionPrincipal global;
 
     public ServicioRecibir(Context context) {
 
         this.context = context;
+        this.global = ((AplicacionPrincipal) context.getApplicationContext());
     }
 
     public void run() {
 
                 try {
-                    if(((AplicacionPrincipal) context).getSocket().isConnected() && ((AplicacionPrincipal) context).getConectado()) {
+                    if(global.getSocket().isConnected() && global.getConectado()) {
                         Log.e("msg", "entro a servicio recibir");
-                        PrintWriter writer = new PrintWriter(((AplicacionPrincipal) context).getSocket().getOutputStream());
+                        PrintWriter writer = new PrintWriter(global.getSocket().getOutputStream());
                         Log.e("msg", "paso el writer");
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(((AplicacionPrincipal) context).getSocket().getInputStream()));
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(global.getSocket().getInputStream()));
 
-                        while (((AplicacionPrincipal) context).getSocket().isConnected()) {
+                        while (global.getSocket().isConnected()) {
                             Log.e("msg", "esperando respuesta");
                             String json = reader.readLine();
                             Log.e("msg", "llego: " + json);
@@ -57,8 +59,8 @@ public class ServicioRecibir implements Runnable {
                                     break;
                                 case "MsgDBRespuesta":
                                     Log.e("msg", "Llego mensaje de respuesta");
-                                    ((AplicacionPrincipal) context).setMsgRespuesta((MsgDBRespuesta) msg);
-                                    ((AplicacionPrincipal) context).setRespuestaCrearCuenta(true);
+                                    global.setMsgRespuesta((MsgDBRespuesta) msg);
+                                    global.setRespuestaCrearCuenta(true);
                                     break;
 
                                 case "MsgNotificacion":

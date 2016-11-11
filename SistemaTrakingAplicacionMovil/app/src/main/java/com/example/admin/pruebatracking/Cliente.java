@@ -8,6 +8,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.StrictMode;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.widget.Button;
@@ -56,6 +57,8 @@ public class Cliente extends AsyncTask<Void, Void, Void>{
         this.TO = TO;
         this.FROM = FROM;
         this.fecha = fecha;
+
+        global = ((AplicacionPrincipal) context.getApplicationContext());
     }
 
     protected Void doInBackground(Void... arg0) {
@@ -79,7 +82,6 @@ public class Cliente extends AsyncTask<Void, Void, Void>{
             if (msj != null) {
                 Log.e("msg", "SE CONECTO AL SERVIDOR CON EXITO");
 
-                global = (AplicacionPrincipal)context;
                 global.setSocket(socket);
                 global.setConectado(true);
                 recibirMensajes();

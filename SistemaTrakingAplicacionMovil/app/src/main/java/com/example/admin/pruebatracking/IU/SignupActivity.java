@@ -35,6 +35,7 @@ public class SignupActivity extends AppCompatActivity {
     EditText _rePasswordText;
     Button _signupButton;
     TextView _loginLink;
+    AplicacionPrincipal global;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -103,7 +104,7 @@ public class SignupActivity extends AppCompatActivity {
                         ArrayList<Cuenta> arrayCuenta = new ArrayList<Cuenta>();
                         arrayCuenta.add(cuenta);
 
-                        Cliente cliente = new Cliente(getApplicationContext(), arrayDestino, uniqueID, fecha);
+                        Cliente cliente = new Cliente(getBaseContext(), arrayDestino, uniqueID, fecha);
                         cliente.execute();
 
                         while (!((AplicacionPrincipal) getApplicationContext()).getConectado()) {

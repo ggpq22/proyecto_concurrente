@@ -38,6 +38,7 @@ public class FragmentGps extends Fragment {
     private ImageView imageView;
     private AnimationDrawable savinAnimation;
     Context context;
+    Context applicationContext;
     Cliente cliente;
 
     @Override
@@ -64,22 +65,13 @@ public class FragmentGps extends Fragment {
                                 btnLocalizacion.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_stop1, 0, 0, 0);
 
                                 ArrayList<String> arrayDestino = new ArrayList<String>();
-                                arrayDestino.add(((AplicacionPrincipal) context).getCuenta());
+                                arrayDestino.add(((AplicacionPrincipal) context.getApplicationContext()).getCuenta());
 
                                 String fecha = (DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString());
 
 
-                                cliente = new Cliente(context, arrayDestino, ((AplicacionPrincipal) context).getCuenta(), fecha);
+                                cliente = new Cliente(context, arrayDestino, ((AplicacionPrincipal) context.getApplicationContext()).getCuenta(), fecha);
                                 cliente.execute();
-
-                                while (!((AplicacionPrincipal) context).getConectado()) {
-                                    try {
-                                        Thread.sleep(1);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                        Log.e("msg", "Error en esperando conexion: " + e.toString());
-                                    }
-                                }
 
                                 Log.e("msg", "PASO EN CREAR CONEXION");
 
@@ -93,7 +85,7 @@ public class FragmentGps extends Fragment {
                                 btnLocalizacion.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_localizacion, 0, 0, 0);
                                 savinAnimation.stop();
                                 cliente.pararLocalizacion();
-                                ((AplicacionPrincipal) context).setConectado(false);
+                                ((AplicacionPrincipal) context.getApplicationContext()).setConectado(false);
 
                         }
                     }
