@@ -92,7 +92,7 @@ public class ServicioEnviar extends AsyncTask<Mensaje, Void, Void> implements Lo
 
                     PrintWriter writer = new PrintWriter(global.getSocket().getOutputStream());
                     ArrayList<String> arrayDestino = new ArrayList<String>();
-                    arrayDestino.add("escritorio");
+                    arrayDestino.add("mario");
                     writer.println(Serializacion.Serializar(new MsgLocalizacion(arrayDestino, "yo", "2016-10-27", location.getLatitude() + "", location.getLongitude() + "")));
                     writer.flush();
 
