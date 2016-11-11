@@ -14,6 +14,7 @@ namespace SistemaTrackingBiblioteca
     public class ServerClient
     {
         string name;
+        CancellationToken token;
 
         public string Name
         {
@@ -70,17 +71,19 @@ namespace SistemaTrackingBiblioteca
             OnLocationChanged(msn);
         }
 
-        public ServerClient(String ip, int puerto)
+        public ServerClient(String ip, int puerto, CancellationToken token)
         {
+
             try
             {
                 this.client = new TcpClient(ip, puerto);
-                service = new CommunicationService(this.client);
-
+                service = new CommunicationService(this.client, token);
+                this.token = token;
                 // Subscribe Events
                 service.Connect += service_Connect;
                 service.Disconnect += service_Disconnect;
                 service.LocationChanged += service_LocationChanged;
+                service.DBRespuesta += service_DBRespuesta;
 
                 sending = new Thread(sendMessages);
                 sending.Start();
@@ -92,6 +95,22 @@ namespace SistemaTrackingBiblioteca
             }
 
         }
+
+        void service_DBRespuesta(object sender, Mensaje mensaje)
+        {
+            MsgDBRespuesta msn = mensaje as MsgDBRespuesta;
+            OnDBRespuesta(msn);
+        }
+
+
+        public event CommunicationEventHandler DBRespuesta;
+        protected virtual void OnDBRespuesta(Mensaje e)
+        {
+            if (DBRespuesta != null)
+                DBRespuesta(this, e);
+        }
+
+
 
         public void SendToServer(Mensaje message)
         {
@@ -106,6 +125,7 @@ namespace SistemaTrackingBiblioteca
 
         private void sendMessages()
         {
+//            while (!token.IsCancellationRequested)
             while (true)
             {
                 if (mensajesSalida.Count > 0)

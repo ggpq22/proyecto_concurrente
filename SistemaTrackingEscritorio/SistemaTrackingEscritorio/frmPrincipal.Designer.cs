@@ -37,10 +37,13 @@
             this.ClientSize = new System.Drawing.Size(694, 426);
             this.Name = "frmPrincipal";
             this.Text = "frmPrincipal";
+            this.Load += new System.EventHandler(this.frmPrincipal_Load);
             this.ResumeLayout(false);
 
         }
 
         #endregion
+
+        private GMap.NET.WindowsForms.GMapControl gMapa;
     }
 }
