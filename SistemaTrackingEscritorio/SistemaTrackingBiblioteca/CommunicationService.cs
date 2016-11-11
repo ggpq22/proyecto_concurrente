@@ -42,6 +42,8 @@ namespace SistemaTrackingBiblioteca
 
         // Events: DBRequested
         public event CommunicationEventHandler DBRespuesta;
+        private TcpClient tcpClient;
+        private CancellationToken token;
         protected virtual void OnDBRequested(Mensaje e)
         {
             if (DBRespuesta != null)
@@ -58,13 +60,25 @@ namespace SistemaTrackingBiblioteca
             events.Start();
         }
 
+        public CommunicationService(TcpClient client, CancellationToken token)
+        {
+            // TODO: Complete member initialization
+            this.token = token;
+            delivery = new MessageDelivery(client);
+            delivery.OpenDelivery();
+
+            events = new Thread(incomingMessage);
+            events.Start();
+        }
+
         // Thread Method
         private void incomingMessage()
         {
             string str;
             Mensaje message;
 
-            while (true)
+            //while (!token.IsCancellationRequested)
+            while(true)
             {
                 str = delivery.RecieveMessage();
                 Console.WriteLine(str);

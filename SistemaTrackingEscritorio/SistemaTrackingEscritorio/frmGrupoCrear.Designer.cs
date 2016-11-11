@@ -1,6 +1,6 @@
 ﻿namespace Mapa
 {
-    partial class frmPrincipal
+    partial class frmGrupoCrear
     {
         /// <summary>
         /// Required designer variable.
@@ -30,20 +30,17 @@
         {
             this.SuspendLayout();
             // 
-            // frmPrincipal
+            // frmGrupoCrear
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(694, 426);
-            this.Name = "frmPrincipal";
-            this.Text = "frmPrincipal";
-            this.Load += new System.EventHandler(this.frmPrincipal_Load);
+            this.ClientSize = new System.Drawing.Size(655, 432);
+            this.Name = "frmGrupoCrear";
+            this.Text = "frmGrupoCrear";
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private GMap.NET.WindowsForms.GMapControl gMapa;
     }
 }
