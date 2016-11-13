@@ -8,6 +8,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.StrictMode;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.widget.Button;
@@ -38,29 +39,32 @@ public class Cliente extends AsyncTask<Void, Void, Void>{
     float distancia;
     LocationManager manager = null;
     ServicioEnviar servicioEnviar = null;
-    ServicioRecibir servicioRecibir = null;
+    Thread servicioRecibir;
     ArrayList<String> TO;
     String FROM;
     String fecha;
+    AplicacionPrincipal global;
 
     public Cliente(Context context, ArrayList<String> TO, String FROM, String fecha) {
         this.context = context;
 
         servicioEnviar = new ServicioEnviar(context);
-        servicioRecibir = new ServicioRecibir(context);
-        //manager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+        servicioRecibir = new Thread(new ServicioRecibir(context));
+        manager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
         tiempo = 5000;
         distancia = 5;
 
         this.TO = TO;
         this.FROM = FROM;
         this.fecha = fecha;
+
+        global = ((AplicacionPrincipal) context.getApplicationContext());
     }
 
     protected Void doInBackground(Void... arg0) {
         try {
             Log.e("msg","entro en abrir conexion");
-            socket = new Socket("192.168.0.103", 8999);
+            socket = new Socket("10.75.61.109", 8999);
             writer = new PrintWriter(socket.getOutputStream());
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             Log.e("msg","creo el socket");
@@ -68,53 +72,30 @@ public class Cliente extends AsyncTask<Void, Void, Void>{
             writer.println(Serializacion.Serializar(new MsgConexion(TO, FROM, fecha, "conectar")));
             writer.flush();
 
-            Log.i("msg", "esperando respuesta");
+            Log.e("msg", "esperando respuesta");
             String jsonConexion = reader.readLine();
-            Log.i("msg", "leyo respuesta");
+            Log.e("msg", "leyo respuesta");
 
             Log.i("msg", jsonConexion);
             MsgConexion msj = (MsgConexion) Serializacion.Deserealizar(jsonConexion);
             Log.i("msg", "ya deserialice " + msj.getMensaje());
             if (msj != null) {
-                Log.i("msg", "SE CONECTO AL SERVIDOR CON EXITO");
+                Log.e("msg", "SE CONECTO AL SERVIDOR CON EXITO");
 
-                ((AplicacionPrincipal) context).setSocket(socket);
-                ((AplicacionPrincipal) context).setConectado(true);
+                global.setSocket(socket);
+                global.setConectado(true);
+                recibirMensajes();
 
-                ((Activity) context).runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(context, "SE CONECTO AL SERVIDOR CON EXITO", Toast.LENGTH_LONG).show();
-                    }
-                });
+                Log.e("msg", "estado variable: " + global.getConectado());
 
             } else {
-                Log.i("msg", "ERROR AL CONECTARSE AL SERVIDOR");
-                ((Activity) context).runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(context, "ERROR AL CONECTARSE AL SERVIDOR", Toast.LENGTH_LONG).show();
-                    }
-                });
+                Log.e("msg", "ERROR AL CONECTARSE AL SERVIDOR");
             }
 
-            Log.i("msg", "CONEXION CERRADA");
-            ((Activity) context).runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(context, "CONEXION CERRADA", Toast.LENGTH_LONG).show();
-                }
-            });
 
         } catch (Exception e) {
-            Log.e("msg", e.toString());
-/*            ((Activity) context).runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(context, "ERROR EN EL SERVIDOR ", Toast.LENGTH_LONG).show();
-                }
-            });*/
             e.printStackTrace();
+            Log.e("msg", " se rompio en Cliente Excepcion: " + e.toString());
         }
 
         return null;
@@ -166,21 +147,21 @@ public class Cliente extends AsyncTask<Void, Void, Void>{
     public void recibirMensajes()
     {
         if(servicioRecibir != null) {
-            servicioRecibir.execute();
+            servicioRecibir.start();
         }
     }
 
     public void pararRecibirMensajes()
     {
         if(servicioRecibir != null) {
-            servicioRecibir.cancel(true);
+            servicioRecibir.stop();
         }
     }
 
     public void enviarMensajes(Mensaje msg)
     {
         if(servicioEnviar != null){
-            servicioEnviar.enviarMensaje(msg);
+            servicioEnviar.execute(msg);
         }
     }
 

@@ -46,7 +46,7 @@
             this.gMapControl1.GrayScaleMode = false;
             this.gMapControl1.HelperLineOption = GMap.NET.WindowsForms.HelperLineOptions.DontShow;
             this.gMapControl1.LevelsKeepInMemmory = 5;
-            this.gMapControl1.Location = new System.Drawing.Point(52, 96);
+            this.gMapControl1.Location = new System.Drawing.Point(22, 73);
             this.gMapControl1.MarkersEnabled = true;
             this.gMapControl1.MaxZoom = 2;
             this.gMapControl1.MinZoom = 2;
@@ -79,10 +79,8 @@
             this.tbIp.Name = "tbIp";
             this.tbIp.Size = new System.Drawing.Size(100, 20);
             this.tbIp.TabIndex = 2;
-
             this.tbIp.Text = "10.75.60.132";
             this.tbIp.TextChanged += new System.EventHandler(this.tbIp_TextChanged);
-
             // 
             // tbPuerto
             // 
@@ -143,6 +141,8 @@
             this.Controls.Add(this.gMapControl1);
             this.Name = "EjemploMapa";
             this.Text = "Form1";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EjemploMapa_FormClosing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.EjemploMapa_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

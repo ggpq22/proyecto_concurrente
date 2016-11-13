@@ -1,6 +1,9 @@
 package com.example.admin.pruebatracking.Mensajes;
 
+import com.example.admin.pruebatracking.Entidades.Cuenta;
 import com.example.admin.pruebatracking.Entidades.DBEntidad;
+import com.example.admin.pruebatracking.Entidades.Grupo;
+import com.example.admin.pruebatracking.Entidades.Historial;
 
 import java.util.ArrayList;
 
@@ -10,7 +13,9 @@ import java.util.ArrayList;
 public class MsgDBRespuesta extends Mensaje {
 
     private String CodigoPeticion;
-    private ArrayList<DBEntidad> Return = new ArrayList<DBEntidad>();
+    private ArrayList<Cuenta> ReturnCuenta = new ArrayList<Cuenta>();
+    private ArrayList<Grupo> ReturnGrupo = new ArrayList<Grupo>();
+    private ArrayList<Historial> ReturnHistorial = new ArrayList<Historial>();
 
     public MsgDBRespuesta(ArrayList<String> to, String from, String fecha) {
         super(to, from, fecha, "MsgDBRespuesta", true);

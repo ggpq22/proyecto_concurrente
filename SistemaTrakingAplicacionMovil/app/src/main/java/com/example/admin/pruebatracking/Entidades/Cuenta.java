@@ -9,10 +9,13 @@ public class Cuenta extends DBEntidad{
 
     private String Pass;
 
-    public Cuenta(int Id, String Usuario, String Pass) {
+    private int RecibeLocalizacion;
+
+    public Cuenta(int Id, String Usuario, String Pass, int RecibeLocalizacion) {
         super(Id);
         this.Usuario = Usuario;
         this.Pass = Pass;
+        this.RecibeLocalizacion = RecibeLocalizacion;
     }
 
     public String getUsuario() {
@@ -29,5 +32,13 @@ public class Cuenta extends DBEntidad{
 
     public void setPass(String pass) {
         this.Pass = pass;
+    }
+
+    public int RecibeLocalizacion() {
+        return RecibeLocalizacion;
+    }
+
+    public void setPass(int RecibeLocalizacion) {
+        this.RecibeLocalizacion = RecibeLocalizacion;
     }
 }
