@@ -13,7 +13,7 @@ namespace ServidorTracking
         StreamWriter writer;
         StreamReader reader;
         NetworkStream stream;
-        TcpClient client;
+        ServerClient client;
 
         public NetworkStream Stream
         {
@@ -21,7 +21,7 @@ namespace ServidorTracking
           set { stream = value; }
         }
 
-        public MessageDelivery(NetworkStream stream, TcpClient client)
+        public MessageDelivery(NetworkStream stream, ServerClient client)
         {
             this.client = client;
             this.stream = stream;
@@ -62,6 +62,7 @@ namespace ServidorTracking
             }
             catch (Exception e)
             {
+                client.RemoveMe();
                 throw e;
             }
         }
@@ -74,6 +75,7 @@ namespace ServidorTracking
             }
             catch (Exception e)
             {
+                client.RemoveMe();
                 throw e;
             }
         }

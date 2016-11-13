@@ -12,7 +12,7 @@ namespace ServidorTracking
     {
         static void Main(string[] args)
         {
-            string ip = "10.75.60.28";
+            string ip = "192.168.0.105";
 
             int port = 8999;
 
@@ -37,7 +37,9 @@ namespace ServidorTracking
                 }
                 catch (Exception e)
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("== ERROR == -" + e.Message);
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             });
 
@@ -47,7 +49,9 @@ namespace ServidorTracking
             }
             catch (Exception e)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("== ERROR == -" + e.Message);
+                Console.ForegroundColor = ConsoleColor.White;
             }
 
             Console.WriteLine("Server running...");

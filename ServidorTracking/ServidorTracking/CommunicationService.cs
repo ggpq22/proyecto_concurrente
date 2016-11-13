@@ -16,6 +16,7 @@ namespace ServidorTracking
     {
         MessageDelivery delivery;
         DBController dbcontrol;
+        ServerClient client;
 
         Thread events;
         
@@ -52,8 +53,10 @@ namespace ServidorTracking
         }
 
         // Constructor
-        public CommunicationService(NetworkStream stream, TcpClient client)
+        public CommunicationService(NetworkStream stream, ServerClient client)
         {
+            this.client = client;
+
             delivery = new MessageDelivery(stream, client);
             dbcontrol = new DBController("pbarco", "12345Pablo");
             try
@@ -83,7 +86,9 @@ namespace ServidorTracking
                 }
                 catch (Exception e)
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("== ERROR == -" + e.Message);
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
 
                 if (str != null)
@@ -96,11 +101,29 @@ namespace ServidorTracking
                     {
                         throw e;
                     }
-                    
+
                     MsgConexion menCon;
                     MsgLocalizacion menLoc;
                     MsgDBPeticion menDB;
-                    Console.WriteLine("RECIBIENDO: " + str);
+
+                    {
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.WriteLine("RECIBIENDO: ");
+
+                        switch (message.Tipo)
+                        {
+                            case "MsgConeccion":
+                                Console.ForegroundColor = ConsoleColor.Green; break;
+                            case "MsgLocalizacion":
+                                Console.ForegroundColor = ConsoleColor.Blue; break;
+                            case "MsgDBPeticion":
+                                Console.ForegroundColor = ConsoleColor.Yellow; break;
+                        }
+
+                        Console.WriteLine(str);
+                        Console.ForegroundColor = ConsoleColor.White;
+                    }
+
                     if (message is MsgConexion)
                     {
                         menCon = message as MsgConexion;
@@ -146,9 +169,9 @@ namespace ServidorTracking
                     {
                         menDB = message as MsgDBPeticion;
 
-                        if(menDB.CodigoPeticion == "Login")
+                        if (menDB.CodigoPeticion == "Login")
                         {
-                            Cuenta c =  menDB.ParamsCuenta[0];
+                            Cuenta c = menDB.ParamsCuenta[0];
                             Cuenta cres;
                             MsgDBRespuesta res = new MsgDBRespuesta();
 
@@ -158,7 +181,7 @@ namespace ServidorTracking
 
                                 res.ReturnCuenta.Add(cres);
                             }
-                            catch(Exception e)
+                            catch (Exception e)
                             {
                                 res.IsValido = false;
                                 res.Errores.Add(e.Message);
@@ -177,7 +200,7 @@ namespace ServidorTracking
                             Cuenta c = menDB.ParamsCuenta[0];
                             MsgDBRespuesta res = new MsgDBRespuesta();
                             Cuenta cres;
-                            
+
                             try
                             {
                                 cres = dbcontrol.CreateCuenta(c);
@@ -479,7 +502,7 @@ namespace ServidorTracking
                 }
                 else
                 {
-                    Console.WriteLine("llega null");
+                    client.RemoveMe();
                 }
             }
         }
@@ -489,12 +512,32 @@ namespace ServidorTracking
             try
             {
                 string str = SerializarcionJson.Serializar<Mensaje>(message);
-                Console.WriteLine("ENVIANDO: " + str);
+
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkCyan;
+                    Console.WriteLine("ENVIANDO: ");
+
+                    switch (message.Tipo)
+                    {
+                        case "MsgConeccion":
+                            Console.ForegroundColor = ConsoleColor.DarkGreen; break;
+                        case "MsgLocalizacion":
+                            Console.ForegroundColor = ConsoleColor.DarkBlue; break;
+                        case "MsgDBPeticion":
+                            Console.ForegroundColor = ConsoleColor.DarkYellow; break;
+                    }
+
+                    Console.WriteLine(str);
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+
                 delivery.SendMessage(str);
             }
             catch (Exception e)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("== ERROR == -" + e.Message);
+                Console.ForegroundColor = ConsoleColor.White;
             }
         }
 
@@ -506,7 +549,9 @@ namespace ServidorTracking
             }
             catch (Exception e)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("== ERROR == -" + e.Message);
+                Console.ForegroundColor = ConsoleColor.White;
             }
         }
     }

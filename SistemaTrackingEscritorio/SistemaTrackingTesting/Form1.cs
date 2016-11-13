@@ -40,10 +40,11 @@ namespace SistemaTrackingTesting
 
         private void button2_Click(object sender, EventArgs e)
         {
-            MsgConexion m = new MsgConexion();
+            MsgLocalizacion m = new MsgLocalizacion();
             m.From = tbFrom.Text;
             m.To.Add(tbTo.Text);
-            m.Mensaje = "conectar";
+            m.Latitud = "3.3";
+            m.Longitud = "3.3";
 
             client.SendToServer(m);
         }
