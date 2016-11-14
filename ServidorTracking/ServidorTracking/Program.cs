@@ -12,7 +12,7 @@ namespace ServidorTracking
     {
         static void Main(string[] args)
         {
-            Console.SetWindowSize(102, 35);
+            Console.SetWindowSize(120, 35);
 
             string ip = "10.75.20.45";
 

@@ -285,9 +285,9 @@ namespace ServidorTracking.DataBase
 
             try
             {
-                id = dbMan.execute("insert into grupo_cuentas(idGrupo, idCuenta, state) values(" + idGrupo + ", " + idIntegrante + ", 1)", QueryType.INSERT);
+                dbMan.execute("insert into grupo_cuentas(idGrupo, idCuenta, state) values(" + idGrupo + ", " + idIntegrante + ", 1)", QueryType.UPDATE);
             
-                g = GetGrupoById(id);
+                g = GetGrupoById(idGrupo);
             }
             catch (Exception e)
             {
