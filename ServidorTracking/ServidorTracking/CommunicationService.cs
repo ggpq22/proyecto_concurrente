@@ -78,7 +78,7 @@ namespace ServidorTracking
             string str = null;
             Mensaje message;
 
-            while (true)
+            while (client.Client.Connected)
             {
                 try
                 {
@@ -108,7 +108,7 @@ namespace ServidorTracking
 
                     {
                         Console.ForegroundColor = ConsoleColor.Cyan;
-                        Console.WriteLine("RECIBIENDO: ");
+                        Console.WriteLine("RECIBIENDO: " + message.Tipo);
 
                         switch (message.Tipo)
                         {
@@ -521,7 +521,7 @@ namespace ServidorTracking
 
                 {
                     Console.ForegroundColor = ConsoleColor.DarkCyan;
-                    Console.WriteLine("ENVIANDO: ");
+                    Console.WriteLine("ENVIANDO: " + message.Tipo);
 
                     switch (message.Tipo)
                     {
@@ -529,7 +529,7 @@ namespace ServidorTracking
                             Console.ForegroundColor = ConsoleColor.DarkGreen; break;
                         case "MsgLocalizacion":
                             Console.ForegroundColor = ConsoleColor.DarkBlue; break;
-                        case "MsgDBPeticion":
+                        case "MsgDBRespuesta":
                             Console.ForegroundColor = ConsoleColor.DarkYellow; break;
                     }
 

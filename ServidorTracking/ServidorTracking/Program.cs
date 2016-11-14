@@ -12,6 +12,8 @@ namespace ServidorTracking
     {
         static void Main(string[] args)
         {
+            Console.SetWindowSize(102, 35);
+
             string ip = "10.75.20.45";
 
             int port = 8999;

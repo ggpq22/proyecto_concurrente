@@ -58,6 +58,7 @@ namespace ServidorTracking
             try
             {
                 string line = reader.ReadLine();
+                reader.DiscardBufferedData();
                 return line;
             }
             catch (Exception e)
