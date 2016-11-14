@@ -248,8 +248,9 @@ namespace ServidorTracking
                         else if (menDB.CodigoPeticion == "CrearGrupo")
                         {
                             Grupo g = menDB.ParamsGrupo[0];
-                            Grupo gres;
+                            Grupo gres = new Grupo();
                             MsgDBRespuesta res = new MsgDBRespuesta();
+                            MsgNotificacion not = new MsgNotificacion();
 
                             try
                             {
@@ -259,6 +260,8 @@ namespace ServidorTracking
                             {
                                 res.IsValido = false;
                                 res.Errores.Add(e.Message);
+                                not.IsValido = false;
+                                not.Errores.Add(e.Message);
                             }
                             finally
                             {
@@ -268,7 +271,16 @@ namespace ServidorTracking
                                 res.CodigoPeticion = menDB.CodigoPeticion;
                                 res.ReturnGrupo.Add(g);
 
+                                not.From = menDB.From;
+                                not.Fecha = DateTime.Now;
+                                not.Peticion = menDB;
+                                foreach (Cuenta c in gres.Integrantes)
+                                {
+                                    not.To.Add(c.Usuario);
+                                }
+
                                 OnDBRequested(res);
+                                OnDBRequested(not);
                             }
                         }
                         else if (menDB.CodigoPeticion == "GetGrupoPorAnfitrion")
@@ -325,41 +337,35 @@ namespace ServidorTracking
                         }
                         else if (menDB.CodigoPeticion == "AgregarCuentaAGrupo")
                         {
-                            if (!menDB.Notificacion)
+                            Cuenta c = menDB.ParamsCuenta[0];
+                            Grupo g = menDB.ParamsGrupo[0];
+                            Grupo gr = new Grupo();
+                            MsgDBRespuesta res = new MsgDBRespuesta();
+                            MsgNotificacion not = new MsgNotificacion();
+
+                            try
                             {
-                                Cuenta c = menDB.ParamsCuenta[0];
-                                Grupo g = menDB.ParamsGrupo[0];
-                                Grupo gr = new Grupo();
-                                MsgDBRespuesta res = new MsgDBRespuesta();
-
-                                try
-                                {
-                                    gr = dbcontrol.AddCuentaToGrupo(c.Id, g.Id);
-                                }
-                                catch (Exception e)
-                                {
-                                    res.IsValido = false;
-                                    res.Errores.Add(e.Message);
-                                }
-                                finally
-                                {
-                                    res.From = menDB.From;
-                                    res.To = menDB.To;
-                                    res.Fecha = DateTime.Now;
-                                    res.CodigoPeticion = menDB.CodigoPeticion;
-                                    res.ReturnGrupo.Add(gr);
-
-                                    OnDBRequested(res);
-                                }
+                                gr = dbcontrol.AddCuentaToGrupo(c.Id, g.Id);
                             }
-                            else
+                            catch (Exception e)
                             {
-                                MsgNotificacion not = new MsgNotificacion();
+                                res.IsValido = false;
+                                res.Errores.Add(e.Message);
+                            }
+                            finally
+                            {
+                                res.From = menDB.From;
+                                res.To = menDB.To;
+                                res.Fecha = DateTime.Now;
+                                res.CodigoPeticion = menDB.CodigoPeticion;
+                                res.ReturnGrupo.Add(gr);
+
                                 not.Fecha = DateTime.Now;
                                 not.From = menDB.From;
                                 not.To = menDB.To;
                                 not.Peticion = menDB;
 
+                                OnDBRequested(res);
                                 OnDBRequested(not);
                             }
                         }

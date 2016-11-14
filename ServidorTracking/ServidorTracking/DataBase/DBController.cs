@@ -59,7 +59,7 @@ namespace ServidorTracking.DataBase
                 }
                 else
                 {
-                    id = dbMan.execute("insert into cuenta(usuario, pass, state) values('" + cuenta.Usuario + "', '" + cuenta.Pass + "', 1)", QueryType.INSERT);
+                    id = dbMan.execute("insert into cuenta(usuario, pass, recibeLocalizaciones, state) values('" + cuenta.Usuario + "', '" + cuenta.Pass + "', " + cuenta.RecibeLocalizacion + ", 1)", QueryType.INSERT);
 
                     c = GetCuentaById(id);
                 }
@@ -98,6 +98,7 @@ namespace ServidorTracking.DataBase
                     c.Id = Convert.ToInt32(dt["idCuenta"]);
                     c.Usuario = Convert.ToString(dt["usuario"]);
                     c.Pass = Convert.ToString(dt["pass"]);
+                    c.RecibeLocalizacion = Convert.ToInt32(dt["recibeLocalizaciones"]);
                 }
             }
             catch (Exception e)
@@ -122,6 +123,7 @@ namespace ServidorTracking.DataBase
                     c.Id = Convert.ToInt32(dt["idCuenta"]);
                     c.Usuario = Convert.ToString(dt["usuario"]);
                     c.Pass = Convert.ToString(dt["pass"]);
+                    c.RecibeLocalizacion = Convert.ToInt32(dt["recibeLocalizaciones"]);
                 }
             }
             catch (Exception e)
