@@ -107,7 +107,7 @@ namespace ServidorTracking
                     MsgDBPeticion menDB;
 
                     {
-                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.ForegroundColor = ConsoleColor.Magenta;
                         Console.WriteLine("RECIBIENDO: " + message.Tipo);
 
                         switch (message.Tipo)
@@ -273,7 +273,7 @@ namespace ServidorTracking
 
                                 not.From = menDB.From;
                                 not.Fecha = DateTime.Now;
-                                not.Peticion = menDB;
+                                not.Respuesta = res;
                                 foreach (Cuenta c in gres.Integrantes)
                                 {
                                     not.To.Add(c.Usuario);
@@ -363,7 +363,7 @@ namespace ServidorTracking
                                 not.Fecha = DateTime.Now;
                                 not.From = menDB.From;
                                 not.To = menDB.To;
-                                not.Peticion = menDB;
+                                not.Respuesta = res;
 
                                 OnDBRequested(res);
                                 OnDBRequested(not);
@@ -520,7 +520,7 @@ namespace ServidorTracking
                 string str = SerializarcionJson.Serializar<Mensaje>(message);
 
                 {
-                    Console.ForegroundColor = ConsoleColor.DarkCyan;
+                    Console.ForegroundColor = ConsoleColor.DarkMagenta;
                     Console.WriteLine("ENVIANDO: " + message.Tipo);
 
                     switch (message.Tipo)

@@ -6,19 +6,19 @@ import java.util.ArrayList;
 
 public class MsgNotificacion extends Mensaje{
 
-    private MsgDBPeticion Peticion;
+    private MsgDBRespuesta Respuesta;
 
     public MsgNotificacion(ArrayList<String> to, String from, String fecha, MsgDBPeticion Peticion) {
         super(to, from, fecha, "MsgNotificacion", true);
-        this.Peticion = Peticion;
+        this.Respuesta = Respuesta;
     }
 
-    public MsgDBPeticion getPeticion() {
-        return Peticion;
+    public MsgDBRespuesta getRespuesta() {
+        return Respuesta;
     }
 
-    public void setPeticion(MsgDBPeticion Peticion) {
-        this.Peticion = Peticion;
+    public void setRespuesta(MsgDBRespuesta Respuesta) {
+        this.Respuesta = Respuesta;
     }
 
 }

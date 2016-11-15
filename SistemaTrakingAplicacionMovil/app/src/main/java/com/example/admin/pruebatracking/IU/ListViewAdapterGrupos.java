@@ -13,16 +13,19 @@ import com.example.admin.pruebatracking.Entidades.Grupo;
 import com.example.admin.pruebatracking.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ListViewAdapterGrupos extends BaseAdapter {
 
     Context context;
     ArrayList<Grupo> grupos;
+    ArrayList<Boolean> seleccionados;
     LayoutInflater inflater;
 
-    public ListViewAdapterGrupos(Context context, ArrayList<Grupo> grupos) {
+    public ListViewAdapterGrupos(Context context, ArrayList<Grupo> grupos, ArrayList<Boolean> seleccionados) {
         this.context = context;
         this.grupos = grupos;
+        this.seleccionados = seleccionados;
     }
 
     @Override
@@ -47,6 +50,10 @@ public class ListViewAdapterGrupos extends BaseAdapter {
 
     public void setGrupos(ArrayList<Grupo> grupos){
         this.grupos = grupos;
+    }
+
+    public void addGrupo(Grupo grupo){
+        grupos.add(grupo);
     }
 
     // patron de listview mejorado
