@@ -33,8 +33,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.btnLogin = new System.Windows.Forms.Button();
-            this.lblNuevaCuenta = new System.Windows.Forms.LinkLabel();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnCrearCuenta = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // tbUsuario
@@ -48,8 +47,10 @@
             // 
             this.tbPassword.Location = new System.Drawing.Point(42, 93);
             this.tbPassword.Name = "tbPassword";
+            this.tbPassword.PasswordChar = '*';
             this.tbPassword.Size = new System.Drawing.Size(180, 20);
             this.tbPassword.TabIndex = 1;
+            this.tbPassword.UseSystemPasswordChar = true;
             // 
             // label1
             // 
@@ -72,7 +73,7 @@
             // 
             // btnLogin
             // 
-            this.btnLogin.Location = new System.Drawing.Point(58, 130);
+            this.btnLogin.Location = new System.Drawing.Point(42, 132);
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Size = new System.Drawing.Size(89, 23);
             this.btnLogin.TabIndex = 4;
@@ -80,33 +81,22 @@
             this.btnLogin.UseVisualStyleBackColor = true;
             this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
             // 
-            // lblNuevaCuenta
+            // btnCrearCuenta
             // 
-            this.lblNuevaCuenta.AutoSize = true;
-            this.lblNuevaCuenta.Location = new System.Drawing.Point(67, 181);
-            this.lblNuevaCuenta.Name = "lblNuevaCuenta";
-            this.lblNuevaCuenta.Size = new System.Drawing.Size(68, 13);
-            this.lblNuevaCuenta.TabIndex = 5;
-            this.lblNuevaCuenta.TabStop = true;
-            this.lblNuevaCuenta.Text = "Crear cuenta";
-            this.lblNuevaCuenta.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lblNuevaCuenta_LinkClicked);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(219, 170);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 6;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnCrearCuenta.Location = new System.Drawing.Point(137, 132);
+            this.btnCrearCuenta.Name = "btnCrearCuenta";
+            this.btnCrearCuenta.Size = new System.Drawing.Size(89, 23);
+            this.btnCrearCuenta.TabIndex = 6;
+            this.btnCrearCuenta.Text = "Crear Cuenta";
+            this.btnCrearCuenta.UseVisualStyleBackColor = true;
+            this.btnCrearCuenta.Click += new System.EventHandler(this.lblNuevaCuenta_LinkClicked);
             // 
             // Login
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(312, 277);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.lblNuevaCuenta);
+            this.Controls.Add(this.btnCrearCuenta);
             this.Controls.Add(this.btnLogin);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -128,7 +118,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button btnLogin;
-        private System.Windows.Forms.LinkLabel lblNuevaCuenta;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnCrearCuenta;
     }
 }

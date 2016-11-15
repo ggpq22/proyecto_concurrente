@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
+
 
 namespace SistemaTrackingBiblioteca
 {
@@ -16,5 +18,19 @@ namespace SistemaTrackingBiblioteca
 
         public bool IsConected { get; set; }
 
+
+        public List<Cuenta> CuentasUsuario { get; set; }
+
+        public System.Threading.CancellationTokenSource TokenSource { get; set; }
+
+        public Form form { get; set; }
+
+        public Form FormLogin { get; set; }
+
+        public List<Grupo> Grupos { get; set; }
+
+        public Form Progress { get; set; }
+
+        public Form FormPrincipal { get; set; }
     }
 }

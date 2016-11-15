@@ -88,12 +88,6 @@
     <Compile Include="EjemploMapa.Designer.cs">
       <DependentUpon>EjemploMapa.cs</DependentUpon>
     </Compile>
-    <Compile Include="frmCrearGrupo.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmCrearGrupo.Designer.cs">
-      <DependentUpon>frmCrearGrupo.cs</DependentUpon>
-    </Compile>
     <Compile Include="frmGrupoCrear.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -106,6 +100,12 @@
     <Compile Include="frmPrincipal.Designer.cs">
       <DependentUpon>frmPrincipal.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmProgresBar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmProgresBar.Designer.cs">
+      <DependentUpon>frmProgresBar.cs</DependentUpon>
+    </Compile>
     <Compile Include="Login.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -117,14 +117,14 @@
     <EmbeddedResource Include="EjemploMapa.resx">
       <DependentUpon>EjemploMapa.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="frmCrearGrupo.resx">
-      <DependentUpon>frmCrearGrupo.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="frmGrupoCrear.resx">
       <DependentUpon>frmGrupoCrear.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmPrincipal.resx">
       <DependentUpon>frmPrincipal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmProgresBar.resx">
+      <DependentUpon>frmProgresBar.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Login.resx">
       <DependentUpon>Login.cs</DependentUpon>

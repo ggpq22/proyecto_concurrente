@@ -53,17 +53,7 @@ namespace SistemaTrackingBiblioteca
         // Constructor
         public CommunicationService(TcpClient client)
         {
-            delivery = new MessageDelivery(client);
-            delivery.OpenDelivery();
-
-            events = new Thread(incomingMessage);
-            events.Start();
-        }
-
-        public CommunicationService(TcpClient client, CancellationToken token)
-        {
-            // TODO: Complete member initialization
-            this.token = token;
+            this.tcpClient = client;
             delivery = new MessageDelivery(client);
             delivery.OpenDelivery();
 
@@ -77,8 +67,7 @@ namespace SistemaTrackingBiblioteca
             string str;
             Mensaje message;
 
-            //while (!token.IsCancellationRequested)
-            while(true)
+            while (tcpClient.Connected)
             {
                 str = delivery.RecieveMessage();
                 Console.WriteLine(str);

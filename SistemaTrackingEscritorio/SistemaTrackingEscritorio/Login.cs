@@ -15,17 +15,18 @@ using System.Threading.Tasks;
 namespace Mapa
 {
     public delegate void delHilo(object token);
-    public delegate void delMostrarForm();
+    public delegate void delThread();
 
     public partial class Login : Form
     {
-        ServerClient server = null;
         bool conectado;
         Guid guid;
         CancellationTokenSource cancelar;
         Thread isConected;
         frmPrincipal frm;
-        delMostrarForm DelMostrarForm;
+        delThread DelMostrarForm;
+
+        //private ServerClient server;
         private Sesion sesion;
 
 
@@ -39,7 +40,7 @@ namespace Mapa
 
         }
 
-        private void lblNuevaCuenta_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void lblNuevaCuenta_LinkClicked(object sender, EventArgs e)
         {
             if (!conectado)
             {
@@ -51,6 +52,7 @@ namespace Mapa
             {
                 Usuario = tbUsuario.Text,
                 Pass = tbPassword.Text,
+                RecibeLocalizacion = 1,
             };
 
             MsgDBPeticion msg = new MsgDBPeticion()
@@ -63,7 +65,7 @@ namespace Mapa
             msg.To.Add(guid.ToString());
             msg.ParamsCuenta.Add(cuenta);
 
-            server.SendToServer(msg);
+            sesion.Server.SendToServer(msg);
 
         }
 
@@ -103,7 +105,7 @@ namespace Mapa
             msg.To.Add(guid.ToString());
             msg.ParamsCuenta.Add(cuenta);
 
-            server.SendToServer(msg);
+            sesion.Server.SendToServer(msg);
 
         }
 
@@ -113,7 +115,7 @@ namespace Mapa
             cancelar = new CancellationTokenSource();
             CancellationToken token = cancelar.Token;
             DelMostrarForm += MostrarForm;
-
+            sesion = new Sesion();
             delHilo del = hilo;
             isConected = new Thread(hilo);
 
@@ -132,37 +134,32 @@ namespace Mapa
             {
                 if (!conectado)
                 {
-                    var tar = new Task(new Action(() =>
+                    try
                     {
-                        try
+                        var ip = Configuracion.GetConfiguracion("IpServidor");
+                        var puerto = Configuracion.GetConfiguracion("PuertoServidor");
+                        var retorno = new ServerClient(ip, int.Parse(puerto));
+                        sesion.Server = retorno;
+                        conectado = true;
+                        sesion.Server.Connect += server_Connect;
+                        sesion.Server.Disconnect += server_Disconnect;
+                        sesion.Server.DBRespuesta += server_DBRespuesta;
+
+                        var msg = new MsgConexion()
                         {
-                            var ip = Configuracion.GetConfiguracion("IpServidor");
-                            var puerto = Configuracion.GetConfiguracion("PuertoServidor");
-                            var retorno = new ServerClient(ip, int.Parse(puerto), token);
-                            server = retorno;
-                            conectado = true;
-                            server.Connect += server_Connect;
-                            server.Disconnect += server_Disconnect;
-                            server.DBRespuesta += server_DBRespuesta;
+                            From = guid.ToString(),
+                            Mensaje = "conectar",
+                            Fecha = DateTime.Now
 
-                            var msg = new MsgConexion()
-                            {
-                                From = guid.ToString(),
-                                Mensaje = "conectar",
-                                Fecha = DateTime.Now
+                        };
+                        msg.To.Add(guid.ToString());
 
-                            };
-                            msg.To.Add(guid.ToString());
-
-                            server.SendToServer(msg);
-
-                        }
-                        catch (Exception) { }
-                    }));
-
-                    tar.Start();
-
-                    
+                        sesion.Server.SendToServer(msg);
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                    }
                 }
 
                 Thread.Sleep(5000);
@@ -176,11 +173,8 @@ namespace Mapa
             {
                 if (msg.IsValido)
                 {
-                    sesion = new Sesion()
-                    {
-                        Usuario = msg.ReturnCuenta[0],
-                        Server = server,
-                    };
+                    sesion.Usuario = msg.ReturnCuenta[0];    
+                    
                     cancelar.Cancel();
                     isConected.Join();
 
@@ -210,12 +204,30 @@ namespace Mapa
             sesion.Server.Connect -= server_Connect;
             sesion.Server.Disconnect -= server_Disconnect;
             sesion.Server.DBRespuesta -= server_DBRespuesta;
-            frm = new frmPrincipal(sesion);
-            frm.Show();
+            sesion.FormLogin = this;
+            sesion.FormPrincipal = new frmPrincipal(sesion);
+            sesion.FormPrincipal.Show();
+            
+            this.Visible = false;
         }
 
         private void Login_FormClosing(object sender, FormClosingEventArgs e)
         {
+            MsgConexion msg = new MsgConexion()
+            {
+                From = guid.ToString(),
+                To = new List<string>() { guid.ToString() },
+                Mensaje = "desconectar",
+                Fecha = DateTime.Now,
+
+            };
+
+            if(sesion.Server != null)
+            {
+                sesion.Server.SendToServer(msg);
+                sesion.Server.client.Close();
+            }
+            
             cancelar.Cancel();
             isConected.Join();
 
