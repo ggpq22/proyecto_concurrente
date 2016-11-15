@@ -2,6 +2,7 @@ package com.example.admin.pruebatracking.IU;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,8 +11,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.example.admin.pruebatracking.AplicacionPrincipal;
@@ -37,20 +40,26 @@ public class FragmentGrupos extends Fragment {
 
 
         grupos = ((AplicacionPrincipal)getContext().getApplicationContext()).getGrupos();
-        adapter = new ListViewAdapterGrupos(getContext(), grupos);
+        ArrayList<Boolean> seleccionados = new ArrayList<Boolean>();
+        for(int i = 0; i < grupos.size(); i++) {
+            seleccionados.add(new Boolean(false));
+        }
+
+        adapter = new ListViewAdapterGrupos(getContext(), grupos, seleccionados);
         lista.setAdapter(adapter);
         ((AplicacionPrincipal)getContext().getApplicationContext()).setAdapterGrupos(adapter);
 
 
-        lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent i = new Intent(getActivity(), ListarUnGrupo.class);
-                i.putExtra("position", position);
-                startActivity(i);
 
+        lista.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> av, View v, int pos, long id) {
+                //item_sel.setBackgroundColor(Color.parseColor("#81F781"));
+                Toast.makeText(getContext(), "posicion "+pos, Toast.LENGTH_LONG).show();
+                return true;
             }
         });
+
         return rootView;
     }
 }

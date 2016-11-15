@@ -11,6 +11,7 @@ import com.example.admin.pruebatracking.IU.ListViewAdapterGrupos;
 import com.example.admin.pruebatracking.IU.MainActivity;
 import com.example.admin.pruebatracking.Mensajes.Mensaje;
 import com.example.admin.pruebatracking.Mensajes.MsgDBRespuesta;
+import com.example.admin.pruebatracking.Mensajes.MsgNotificacion;
 import com.example.admin.pruebatracking.Serializacion.Serializacion;
 
 import java.io.BufferedReader;
@@ -94,6 +95,18 @@ public class ServicioRecibir implements Runnable {
 
                                 case "MsgNotificacion":
                                     Log.e("msg", "Llego mensaje de notificacion");
+                                    final ListViewAdapterGrupos adapter = global.getAdapterGrupos();
+                                    if(adapter != null && msg.getIsValido())
+                                    {
+                                        ((Activity)global.getContext()).runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                adapter.addGrupo(((MsgNotificacion)msg).getRespuesta().getReturnGrupo().get(0));
+                                                adapter.notifyDataSetChanged();
+                                                Toast.makeText(global.getContext(), "Fuiste añadido a un nuevo grupo", Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+                                    }
 
                                     break;
 

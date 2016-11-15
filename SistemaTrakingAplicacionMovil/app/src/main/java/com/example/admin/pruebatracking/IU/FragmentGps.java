@@ -68,7 +68,11 @@ public class FragmentGps extends Fragment {
 
                                 if(global.getSocket().isConnected() && global.getConectado()) {
                                     ArrayList<String> arrayDestino = new ArrayList<String>();
-                                    arrayDestino.add(((AplicacionPrincipal) context.getApplicationContext()).getCuenta().getUsuario());
+                                    ArrayList<Grupo> grupos = global.getGrupos();
+                                    for (int i = 0; i < grupos.size(); i++)
+                                    {
+                                        arrayDestino.add(grupos.get(i).getNombre());
+                                    }
 
                                     String fecha = (DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString());
 
