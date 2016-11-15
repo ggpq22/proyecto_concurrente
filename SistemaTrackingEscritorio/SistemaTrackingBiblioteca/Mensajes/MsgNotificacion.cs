@@ -12,6 +12,6 @@ namespace SistemaTrackingBiblioteca.Mensajes
             base.Tipo = this.GetType().Name;
         }
 
-        public MsgDBPeticion Peticion { get; set; }
+        public MsgDBRespuesta Respuesta { get; set; }
     }
 }

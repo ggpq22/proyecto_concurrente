@@ -33,6 +33,7 @@
             this.dgvUsuarioBusqueda = new System.Windows.Forms.DataGridView();
             this.btnCrearGrupo = new System.Windows.Forms.Button();
             this.btnCancelar = new System.Windows.Forms.Button();
+            this.prProgreso = new System.Windows.Forms.ProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuarioBusqueda)).BeginInit();
             this.SuspendLayout();
             // 
@@ -78,11 +79,20 @@
             this.btnCancelar.Text = "Cancelar";
             this.btnCancelar.UseVisualStyleBackColor = true;
             // 
+            // prProgreso
+            // 
+            this.prProgreso.Location = new System.Drawing.Point(43, 264);
+            this.prProgreso.Name = "prProgreso";
+            this.prProgreso.Size = new System.Drawing.Size(308, 23);
+            this.prProgreso.TabIndex = 11;
+            this.prProgreso.Visible = false;
+            // 
             // frmGrupoCrear
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(418, 299);
+            this.Controls.Add(this.prProgreso);
             this.Controls.Add(this.btnCancelar);
             this.Controls.Add(this.btnCrearGrupo);
             this.Controls.Add(this.dgvUsuarioBusqueda);
@@ -105,5 +115,6 @@
         private System.Windows.Forms.DataGridView dgvUsuarioBusqueda;
         private System.Windows.Forms.Button btnCrearGrupo;
         private System.Windows.Forms.Button btnCancelar;
+        private System.Windows.Forms.ProgressBar prProgreso;
     }
 }

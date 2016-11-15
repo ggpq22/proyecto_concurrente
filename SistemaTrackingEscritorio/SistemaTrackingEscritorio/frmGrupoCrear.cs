@@ -23,6 +23,10 @@ namespace Mapa
 
         private Grupo grupoNuevo = new Grupo();
 
+        private Thread tareaProgreso;
+
+        private CancellationTokenSource tokenProgreso;
+
         public frmGrupoCrear()
         {
             InitializeComponent();
@@ -86,6 +90,34 @@ namespace Mapa
 
             sesion.Server.SendToServer(msg);
 
+            ActivarProgressBar();
+            btnCrearGrupo.Enabled = false;
+
+        }
+
+        private void ActivarProgressBar()
+        {
+            tokenProgreso = new CancellationTokenSource();
+
+            prProgreso.Visible = true;
+
+            ParameterizedThreadStart param = (object o) =>
+            {
+                var contador = 0;
+                var token = (CancellationToken)o;
+                while (!token.IsCancellationRequested)
+                {
+                    contador = contador == 100 ? 0 : contador + 10;
+
+                    prProgreso.Invoke(new Action(() => { prProgreso.Value = contador; }));
+
+                    Thread.Sleep(500);
+                }
+
+            };
+
+            tareaProgreso = new Thread(param);
+            tareaProgreso.Start(tokenProgreso.Token);
         }
 
         private List<Cuenta> ListaIntegrantesSeleccionados()
@@ -110,6 +142,7 @@ namespace Mapa
 
         private void PedirCuentaDeUsuarios()
         {
+            ActivarProgressBar();
             MsgDBPeticion msg = new MsgDBPeticion()
             {
                 CodigoPeticion = "GetCuentas",
@@ -126,15 +159,20 @@ namespace Mapa
         void Server_DBRespuesta(object sender, Mensaje mensaje)
         {
             var msg = mensaje as MsgDBRespuesta;
-
+            tokenProgreso.Cancel();
+            tareaProgreso.Join();
+            prProgreso.Invoke(new Action(() => { prProgreso.Visible = false; }));
             if (msg.CodigoPeticion.Equals("CrearGrupo"))
             {
+                
+                btnCrearGrupo.Invoke(new Action(() => { btnCrearGrupo.Enabled = true; }));
                 try
                 {
                     if (msg.IsValido)
                     {
                         MessageBox.Show("Se creo el grupo correctamente.");
                         sesion.form.Invoke(new Action(() => { sesion.form.Visible = true; }));
+                        ((frmPrincipal)sesion.FormPrincipal).ActualizarGrupos();
                         this.Close();
 
                     }
@@ -183,6 +221,10 @@ namespace Mapa
         private void frmGrupoCrear_FormClosing(object sender, FormClosingEventArgs e)
         {
             sesion.form.Visible = true;
+            ((frmPrincipal)sesion.form).ActualizarGrupos();
+
         }
+
+        
     }
 }
