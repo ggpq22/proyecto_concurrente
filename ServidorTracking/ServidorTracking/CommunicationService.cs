@@ -273,7 +273,7 @@ namespace ServidorTracking
 
                                 not.From = menDB.From;
                                 not.Fecha = DateTime.Now;
-                                not.Peticion = menDB;
+                                not.Respuesta = res;
                                 foreach (Cuenta c in gres.Integrantes)
                                 {
                                     not.To.Add(c.Usuario);
@@ -363,7 +363,7 @@ namespace ServidorTracking
                                 not.Fecha = DateTime.Now;
                                 not.From = menDB.From;
                                 not.To = menDB.To;
-                                not.Peticion = menDB;
+                                not.Respuesta = res;
 
                                 OnDBRequested(res);
                                 OnDBRequested(not);
