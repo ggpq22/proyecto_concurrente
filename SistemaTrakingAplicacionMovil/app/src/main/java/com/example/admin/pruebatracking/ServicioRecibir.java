@@ -58,9 +58,24 @@ public class ServicioRecibir implements Runnable {
 
                                     break;
                                 case "MsgDBRespuesta":
-                                    Log.e("msg", "Llego mensaje de respuesta");
-                                    global.setMsgRespuesta((MsgDBRespuesta) msg);
-                                    global.setRespuestaCrearCuenta(true);
+                                    switch (((MsgDBRespuesta)msg).getCodigoPeticion()) {
+                                        case "Login":
+                                            Log.e("msg", "Llego mensaje de respuesta con codigo de Login");
+                                            global.setRespuestaEntrar(true);
+                                            global.setMsgDBRespuestaEntrar(((MsgDBRespuesta)msg));
+                                            break;
+
+                                        case "CrearCuenta":
+                                            Log.e("msg", "Llego mensaje de respuesta con codigo de CrearCuenta");;;
+                                            global.setRespuestaEntrar(true);
+                                            global.setMsgDBRespuestaEntrar(((MsgDBRespuesta) msg));
+                                            break;
+
+                                        case "GetGrupoPorIntegrante":
+                                            Log.e("msg", "Llego mensaje de respuesta con codigo de GetGrupoPorIntegrante");;
+                                            Log.e("msg","cantidad de grupos a los que perteneces: " + ((MsgDBRespuesta) msg).getReturnGrupo().size());
+                                            break;
+                                    }
                                     break;
 
                                 case "MsgNotificacion":

@@ -28,4 +28,20 @@ public class MsgDBRespuesta extends Mensaje {
     public void setCodigoPeticion(String CodigoPeticion) {
         this.CodigoPeticion = CodigoPeticion;
     }
+
+    public ArrayList<Cuenta> getReturnCuenta() {
+        return ReturnCuenta;
+    }
+
+    public void setReturnCuenta(ArrayList<Cuenta> ReturnCuenta) {
+        this.ReturnCuenta = ReturnCuenta;
+    }
+
+    public ArrayList<Grupo> getReturnGrupo() {
+        return ReturnGrupo;
+    }
+
+    public void setReturnGrupo(ArrayList<Grupo> ReturnGrupo) {
+        this.ReturnGrupo = ReturnGrupo;
+    }
 }
