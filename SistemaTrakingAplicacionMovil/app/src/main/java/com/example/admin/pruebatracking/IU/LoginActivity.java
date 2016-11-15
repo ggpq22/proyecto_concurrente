@@ -84,74 +84,134 @@ public class LoginActivity extends AppCompatActivity {
         final String email = _emailText.getText().toString();
         final String password = _passwordText.getText().toString();
 
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
+        new Thread() {
+            public void run() {
 
-                        String uniqueID = UUID.randomUUID().toString();
-                        ArrayList<String> arrayDestino = new ArrayList<String>();
-                        arrayDestino.add(uniqueID);
+                String uniqueID = UUID.randomUUID().toString();
+                ArrayList<String> arrayDestino = new ArrayList<String>();
+                arrayDestino.add(uniqueID);
 
-                        String fecha = (DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString());
+                String fecha = (DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString());
 
-                        Cuenta cuenta = new Cuenta(1, email, password, 0);
-                        ArrayList<Cuenta> arrayCuenta = new ArrayList<Cuenta>();
-                        arrayCuenta.add(cuenta);
+                Cuenta cuenta = new Cuenta(1, email, password, 0);
+                ArrayList<Cuenta> arrayCuenta = new ArrayList<Cuenta>();
+                arrayCuenta.add(cuenta);
 
-                        Cliente cliente = new Cliente(getBaseContext(), arrayDestino, uniqueID, fecha);
-                        cliente.execute();
+                Cliente cliente = new Cliente(getBaseContext(), arrayDestino, uniqueID, fecha);
+                cliente.execute();
 
-                        while (!((AplicacionPrincipal) getApplicationContext()).getConectado()) {
-                            try {
-                                Thread.sleep(1);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                Log.e("msg", "Error en esperando conexion: " + e.toString());
-                            }
-                        }
-
-                        Log.e("msg", "PASO EN CREAR CONEXION");
-
-                        MsgDBPeticion peticion = new MsgDBPeticion(arrayDestino, uniqueID, fecha, "Login", arrayCuenta, new ArrayList<Grupo>(), false);
-                        cliente.enviarMensajes(peticion);
-
-                        while (!((AplicacionPrincipal) getApplicationContext()).getCrearCuenta()) {
-                            try {
-                                Thread.sleep(1);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                Log.e("msg", "Error en esperando enviar peticion Crear Cuenta: " + e.toString());
-                            }
-                        }
-
-                        Log.e("msg", "PASO PETICION LOGIN");
-                        ((AplicacionPrincipal) getApplicationContext()).setCrearCuenta(false);
-
-                        while (!((AplicacionPrincipal) getApplicationContext()).getRespuestaEntrar()) {
-                            try {
-                                Thread.sleep(1);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                Log.e("msg", "Error en esperando Respuesta Login: " + e.toString());
-                            }
-                        }
-
-                        Log.e("msg","PASO RESPUESTA LOGIN");
-                        ((AplicacionPrincipal) getApplicationContext()).setRespuestaEntrar(false);
-                        ((AplicacionPrincipal) getApplicationContext()).setConectado(false);
-
-                        MsgDBRespuesta msg = ((AplicacionPrincipal) getApplicationContext()).getMsgDBRespuestaEntrar();
-                        if (msg != null && msg.getIsValido()) {
-                            ((AplicacionPrincipal) getApplicationContext()).setCuenta(msg.getReturnCuenta().get(0));
-                            onLoginSuccess();
-                        } else {
-                            onLoginFailed();
-                        }
-                        progressDialog.dismiss();
-
-
+                while (!((AplicacionPrincipal) getApplicationContext()).getConectado()) {
+                    try {
+                        Thread.sleep(1);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Log.e("msg", "Error en esperando conexion: " + e.toString());
                     }
-                }, 2500);
+                }
+
+                Log.e("msg", "PASO EN CREAR CONEXION");
+
+                MsgDBPeticion peticion = new MsgDBPeticion(arrayDestino, uniqueID, fecha, "Login", arrayCuenta, new ArrayList<Grupo>(), false);
+                cliente.enviarMensajes(peticion);
+
+                while (!((AplicacionPrincipal) getApplicationContext()).getLogin()) {
+                    try {
+                        Thread.sleep(1);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Log.e("msg", "Error en esperando enviar peticion Crear Cuenta: " + e.toString());
+                    }
+                }
+
+                Log.e("msg", "PASO PETICION LOGIN");
+
+                while (!((AplicacionPrincipal) getApplicationContext()).getRespuestaEntrar()) {
+                    try {
+                        Thread.sleep(1);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Log.e("msg", "Error en esperando Respuesta Login: " + e.toString());
+                    }
+                }
+
+                cliente.pararRecibirMensajes();
+                cliente.cancel(true
+                );
+                cliente.cerrarConexion();
+                Log.e("msg", "PASO RESPUESTA LOGIN");
+
+                ((AplicacionPrincipal) getApplicationContext()).setLogin(false);
+                ((AplicacionPrincipal) getApplicationContext()).setRespuestaEntrar(false);
+                ((AplicacionPrincipal) getApplicationContext()).setConectado(false);
+
+                MsgDBRespuesta msg = ((AplicacionPrincipal) getApplicationContext()).getMsgDBRespuestaEntrar();
+                if (msg != null && msg.getIsValido()) {
+                    ((AplicacionPrincipal) getApplicationContext()).setCuenta(msg.getReturnCuenta().get(0));
+                    cuenta = ((AplicacionPrincipal) getBaseContext().getApplicationContext()).getCuenta();
+
+                    arrayDestino = new ArrayList<String>();
+                    arrayDestino.add(cuenta.getUsuario());
+                    fecha = (DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString());
+
+                    arrayCuenta = new ArrayList<Cuenta>();
+                    arrayCuenta.add(cuenta);
+
+                    cliente = new Cliente(getBaseContext(), arrayDestino, cuenta.getUsuario(), fecha);
+                    cliente.execute();
+
+                    while (!((AplicacionPrincipal) getApplicationContext()).getConectado()) {
+                        try {
+                            Thread.sleep(1);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Log.e("msg", "Error en esperando conexion con usuario: " + e.toString());
+                        }
+                    }
+
+                    Log.e("msg", "PASO CREAR CONEXION CON USUARIO");
+
+                    MsgDBPeticion peticionGrupos = new MsgDBPeticion(arrayDestino,((AplicacionPrincipal) getBaseContext().getApplicationContext()).getCuenta().getUsuario(), fecha, "GetGrupoPorIntegrante", arrayCuenta, new ArrayList<Grupo>(), false);
+                    cliente.enviarMensajes(peticionGrupos);
+
+                    while (!((AplicacionPrincipal) getApplicationContext()).getRecuperarGrupos()) {
+                        try {
+                            Thread.sleep(1);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Log.e("msg", "Error en esperando enviar peticion Recuperar Grupos: " + e.toString());
+                        }
+                    }
+
+                    Log.e("msg", "PASO PETICION RECUPERAR GRUPOS");
+
+                    while (!((AplicacionPrincipal) getApplicationContext()).getRespuestaRecuperarGrupos()) {
+                        try {
+                            Thread.sleep(1);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Log.e("msg", "Error en esperando Respuesta Login: " + e.toString());
+                        }
+                    }
+
+                    Log.e("msg", "PASO RESPUESTA RECUPERAR GRUPOS");
+
+                    ((AplicacionPrincipal) getApplicationContext()).setRecuperarGrupos(false);
+                    ((AplicacionPrincipal) getApplicationContext()).setRespuestaRecuperarGrupos(false);
+
+                    onLoginSuccess();
+                } else {
+                    onLoginFailed();
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressDialog.dismiss();
+                    }
+                });
+
+            }
+        }.start();
     }
 
 
@@ -166,19 +226,27 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // Disable going back to the MainActivity
         moveTaskToBack(true);
     }
 
     public void onLoginSuccess() {
-        _loginButton.setEnabled(true);
-        finish();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                _loginButton.setEnabled(true);
+                finish();
+            }
+        });
     }
 
     public void onLoginFailed() {
-        Toast.makeText(getBaseContext(), "No se pudo ingresar, Verifique sus datos", Toast.LENGTH_LONG).show();
-
-        _loginButton.setEnabled(true);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getBaseContext(), "No se pudo ingresar, Verifique sus datos", Toast.LENGTH_LONG).show();
+                _loginButton.setEnabled(true);
+            }
+        });
     }
 
     public boolean validate() {

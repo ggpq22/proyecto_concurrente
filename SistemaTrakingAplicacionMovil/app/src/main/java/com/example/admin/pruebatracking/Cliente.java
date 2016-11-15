@@ -86,8 +86,6 @@ public class Cliente extends AsyncTask<Void, Void, Void>{
                 global.setConectado(true);
                 recibirMensajes();
 
-                Log.e("msg", "estado variable: " + global.getConectado());
-
             } else {
                 Log.e("msg", "ERROR AL CONECTARSE AL SERVIDOR");
             }
@@ -154,7 +152,9 @@ public class Cliente extends AsyncTask<Void, Void, Void>{
     public void pararRecibirMensajes()
     {
         if(servicioRecibir != null) {
-            servicioRecibir.stop();
+            Log.e("msg", "INTERRUMPIENDO SERVICIO RECIBIR");
+            servicioRecibir.interrupt();
+            servicioRecibir = null;
         }
     }
 

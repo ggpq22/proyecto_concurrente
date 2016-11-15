@@ -37,7 +37,7 @@
                     <ImageView
                         android:layout_width="75dp"
                         android:layout_height="75dp"
-                        android:id="@+id/imagen_lista_personalizada_grupo"
+                        android:id="@+id/iv_imagen_grupo"
                         android:src="@drawable/defaultuser"
                         android:scaleType="centerCrop" />
                 </LinearLayout>
@@ -53,7 +53,7 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         android:text="Nombre del grupo"
-                        android:id="@+id/tv_titulo_grupo"
+                        android:id="@+id/tv_nombre_grupo"
                         android:layout_marginLeft="5dp"
                         android:layout_marginBottom="10dp"
                         android:textColor="#ff000000" />
@@ -62,7 +62,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="ESTADO: SIN SIGUIMIENTO"
+                        android:text="ESTADO: EN SIGUIMIENTO"
                         android:id="@+id/tv_estado_grupo"
                         android:layout_marginLeft="5dp"
                         android:textColor="#ff868686" />

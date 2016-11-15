@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.admin.pruebatracking.AplicacionPrincipal;
 import com.example.admin.pruebatracking.Cliente;
@@ -38,8 +39,8 @@ public class FragmentGps extends Fragment {
     private ImageView imageView;
     private AnimationDrawable savinAnimation;
     Context context;
-    Context applicationContext;
     Cliente cliente;
+    AplicacionPrincipal global;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,6 +48,7 @@ public class FragmentGps extends Fragment {
         View view = inflater.inflate(R.layout.fragment_gps, container, false);
 
         context = getActivity();
+        global = ((AplicacionPrincipal) context.getApplicationContext());
 
         imageView = (ImageView)view.findViewById(R.id.animacion);
         imageView.setBackgroundResource(R.drawable.animacion_desplazamiento);
@@ -64,20 +66,22 @@ public class FragmentGps extends Fragment {
                                 btnLocalizacion.setText("STOP LOCALIZACIÓN");
                                 btnLocalizacion.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_stop1, 0, 0, 0);
 
-                                ArrayList<String> arrayDestino = new ArrayList<String>();
-                                arrayDestino.add(((AplicacionPrincipal) context.getApplicationContext()).getCuenta().getUsuario());
+                                if(global.getSocket().isConnected() && global.getConectado()) {
+                                    ArrayList<String> arrayDestino = new ArrayList<String>();
+                                    arrayDestino.add(((AplicacionPrincipal) context.getApplicationContext()).getCuenta().getUsuario());
 
-                                String fecha = (DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString());
+                                    String fecha = (DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString());
 
+                                    cliente = new Cliente(context, arrayDestino, ((AplicacionPrincipal) context.getApplicationContext()).getCuenta().getUsuario(), fecha);
 
-                                cliente = new Cliente(context, arrayDestino, ((AplicacionPrincipal) context.getApplicationContext()).getCuenta().getUsuario(), fecha);
-                                cliente.execute();
+                                    cliente.iniciarLocalizacion();
 
-                                Log.e("msg", "PASO EN CREAR CONEXION");
-
-                                cliente.iniciarLocalizacion();
-
-                                savinAnimation.start();
+                                    savinAnimation.start();
+                                }
+                                else
+                                {
+                                    Toast.makeText(context, "NO SE PUDO CONECTAR AL SERVIDOR", Toast.LENGTH_LONG).show();
+                                }
 
                                 break;
                             case "STOP LOCALIZACIÓN":

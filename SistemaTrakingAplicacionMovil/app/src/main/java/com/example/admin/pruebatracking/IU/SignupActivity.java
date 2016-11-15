@@ -35,7 +35,6 @@ public class SignupActivity extends AppCompatActivity {
     EditText _rePasswordText;
     Button _signupButton;
     TextView _loginLink;
-    AplicacionPrincipal global;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -91,84 +90,99 @@ public class SignupActivity extends AppCompatActivity {
         final String password = _passwordText.getText().toString();
         String rePassword = _rePasswordText.getText().toString();
 
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        String uniqueID = UUID.randomUUID().toString();
-                        ArrayList<String> arrayDestino = new ArrayList<String>();
-                        arrayDestino.add(uniqueID);
+        new Thread() {
+            public void run() {
+                String uniqueID = UUID.randomUUID().toString();
+                ArrayList<String> arrayDestino = new ArrayList<String>();
+                arrayDestino.add(uniqueID);
 
-                        String fecha = (DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString());
+                String fecha = (DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString());
 
-                        Cuenta cuenta = new Cuenta(1, email, password, 0);
-                        ArrayList<Cuenta> arrayCuenta = new ArrayList<Cuenta>();
-                        arrayCuenta.add(cuenta);
+                Cuenta cuenta = new Cuenta(1, email, password, 0);
+                ArrayList<Cuenta> arrayCuenta = new ArrayList<Cuenta>();
+                arrayCuenta.add(cuenta);
 
-                        Cliente cliente = new Cliente(getBaseContext(), arrayDestino, uniqueID, fecha);
-                        cliente.execute();
+                Cliente cliente = new Cliente(getBaseContext(), arrayDestino, uniqueID, fecha);
+                cliente.execute();
 
-                        while (!((AplicacionPrincipal) getApplicationContext()).getConectado()) {
-                            try {
-                                Thread.sleep(1);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                Log.e("msg", "Error en esperando conexion: " + e.toString());
-                            }
-                        }
-
-                        Log.e("msg", "PASO EN CREAR CONEXION");
-
-                        MsgDBPeticion peticion = new MsgDBPeticion(arrayDestino, uniqueID, fecha, "CrearCuenta", arrayCuenta, new ArrayList<Grupo>(), false);
-                        cliente.enviarMensajes(peticion);
-
-                        while (!((AplicacionPrincipal) getApplicationContext()).getCrearCuenta()) {
-                            try {
-                                Thread.sleep(1);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                Log.e("msg", "Error en esperando enviar peticion Crear Cuenta: " + e.toString());
-                            }
-                        }
-
-                        Log.e("msg", "PASO PETICION CREAR CUENTA");
-                        ((AplicacionPrincipal) getApplicationContext()).setCrearCuenta(false);
-
-                        while (!((AplicacionPrincipal) getApplicationContext()).getRespuestaEntrar()) {
-                            try {
-                                Thread.sleep(1);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                                Log.e("msg", "Error en esperando Respuesta crear cuenta: " + e.toString());
-                            }
-                        }
-
-                        Log.e("msg", "PASO RESPUESTA CUENTA");
-                        ((AplicacionPrincipal) getApplicationContext()).setRespuestaEntrar(false);
-                        ((AplicacionPrincipal) getApplicationContext()).setConectado(false);
-
-                        MsgDBRespuesta msg = ((AplicacionPrincipal) getApplicationContext()).getMsgDBRespuestaEntrar();
-                        if (msg != null && msg.getIsValido()) {
-                            ((AplicacionPrincipal) getApplicationContext()).setCuenta(msg.getReturnCuenta().get(0));
-                            onSignupSuccess();
-                        } else {
-                            onSignupFailed();
-                        }
-                        progressDialog.dismiss();
-
+                while (!((AplicacionPrincipal) getApplicationContext()).getConectado()) {
+                    try {
+                        Thread.sleep(1);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Log.e("msg", "Error en esperando conexion: " + e.toString());
                     }
-                }, 2500);
+                }
+
+                Log.e("msg", "PASO EN CREAR CONEXION");
+
+                MsgDBPeticion peticion = new MsgDBPeticion(arrayDestino, uniqueID, fecha, "CrearCuenta", arrayCuenta, new ArrayList<Grupo>(), false);
+                cliente.enviarMensajes(peticion);
+
+                while (!((AplicacionPrincipal) getApplicationContext()).getCrearCuenta()) {
+                    try {
+                        Thread.sleep(1);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Log.e("msg", "Error en esperando enviar peticion Crear Cuenta: " + e.toString());
+                    }
+                }
+
+                Log.e("msg", "PASO PETICION CREAR CUENTA");
+
+                while (!((AplicacionPrincipal) getApplicationContext()).getRespuestaEntrar()) {
+                    try {
+                        Thread.sleep(1);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Log.e("msg", "Error en esperando Respuesta crear cuenta: " + e.toString());
+                    }
+                }
+
+                Log.e("msg", "PASO RESPUESTA CUENTA");
+
+                ((AplicacionPrincipal) getApplicationContext()).setCrearCuenta(false);
+                ((AplicacionPrincipal) getApplicationContext()).setRespuestaEntrar(false);
+                ((AplicacionPrincipal) getApplicationContext()).setConectado(false);
+
+                MsgDBRespuesta msg = ((AplicacionPrincipal) getApplicationContext()).getMsgDBRespuestaEntrar();
+                if (msg != null && msg.getIsValido()) {
+                    ((AplicacionPrincipal) getApplicationContext()).setCuenta(msg.getReturnCuenta().get(0));
+                    onSignupSuccess();
+                } else {
+                    onSignupFailed();
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressDialog.dismiss();
+                    }
+                });
+            }
+        }.start();
     }
 
 
     public void onSignupSuccess() {
-        _signupButton.setEnabled(true);
-        setResult(RESULT_OK, null);
-        finish();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                _signupButton.setEnabled(true);
+                setResult(RESULT_OK, null);
+                finish();
+            }
+        });
     }
 
     public void onSignupFailed() {
-        Toast.makeText(getBaseContext(), "Verifique los datos ingresados", Toast.LENGTH_SHORT).show();
-        _signupButton.setEnabled(true);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getBaseContext(), "Verifique los datos ingresados", Toast.LENGTH_SHORT).show();
+                _signupButton.setEnabled(true);
+            }
+        });
     }
 
     public boolean validate() {

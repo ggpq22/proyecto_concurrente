@@ -60,8 +60,22 @@ public class ServicioEnviar extends AsyncTask<Mensaje, Void, Void> implements Lo
                             writer.println(Serializacion.Serializar((MsgLocalizacion) arg[0]));
                             break;
                         case "MsgDBPeticion":
+                            switch (((MsgDBPeticion)arg[0]).getCodigoPeticion()) {
+                                case "Login":
+                                    Log.e("msg","Mensaje de peticion (Login)");
+                                    ((AplicacionPrincipal) context.getApplicationContext()).setLogin(true);
+                                    break;
+                                case "CrearCuenta":
+                                    Log.e("msg","Mensaje de peticion (CrearCuenta)");
+                                    ((AplicacionPrincipal) context.getApplicationContext()).setCrearCuenta(true);
+                                    break;
+                                case "GetGrupoPorIntegrante":
+                                    Log.e("msg","Mensaje de peticion (GetGrupoPorIntegrante)");
+                                    ((AplicacionPrincipal) context.getApplicationContext()).setRecuperarGrupos(true);
+                                    break;
+                            }
+
                             writer.println(Serializacion.Serializar((MsgDBPeticion) arg[0]));
-                            ((AplicacionPrincipal) context.getApplicationContext()).setCrearCuenta(true);
                             Log.e("msg","Envio el mensaje de peticion");
                             break;
                         case "MsgDBRespuesta":
