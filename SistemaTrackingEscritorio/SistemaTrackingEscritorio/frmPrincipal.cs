@@ -50,6 +50,7 @@ namespace Mapa
             //sesion.Progress = new frmProgresBar();
             //sesion.Progress.Show();
             ActualizarGrupos();
+            btnGrupos.Enabled = false;
 
 
 
@@ -104,9 +105,14 @@ namespace Mapa
                 tokenProgress.Cancel();
                 TareaProgreso.Join();
                 pbProgreso.Invoke(new Action(() => { pbProgreso.Visible = false; }));
-                //((frmProgresBar)sesion.Progress).token.Cancel();
-                //((frmProgresBar)sesion.Progress).tarea.Join();
-                //sesion.FormPrincipal.Visible = true;
+                if (btnGrupos.InvokeRequired)
+                {
+                    btnGrupos.Invoke(new Action(() => { btnGrupos.Enabled = true; }));
+                }
+                else
+                {
+                    btnGrupos.Enabled = true;
+                }
 
             }
 
@@ -182,6 +188,8 @@ namespace Mapa
         private void frmPrincipal_FormClosing(object sender, FormClosingEventArgs e)
         {
             sesion.FormLogin.Visible = true;
+            tokenProgress.Cancel();
+            TareaProgreso.Join();
         }
 
 
@@ -305,6 +313,11 @@ namespace Mapa
 
         internal void ActualizarGrupos()
         {
+            if(sesion.Grupos != null)
+            {
+                dgvGruposAnfitrion.DataSource = null;
+                sesion.Grupos.Clear();
+            }
             tokenProgress = new CancellationTokenSource();
             ParameterizedThreadStart p = (object o) =>
             {
@@ -323,7 +336,14 @@ namespace Mapa
             };
 
             TareaProgreso = new Thread(p);
-            pbProgreso.Visible = true;
+            if (pbProgreso.InvokeRequired)
+            {
+                pbProgreso.Invoke(new Action(() => { pbProgreso.Visible = true; }));
+            }
+            else
+            {
+                pbProgreso.Visible = true;
+            }
             TareaProgreso.Start(tokenProgress.Token);
         }
     }

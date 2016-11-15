@@ -28,7 +28,7 @@ public class FragmentGrupos extends Fragment {
 
     ListViewAdapterGrupos adapter;
     ArrayList<Grupo> grupos;
-
+    ArrayList<Boolean> seleccionados;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,7 +40,8 @@ public class FragmentGrupos extends Fragment {
 
 
         grupos = ((AplicacionPrincipal)getContext().getApplicationContext()).getGrupos();
-        ArrayList<Boolean> seleccionados = new ArrayList<Boolean>();
+        seleccionados = new ArrayList<Boolean>();
+
         for(int i = 0; i < grupos.size(); i++) {
             seleccionados.add(new Boolean(false));
         }
@@ -54,8 +55,9 @@ public class FragmentGrupos extends Fragment {
         lista.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> av, View v, int pos, long id) {
-                //item_sel.setBackgroundColor(Color.parseColor("#81F781"));
                 Toast.makeText(getContext(), "posicion "+pos, Toast.LENGTH_LONG).show();
+                seleccionados.set(pos, true);
+
                 return true;
             }
         });

@@ -139,7 +139,7 @@ public class SignupActivity extends AppCompatActivity {
                     }
                 }
 
-                Log.e("msg", "PASO RESPUESTA CUENTA");
+                Log.e("msg", "PASO RESPUESTA CREAR CUENTA");
 
                 ((AplicacionPrincipal) getApplicationContext()).setCrearCuenta(false);
                 ((AplicacionPrincipal) getApplicationContext()).setRespuestaEntrar(false);
@@ -148,6 +148,57 @@ public class SignupActivity extends AppCompatActivity {
                 MsgDBRespuesta msg = ((AplicacionPrincipal) getApplicationContext()).getMsgDBRespuestaEntrar();
                 if (msg != null && msg.getIsValido()) {
                     ((AplicacionPrincipal) getApplicationContext()).setCuenta(msg.getReturnCuenta().get(0));
+                    cuenta = ((AplicacionPrincipal) getBaseContext().getApplicationContext()).getCuenta();
+
+                    arrayDestino = new ArrayList<String>();
+                    arrayDestino.add(cuenta.getUsuario());
+                    fecha = (DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString());
+
+                    arrayCuenta = new ArrayList<Cuenta>();
+                    arrayCuenta.add(cuenta);
+
+                    cliente = new Cliente(getBaseContext(), arrayDestino, cuenta.getUsuario(), fecha);
+                    cliente.execute();
+
+                    while (!((AplicacionPrincipal) getApplicationContext()).getConectado()) {
+                        try {
+                            Thread.sleep(1);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Log.e("msg", "Error en esperando conexion con usuario: " + e.toString());
+                        }
+                    }
+
+                    Log.e("msg", "PASO CREAR CONEXION CON USUARIO");
+
+                    MsgDBPeticion peticionGrupos = new MsgDBPeticion(arrayDestino,((AplicacionPrincipal) getBaseContext().getApplicationContext()).getCuenta().getUsuario(), fecha, "GetGrupoPorIntegrante", arrayCuenta, new ArrayList<Grupo>(), false);
+                    cliente.enviarMensajes(peticionGrupos);
+
+                    while (!((AplicacionPrincipal) getApplicationContext()).getRecuperarGrupos()) {
+                        try {
+                            Thread.sleep(1);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Log.e("msg", "Error en esperando enviar peticion Recuperar Grupos: " + e.toString());
+                        }
+                    }
+
+                    Log.e("msg", "PASO PETICION RECUPERAR GRUPOS");
+
+                    while (!((AplicacionPrincipal) getApplicationContext()).getRespuestaRecuperarGrupos()) {
+                        try {
+                            Thread.sleep(1);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Log.e("msg", "Error en esperando Respuesta Login: " + e.toString());
+                        }
+                    }
+
+                    Log.e("msg", "PASO RESPUESTA RECUPERAR GRUPOS");
+
+                    ((AplicacionPrincipal) getApplicationContext()).setRecuperarGrupos(false);
+                    ((AplicacionPrincipal) getApplicationContext()).setRespuestaRecuperarGrupos(false);
+
                     onSignupSuccess();
                 } else {
                     onSignupFailed();
