@@ -10,11 +10,25 @@ namespace ServidorTracking
 {
     class Program
     {
+
+        public static string GetLocalIPAddress()
+        {
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    return ip.ToString();
+                }
+            }
+            throw new Exception("Local IP Address Not Found!");
+        }
+
         static void Main(string[] args)
         {
             Console.SetWindowSize(120, 35);
 
-            string ip = "10.75.20.45";
+            string ip = GetLocalIPAddress();
 
             int port = 8999;
 
@@ -48,6 +62,8 @@ namespace ServidorTracking
             try
             {
                 runningServer.Start();
+
+                Console.WriteLine("Server running on IP: " + ip + ", PORT: " + port + ".");
             }
             catch (Exception e)
             {
@@ -55,8 +71,6 @@ namespace ServidorTracking
                 Console.WriteLine("== ERROR == -" + e.Message);
                 Console.ForegroundColor = ConsoleColor.White;
             }
-
-            Console.WriteLine("Server running...");
 
             string command;
 
