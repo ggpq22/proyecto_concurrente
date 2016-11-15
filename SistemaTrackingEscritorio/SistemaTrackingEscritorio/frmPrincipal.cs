@@ -49,28 +49,9 @@ namespace Mapa
             new Thread(ConectarServidor).Start();
             //sesion.Progress = new frmProgresBar();
             //sesion.Progress.Show();
-            tokenProgress = new CancellationTokenSource();
-            ParameterizedThreadStart p = (object o) =>
-            {
-                var token = (CancellationToken)o;
-                var contador = 0;
-                while (!token.IsCancellationRequested)
-                {
-                    pbProgreso.Invoke(new Action(() =>
-                    {
-                        contador = contador == 100 ? 0 : contador + 10;
-                        pbProgreso.Value = contador;
-                    }));
+            ActualizarGrupos();
 
-                    Thread.Sleep(500);
-                }
-            };
 
-            TareaProgreso = new Thread(p);
-            pbProgreso.Visible = true;
-            TareaProgreso.Start(tokenProgress.Token);
-
-            
 
         }
 
@@ -185,7 +166,9 @@ namespace Mapa
         private void btnGrupos_Click(object sender, EventArgs e)
         {
             sesion.form = this;
-
+            tokenProgress.Cancel();
+            TareaProgreso.Join();
+            pbProgreso.Invoke(new Action(() => { pbProgreso.Visible = false; }));
             sesion.Server.Connect -= Server_Connect;
             sesion.Server.DBRespuesta -= Server_DBRespuesta;
             sesion.Server.Disconnect -= Server_Disconnect;
@@ -243,26 +226,27 @@ namespace Mapa
 
         private void button2_Click(object sender, EventArgs e)
         {
-            
-            new Thread(() => {
+
+            new Thread(() =>
+            {
                 MsgLocalizacion msg = new MsgLocalizacion()
                 {
                     From = "test2",
-                    To = new List<string>() { "prueba"},
-                     Fecha = DateTime.Now,
-                      Latitud = "-66",
-                      Longitud = "-33",
-                      
+                    To = new List<string>() { "prueba" },
+                    Fecha = DateTime.Now,
+                    Latitud = "-66",
+                    Longitud = "-33",
+
                 };
-                
+
                 MsgLocalizacion msg1 = new MsgLocalizacion()
                 {
                     From = "a@a.a",
-                    To = new List<string>() { "prueba"},
-                     Fecha = DateTime.Now,
-                      Latitud = "-33",
-                      Longitud = "-66",
-                      
+                    To = new List<string>() { "prueba" },
+                    Fecha = DateTime.Now,
+                    Latitud = "-33",
+                    Longitud = "-66",
+
                 };
 
                 while (true)
@@ -270,10 +254,10 @@ namespace Mapa
                     PruebaLocalicacion(msg);
                     PruebaLocalicacion(msg1);
                     Thread.Sleep(1000);
-                    msg.Latitud = (int.Parse(msg.Latitud) + 1).ToString();
-                    msg.Longitud = (int.Parse(msg.Longitud) + 1).ToString();
-                    msg1.Latitud = (int.Parse(msg1.Latitud) + 1).ToString();
-                    msg1.Longitud = (int.Parse(msg1.Longitud) + 1).ToString();
+                    msg.Latitud = (double.Parse(msg.Latitud) + 0.001).ToString();
+                    msg.Longitud = (double.Parse(msg.Longitud) + 0.001).ToString();
+                    msg1.Latitud = (double.Parse(msg1.Latitud) + 0.001).ToString();
+                    msg1.Longitud = (double.Parse(msg1.Longitud) + 0.001).ToString();
                 }
             }).Start();
         }
@@ -284,7 +268,7 @@ namespace Mapa
 
             var lat = Double.Parse(msg.Latitud);
             var lng = Double.Parse(msg.Longitud);
-            var esta = sesion.CuentasUsuario.FirstOrDefault(x => x.Usuario == mensaje.From) ;
+            var esta = sesion.CuentasUsuario.FirstOrDefault(x => x.Usuario == mensaje.From);
             if (esta == null)
             {
                 return;
@@ -318,5 +302,29 @@ namespace Mapa
             mapa.Zoom = 9;
         }
 
+
+        internal void ActualizarGrupos()
+        {
+            tokenProgress = new CancellationTokenSource();
+            ParameterizedThreadStart p = (object o) =>
+            {
+                var token = (CancellationToken)o;
+                var contador = 0;
+                while (!token.IsCancellationRequested)
+                {
+                    pbProgreso.Invoke(new Action(() =>
+                    {
+                        contador = contador == 100 ? 0 : contador + 10;
+                        pbProgreso.Value = contador;
+                    }));
+
+                    Thread.Sleep(500);
+                }
+            };
+
+            TareaProgreso = new Thread(p);
+            pbProgreso.Visible = true;
+            TareaProgreso.Start(tokenProgress.Token);
+        }
     }
 }
