@@ -64,7 +64,7 @@ public class Cliente extends AsyncTask<Void, Void, Void>{
     protected Void doInBackground(Void... arg0) {
         try {
             Log.e("msg","entro en abrir conexion");
-            socket = new Socket("10.75.61.109", 8999);
+            socket = new Socket("192.168.0.103", 8999);
             writer = new PrintWriter(socket.getOutputStream());
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             Log.e("msg","creo el socket");

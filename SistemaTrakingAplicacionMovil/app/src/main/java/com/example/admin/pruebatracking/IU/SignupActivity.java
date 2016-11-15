@@ -133,7 +133,7 @@ public class SignupActivity extends AppCompatActivity {
                         Log.e("msg", "PASO PETICION CREAR CUENTA");
                         ((AplicacionPrincipal) getApplicationContext()).setCrearCuenta(false);
 
-                        while (!((AplicacionPrincipal) getApplicationContext()).getRespuestaCrearCuenta()) {
+                        while (!((AplicacionPrincipal) getApplicationContext()).getRespuestaEntrar()) {
                             try {
                                 Thread.sleep(1);
                             } catch (Exception e) {
@@ -143,12 +143,12 @@ public class SignupActivity extends AppCompatActivity {
                         }
 
                         Log.e("msg", "PASO RESPUESTA CUENTA");
-                        ((AplicacionPrincipal) getApplicationContext()).setRespuestaCrearCuenta(false);
+                        ((AplicacionPrincipal) getApplicationContext()).setRespuestaEntrar(false);
                         ((AplicacionPrincipal) getApplicationContext()).setConectado(false);
 
-                        MsgDBRespuesta msg = ((AplicacionPrincipal) getApplicationContext()).getMsgRespuesta();
+                        MsgDBRespuesta msg = ((AplicacionPrincipal) getApplicationContext()).getMsgDBRespuestaEntrar();
                         if (msg != null && msg.getIsValido()) {
-                            ((AplicacionPrincipal) getApplicationContext()).setCuenta(email);
+                            ((AplicacionPrincipal) getApplicationContext()).setCuenta(msg.getReturnCuenta().get(0));
                             onSignupSuccess();
                         } else {
                             onSignupFailed();

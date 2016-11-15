@@ -65,12 +65,12 @@ public class FragmentGps extends Fragment {
                                 btnLocalizacion.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_stop1, 0, 0, 0);
 
                                 ArrayList<String> arrayDestino = new ArrayList<String>();
-                                arrayDestino.add(((AplicacionPrincipal) context.getApplicationContext()).getCuenta());
+                                arrayDestino.add(((AplicacionPrincipal) context.getApplicationContext()).getCuenta().getUsuario());
 
                                 String fecha = (DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString());
 
 
-                                cliente = new Cliente(context, arrayDestino, ((AplicacionPrincipal) context.getApplicationContext()).getCuenta(), fecha);
+                                cliente = new Cliente(context, arrayDestino, ((AplicacionPrincipal) context.getApplicationContext()).getCuenta().getUsuario(), fecha);
                                 cliente.execute();
 
                                 Log.e("msg", "PASO EN CREAR CONEXION");

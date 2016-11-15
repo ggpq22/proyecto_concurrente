@@ -35,4 +35,20 @@ public class MsgDBPeticion extends Mensaje {
         this.CodigoPeticion = CodigoPeticion;
     }
 
+    public ArrayList<Cuenta> getParamsCuenta() {
+        return ParamsCuenta;
+    }
+
+    public void setParamsCuenta(ArrayList<Cuenta> ParamsCuenta) {
+        this.ParamsCuenta = ParamsCuenta;
+    }
+
+    public ArrayList<Grupo> getParamsGrupo() {
+        return ParamsGrupo;
+    }
+
+    public void setParamsGrupo(ArrayList<Grupo> ParamsGrupo) {
+        this.ParamsGrupo = ParamsGrupo;
+    }
+
 }

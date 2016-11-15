@@ -75,8 +75,7 @@ public class LoginActivity extends AppCompatActivity {
 
         _loginButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
-                R.style.AppTheme_Dark_Dialog);
+        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this, R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Autentificando...");
         progressDialog.setCancelable(false);
@@ -128,22 +127,22 @@ public class LoginActivity extends AppCompatActivity {
                         Log.e("msg", "PASO PETICION LOGIN");
                         ((AplicacionPrincipal) getApplicationContext()).setCrearCuenta(false);
 
-                        while (!((AplicacionPrincipal) getApplicationContext()).getRespuestaCrearCuenta()) {
+                        while (!((AplicacionPrincipal) getApplicationContext()).getRespuestaEntrar()) {
                             try {
                                 Thread.sleep(1);
                             } catch (Exception e) {
                                 e.printStackTrace();
-                                Log.e("msg", "Error en esperando Respuesta crear cuenta: " + e.toString());
+                                Log.e("msg", "Error en esperando Respuesta Login: " + e.toString());
                             }
                         }
 
                         Log.e("msg","PASO RESPUESTA LOGIN");
-                        ((AplicacionPrincipal) getApplicationContext()).setRespuestaCrearCuenta(false);
+                        ((AplicacionPrincipal) getApplicationContext()).setRespuestaEntrar(false);
                         ((AplicacionPrincipal) getApplicationContext()).setConectado(false);
 
-                        MsgDBRespuesta msg = ((AplicacionPrincipal) getApplicationContext()).getMsgRespuesta();
+                        MsgDBRespuesta msg = ((AplicacionPrincipal) getApplicationContext()).getMsgDBRespuestaEntrar();
                         if (msg != null && msg.getIsValido()) {
-                            ((AplicacionPrincipal) getApplicationContext()).setCuenta(email);
+                            ((AplicacionPrincipal) getApplicationContext()).setCuenta(msg.getReturnCuenta().get(0));
                             onLoginSuccess();
                         } else {
                             onLoginFailed();

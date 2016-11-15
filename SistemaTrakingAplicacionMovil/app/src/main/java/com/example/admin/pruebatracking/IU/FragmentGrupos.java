@@ -1,5 +1,6 @@
 package com.example.admin.pruebatracking.IU;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,6 +31,12 @@ public class FragmentGrupos extends Fragment {
                              Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_grupos, container, false);
+
+        ProgressDialog dialog=new ProgressDialog(rootView.getContext());
+        dialog.setMessage("message");
+        dialog.setCancelable(false);
+        dialog.setInverseBackgroundForced(false);
+        dialog.show();
 
         ListView lista = (ListView) rootView.findViewById(R.id.listView_listarGrupos);
 

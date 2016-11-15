@@ -2,6 +2,7 @@ package com.example.admin.pruebatracking;
 
 import android.app.Application;
 
+import com.example.admin.pruebatracking.Entidades.Cuenta;
 import com.example.admin.pruebatracking.Mensajes.MsgDBRespuesta;
 
 import java.net.Socket;
@@ -11,21 +12,13 @@ import java.net.Socket;
  */
 public class AplicacionPrincipal extends Application {
 
-    private MsgDBRespuesta msgRespuesta;
     private Socket socket;
+    MsgDBRespuesta msgDBRespuestaEntrar;
     private boolean conectado = false;
     private boolean crearCuenta = false;
-    private boolean respuestaCrearCuenta = false;
+    private boolean respuestaEntrar = false;
     private boolean login = false;
-    private String cuenta = "";
-
-    public MsgDBRespuesta getMsgRespuesta() {
-        return msgRespuesta;
-    }
-
-    public void setMsgRespuesta(MsgDBRespuesta msgRespuesta) {
-        this.msgRespuesta = msgRespuesta;
-    }
+    private Cuenta cuenta;
 
     public Socket getSocket() {
         return socket;
@@ -34,6 +27,14 @@ public class AplicacionPrincipal extends Application {
     public void setSocket(Socket socket)
     {
         this.socket = socket;
+    }
+
+    public MsgDBRespuesta getMsgDBRespuestaEntrar() {
+        return msgDBRespuestaEntrar;
+    }
+
+    public void setMsgDBRespuestaEntrar(MsgDBRespuesta msgDBRespuestaEntrar) {
+        this.msgDBRespuestaEntrar = msgDBRespuestaEntrar;
     }
 
     public boolean getConectado() {
@@ -52,12 +53,12 @@ public class AplicacionPrincipal extends Application {
         this.crearCuenta = crearCuenta;
     }
 
-    public boolean getRespuestaCrearCuenta() {
-        return respuestaCrearCuenta;
+    public boolean getRespuestaEntrar() {
+        return respuestaEntrar;
     }
 
-    public void setRespuestaCrearCuenta(boolean respuestaCrearCuenta){
-        this.respuestaCrearCuenta = respuestaCrearCuenta;
+    public void setRespuestaEntrar(boolean respuestaEntrar){
+        this.respuestaEntrar = respuestaEntrar;
     }
 
     public boolean getLogin() {
@@ -68,11 +69,11 @@ public class AplicacionPrincipal extends Application {
         this.login = login;
     }
 
-    public String getCuenta() {
+    public Cuenta getCuenta() {
         return cuenta;
     }
 
-    public void setCuenta(String cuenta){
+    public void setCuenta(Cuenta cuenta){
         this.cuenta = cuenta;
     }
 
