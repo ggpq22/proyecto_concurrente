@@ -66,7 +66,9 @@ namespace SistemaTrackingBiblioteca
             }
             catch (Exception e)
             {
-                throw e;
+                reader.Close();
+                writer.Close();
+                return null;
             }
         }
 
@@ -78,7 +80,8 @@ namespace SistemaTrackingBiblioteca
             }
             catch (Exception e)
             {
-                throw e;
+                reader.Close();
+                writer.Close();
             }
         }
     }

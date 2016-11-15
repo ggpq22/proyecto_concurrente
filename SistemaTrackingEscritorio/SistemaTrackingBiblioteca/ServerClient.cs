@@ -14,7 +14,6 @@ namespace SistemaTrackingBiblioteca
     public class ServerClient
     {
         string name;
-        CancellationToken token;
 
         public string Name
         {
@@ -22,7 +21,7 @@ namespace SistemaTrackingBiblioteca
             set { name = value; }
         }
 
-        TcpClient client;
+        public TcpClient client { get; set; }
         CommunicationService service;
         ConcurrentQueue<Mensaje> mensajesSalida = new ConcurrentQueue<Mensaje>();
 
@@ -71,21 +70,21 @@ namespace SistemaTrackingBiblioteca
             OnLocationChanged(msn);
         }
 
-        public ServerClient(String ip, int puerto, CancellationToken token)
+        public ServerClient(String ip, int puerto)
         {
 
             try
             {
                 this.client = new TcpClient(ip, puerto);
-                service = new CommunicationService(this.client, token);
-                this.token = token;
                 // Subscribe Events
+                service = new CommunicationService(client);
                 service.Connect += service_Connect;
                 service.Disconnect += service_Disconnect;
                 service.LocationChanged += service_LocationChanged;
                 service.DBRespuesta += service_DBRespuesta;
 
                 sending = new Thread(sendMessages);
+                
                 sending.Start();
             }
             catch (Exception ex)
@@ -125,8 +124,7 @@ namespace SistemaTrackingBiblioteca
 
         private void sendMessages()
         {
-//            while (!token.IsCancellationRequested)
-            while (true)
+            while (client.Connected)
             {
                 if (mensajesSalida.Count > 0)
                 {
