@@ -47,6 +47,12 @@ namespace ServidorTracking
         }
 
         TcpClient client;
+
+        public TcpClient Client
+        {
+            get { return client; }
+        }
+
         CommunicationService service;
         MessageRouter router;
         DBController dbCon;
@@ -68,9 +74,7 @@ namespace ServidorTracking
         void service_Disconnect(object sender, Mensaje message)
         {
             MsgConexion msn = message as MsgConexion;
-            router.RouteMessage(msn);
-            CloseClient();
-            router.RemoveClient(this);
+            RemoveMe();
         }
         void service_LocationChanged(object sender, Mensaje message)
         {
@@ -96,7 +100,7 @@ namespace ServidorTracking
             this.client = client;
             this.router = router;
             dbCon = new DBController("pbarco", "12345Pablo");
-            service = new CommunicationService(this.client.GetStream(), this.client);
+            service = new CommunicationService(this.client.GetStream(), this);
 	        
             // Subscribe Events
             service.Connect += service_Connect;
@@ -140,6 +144,13 @@ namespace ServidorTracking
             }
             
             countdownEvent.Signal();
+        }
+
+        public void RemoveMe()
+        {
+            CloseClient();
+            router.RemoveClient(this);
+            Console.WriteLine("Cliente " + this.Name + " se ha desconectado.");
         }
     }
 }

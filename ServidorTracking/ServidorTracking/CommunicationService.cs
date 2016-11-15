@@ -16,6 +16,7 @@ namespace ServidorTracking
     {
         MessageDelivery delivery;
         DBController dbcontrol;
+        ServerClient client;
 
         Thread events;
         
@@ -52,8 +53,10 @@ namespace ServidorTracking
         }
 
         // Constructor
-        public CommunicationService(NetworkStream stream, TcpClient client)
+        public CommunicationService(NetworkStream stream, ServerClient client)
         {
+            this.client = client;
+
             delivery = new MessageDelivery(stream, client);
             dbcontrol = new DBController("pbarco", "12345Pablo");
             try
@@ -75,7 +78,7 @@ namespace ServidorTracking
             string str = null;
             Mensaje message;
 
-            while (true)
+            while (client.Client.Connected)
             {
                 try
                 {
@@ -83,7 +86,9 @@ namespace ServidorTracking
                 }
                 catch (Exception e)
                 {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("== ERROR == -" + e.Message);
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
 
                 if (str != null)
@@ -96,11 +101,29 @@ namespace ServidorTracking
                     {
                         throw e;
                     }
-                    
+
                     MsgConexion menCon;
                     MsgLocalizacion menLoc;
                     MsgDBPeticion menDB;
-                    Console.WriteLine("RECIBIENDO: " + str);
+
+                    {
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.WriteLine("RECIBIENDO: " + message.Tipo);
+
+                        switch (message.Tipo)
+                        {
+                            case "MsgConeccion":
+                                Console.ForegroundColor = ConsoleColor.Green; break;
+                            case "MsgLocalizacion":
+                                Console.ForegroundColor = ConsoleColor.Blue; break;
+                            case "MsgDBPeticion":
+                                Console.ForegroundColor = ConsoleColor.Yellow; break;
+                        }
+
+                        Console.WriteLine(str);
+                        Console.ForegroundColor = ConsoleColor.White;
+                    }
+
                     if (message is MsgConexion)
                     {
                         menCon = message as MsgConexion;
@@ -146,9 +169,9 @@ namespace ServidorTracking
                     {
                         menDB = message as MsgDBPeticion;
 
-                        if(menDB.CodigoPeticion == "Login")
+                        if (menDB.CodigoPeticion == "Login")
                         {
-                            Cuenta c =  menDB.ParamsCuenta[0];
+                            Cuenta c = menDB.ParamsCuenta[0];
                             Cuenta cres;
                             MsgDBRespuesta res = new MsgDBRespuesta();
 
@@ -158,7 +181,7 @@ namespace ServidorTracking
 
                                 res.ReturnCuenta.Add(cres);
                             }
-                            catch(Exception e)
+                            catch (Exception e)
                             {
                                 res.IsValido = false;
                                 res.Errores.Add(e.Message);
@@ -177,7 +200,7 @@ namespace ServidorTracking
                             Cuenta c = menDB.ParamsCuenta[0];
                             MsgDBRespuesta res = new MsgDBRespuesta();
                             Cuenta cres;
-                            
+
                             try
                             {
                                 cres = dbcontrol.CreateCuenta(c);
@@ -225,8 +248,9 @@ namespace ServidorTracking
                         else if (menDB.CodigoPeticion == "CrearGrupo")
                         {
                             Grupo g = menDB.ParamsGrupo[0];
-                            Grupo gres;
+                            Grupo gres = new Grupo();
                             MsgDBRespuesta res = new MsgDBRespuesta();
+                            MsgNotificacion not = new MsgNotificacion();
 
                             try
                             {
@@ -236,6 +260,8 @@ namespace ServidorTracking
                             {
                                 res.IsValido = false;
                                 res.Errores.Add(e.Message);
+                                not.IsValido = false;
+                                not.Errores.Add(e.Message);
                             }
                             finally
                             {
@@ -245,7 +271,16 @@ namespace ServidorTracking
                                 res.CodigoPeticion = menDB.CodigoPeticion;
                                 res.ReturnGrupo.Add(g);
 
+                                not.From = menDB.From;
+                                not.Fecha = DateTime.Now;
+                                not.Peticion = menDB;
+                                foreach (Cuenta c in gres.Integrantes)
+                                {
+                                    not.To.Add(c.Usuario);
+                                }
+
                                 OnDBRequested(res);
+                                OnDBRequested(not);
                             }
                         }
                         else if (menDB.CodigoPeticion == "GetGrupoPorAnfitrion")
@@ -302,41 +337,35 @@ namespace ServidorTracking
                         }
                         else if (menDB.CodigoPeticion == "AgregarCuentaAGrupo")
                         {
-                            if (!menDB.Notificacion)
+                            Cuenta c = menDB.ParamsCuenta[0];
+                            Grupo g = menDB.ParamsGrupo[0];
+                            Grupo gr = new Grupo();
+                            MsgDBRespuesta res = new MsgDBRespuesta();
+                            MsgNotificacion not = new MsgNotificacion();
+
+                            try
                             {
-                                Cuenta c = menDB.ParamsCuenta[0];
-                                Grupo g = menDB.ParamsGrupo[0];
-                                Grupo gr = new Grupo();
-                                MsgDBRespuesta res = new MsgDBRespuesta();
-
-                                try
-                                {
-                                    gr = dbcontrol.AddCuentaToGrupo(c.Id, g.Id);
-                                }
-                                catch (Exception e)
-                                {
-                                    res.IsValido = false;
-                                    res.Errores.Add(e.Message);
-                                }
-                                finally
-                                {
-                                    res.From = menDB.From;
-                                    res.To = menDB.To;
-                                    res.Fecha = DateTime.Now;
-                                    res.CodigoPeticion = menDB.CodigoPeticion;
-                                    res.ReturnGrupo.Add(gr);
-
-                                    OnDBRequested(res);
-                                }
+                                gr = dbcontrol.AddCuentaToGrupo(c.Id, g.Id);
                             }
-                            else
+                            catch (Exception e)
                             {
-                                MsgNotificacion not = new MsgNotificacion();
+                                res.IsValido = false;
+                                res.Errores.Add(e.Message);
+                            }
+                            finally
+                            {
+                                res.From = menDB.From;
+                                res.To = menDB.To;
+                                res.Fecha = DateTime.Now;
+                                res.CodigoPeticion = menDB.CodigoPeticion;
+                                res.ReturnGrupo.Add(gr);
+
                                 not.Fecha = DateTime.Now;
                                 not.From = menDB.From;
                                 not.To = menDB.To;
                                 not.Peticion = menDB;
 
+                                OnDBRequested(res);
                                 OnDBRequested(not);
                             }
                         }
@@ -479,7 +508,7 @@ namespace ServidorTracking
                 }
                 else
                 {
-                    Console.WriteLine("llega null");
+                    client.RemoveMe();
                 }
             }
         }
@@ -489,12 +518,32 @@ namespace ServidorTracking
             try
             {
                 string str = SerializarcionJson.Serializar<Mensaje>(message);
-                Console.WriteLine("ENVIANDO: " + str);
+
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkCyan;
+                    Console.WriteLine("ENVIANDO: " + message.Tipo);
+
+                    switch (message.Tipo)
+                    {
+                        case "MsgConeccion":
+                            Console.ForegroundColor = ConsoleColor.DarkGreen; break;
+                        case "MsgLocalizacion":
+                            Console.ForegroundColor = ConsoleColor.DarkBlue; break;
+                        case "MsgDBRespuesta":
+                            Console.ForegroundColor = ConsoleColor.DarkYellow; break;
+                    }
+
+                    Console.WriteLine(str);
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+
                 delivery.SendMessage(str);
             }
             catch (Exception e)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("== ERROR == -" + e.Message);
+                Console.ForegroundColor = ConsoleColor.White;
             }
         }
 
@@ -506,7 +555,9 @@ namespace ServidorTracking
             }
             catch (Exception e)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("== ERROR == -" + e.Message);
+                Console.ForegroundColor = ConsoleColor.White;
             }
         }
     }

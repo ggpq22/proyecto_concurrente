@@ -49,7 +49,9 @@ namespace ServidorTracking
             }
             catch (Exception e)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("== ERROR == -" + e.Message);
+                Console.ForegroundColor = ConsoleColor.White;
             }
         }
 
@@ -80,14 +82,7 @@ namespace ServidorTracking
                                             {
                                                 if (sc.Name == c.Usuario)
                                                 {
-                                                    if (m is MsgLocalizacion)
-                                                    {
-                                                        if (sc.GetsLocations == 1)
-                                                        {
-                                                            sc.SendToClient(m);
-                                                        }
-                                                    }
-                                                    else
+                                                    if (sc.GetsLocations == 1)
                                                     {
                                                         sc.SendToClient(m);
                                                     }
@@ -97,14 +92,12 @@ namespace ServidorTracking
                                     }
                                 }
                             }
-                            else
+                            
+                            foreach (ServerClient sc in clientes)
                             {
-                                foreach (ServerClient sc in clientes)
+                                if (sc.Name == to)
                                 {
-                                    if (sc.Name == to)
-                                    {
-                                        sc.SendToClient(m);
-                                    }
+                                    sc.SendToClient(m);
                                 }
                             }
                         }
