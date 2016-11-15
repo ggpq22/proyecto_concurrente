@@ -172,8 +172,30 @@ namespace Mapa
                     {
                         MessageBox.Show("Se creo el grupo correctamente.");
                         sesion.form.Invoke(new Action(() => { sesion.form.Visible = true; }));
-                        ((frmPrincipal)sesion.FormPrincipal).ActualizarGrupos();
-                        this.Close();
+                        sesion.Grupos.Add(msg.ReturnGrupo[0]);
+                        
+                        if (((frmPrincipal)sesion.form).dgvGruposAnfitrion.InvokeRequired)
+                        {
+                            ((frmPrincipal)sesion.form).dgvGruposAnfitrion.Invoke(new Action(() => {
+                                ((frmPrincipal)sesion.form).dgvGruposAnfitrion.DataSource = null;
+                                ((frmPrincipal)sesion.form).dgvGruposAnfitrion.DataSource = sesion.Grupos;
+                            }));
+                        }
+                        else
+                        {
+                            ((frmPrincipal)sesion.form).dgvGruposAnfitrion.DataSource = null;
+                            ((frmPrincipal)sesion.form).dgvGruposAnfitrion.DataSource = sesion.Grupos;
+                        }
+                        
+                        if(this.InvokeRequired)
+                        {
+                            this.Invoke(new Action(() => { this.Close(); }));
+                        }
+                        else
+                        {
+                            this.Close();
+
+                        }
 
                     }
                     else
@@ -181,7 +203,7 @@ namespace Mapa
                         MessageBox.Show("Hubo un error.");
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
                 }
 
@@ -209,6 +231,8 @@ namespace Mapa
 
         }
 
+        
+
         private void ConfiguracionGrillaBusqueda()
         {
             dgvUsuarioBusqueda.MultiSelect = true;
@@ -221,10 +245,12 @@ namespace Mapa
         private void frmGrupoCrear_FormClosing(object sender, FormClosingEventArgs e)
         {
             sesion.form.Visible = true;
-            ((frmPrincipal)sesion.form).ActualizarGrupos();
+            tokenProgreso.Cancel();
+            tareaProgreso.Join();
+            
 
         }
 
-        
+
     }
 }
