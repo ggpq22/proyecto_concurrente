@@ -89,6 +89,9 @@ namespace Mapa
                 return;
             }
 
+            btnLogin.Enabled = false;
+            btnCrearCuenta.Enabled = false;
+
             var cuenta = new Cuenta()
             {
                 Usuario = tbUsuario.Text,
@@ -168,13 +171,27 @@ namespace Mapa
 
         void server_DBRespuesta(object sender, Mensaje mensaje)
         {
+            if (btnCrearCuenta.InvokeRequired)
+            {
+                btnCrearCuenta.Invoke(new Action(() =>
+                {
+                    btnCrearCuenta.Enabled = true;
+                    btnLogin.Enabled = true;
+                }));
+            }
+            else
+            {
+                btnCrearCuenta.Enabled = true;
+                btnLogin.Enabled = true;
+            }
+
             var msg = mensaje as MsgDBRespuesta;
             if (msg.CodigoPeticion.Equals("Login"))
             {
                 if (msg.IsValido)
                 {
-                    sesion.Usuario = msg.ReturnCuenta[0];    
-                    
+                    sesion.Usuario = msg.ReturnCuenta[0];
+
                     cancelar.Cancel();
                     isConected.Join();
 
@@ -185,7 +202,7 @@ namespace Mapa
                     MessageBox.Show("Login incorrecto");
                 }
             }
-            else if(msg.CodigoPeticion.Equals("CrearCuenta"))
+            else if (msg.CodigoPeticion.Equals("CrearCuenta"))
             {
                 if (msg.IsValido)
                 {
@@ -207,7 +224,7 @@ namespace Mapa
             sesion.FormLogin = this;
             sesion.FormPrincipal = new frmPrincipal(sesion);
             sesion.FormPrincipal.Show();
-            
+
             this.Visible = false;
         }
 
@@ -222,12 +239,12 @@ namespace Mapa
 
             };
 
-            if(sesion.Server != null)
+            if (sesion.Server != null)
             {
                 sesion.Server.SendToServer(msg);
                 sesion.Server.client.Close();
             }
-            
+
             cancelar.Cancel();
             isConected.Join();
 

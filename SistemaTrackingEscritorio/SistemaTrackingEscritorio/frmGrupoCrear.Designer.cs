@@ -99,7 +99,8 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.tbNombreGrupo);
             this.Name = "frmGrupoCrear";
-            this.Text = "frmGrupoCrear";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Crear Grupo";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmGrupoCrear_FormClosing);
             this.Load += new System.EventHandler(this.frmGrupoCrear_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuarioBusqueda)).EndInit();

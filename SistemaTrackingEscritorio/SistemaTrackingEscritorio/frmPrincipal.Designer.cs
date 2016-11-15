@@ -161,7 +161,8 @@
             this.Controls.Add(this.mapa);
             this.Controls.Add(this.btnGrupos);
             this.Name = "frmPrincipal";
-            this.Text = "frmPrincipal";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Principal";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmPrincipal_FormClosing);
             this.Load += new System.EventHandler(this.frmPrincipal_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvGruposAnfitrion)).EndInit();
@@ -173,10 +174,9 @@
 
         #endregion
 
-        private GMap.NET.WindowsForms.GMapControl gMapa;
         private System.Windows.Forms.Button btnGrupos;
         private GMap.NET.WindowsForms.GMapControl mapa;
-        private System.Windows.Forms.DataGridView dgvGruposAnfitrion;
+        public System.Windows.Forms.DataGridView dgvGruposAnfitrion;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DataGridView dgvUsuariosGrupo;

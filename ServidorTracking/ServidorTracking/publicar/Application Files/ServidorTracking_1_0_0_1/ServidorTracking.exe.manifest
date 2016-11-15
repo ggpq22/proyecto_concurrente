@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<asmv1:assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns="urn:schemas-microsoft-com:asm.v2" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:co.v2="urn:schemas-microsoft-com:clickonce.v2">
+  <asmv1:assemblyIdentity name="ServidorTracking.exe" version="1.0.0.1" publicKeyToken="0cd5067a3876493f" language="neutral" processorArchitecture="msil" type="win32" />
+  <application />
+  <entryPoint>
+    <assemblyIdentity name="ServidorTracking" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+    <commandLine file="ServidorTracking.exe" parameters="" />
+  </entryPoint>
+  <trustInfo>
+    <security>
+      <applicationRequestMinimum>
+        <PermissionSet Unrestricted="true" ID="Custom" SameSite="site" />
+        <defaultAssemblyRequest permissionSetReference="Custom" />
+      </applicationRequestMinimum>
+      <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
+        <!--
+          Opciones del manifiesto de Control de cuentas de usuario
+          Si desea cambiar el nivel de Control de cuentas de usuario de Windows, reemplace el 
+          nodo requestedExecutionLevel por alguno de los siguientes.
+
+        <requestedExecutionLevel  level="asInvoker" uiAccess="false" />
+        <requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
+        <requestedExecutionLevel  level="highestAvailable" uiAccess="false" />
+
+         Si desea usar la virtualización de archivos y del Registro para la 
+         compatibilidad con versiones anteriores, elimine el nodo requestedExecutionLevel.
+    -->
+        <requestedExecutionLevel level="asInvoker" uiAccess="false" />
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <dependency>
+    <dependentOS>
+      <osVersionInfo>
+        <os majorVersion="5" minorVersion="1" buildNumber="2600" servicePackMajor="0" />
+      </osVersionInfo>
+    </dependentOS>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.Windows.CommonLanguageRuntime" version="4.0.30319.0" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="GMap.NET.Core.dll" size="2444288">
+      <assemblyIdentity name="GMap.NET.Core" version="1.7.0.0" publicKeyToken="B85B9027B614AFEF" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>qEhyQyowm+fP25Dps1n61EhCJ5ftrj1Azt+5E+Toyrw=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="GMap.NET.WindowsForms.dll" size="150528">
+      <assemblyIdentity name="GMap.NET.WindowsForms" version="1.7.0.0" publicKeyToken="B85B9027B614AFEF" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>OR+5lPpq2pKtS0bmJ6kp2xLb01qW5E+RnaEXYI4WWMQ=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Newtonsoft.Json.dll" size="407776">
+      <assemblyIdentity name="Newtonsoft.Json" version="4.5.0.0" publicKeyToken="30AD4FE6B2A6AEED" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>l3mYrsSGOV6rps5WYWSEJaGhgc4Ywsh8YoivYrh9Xso=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ServidorTracking.exe" size="31744">
+      <assemblyIdentity name="ServidorTracking" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>8UTM6Ei7jHerr9E00VUd/jqz+KSyGlbnPWpczeNvp1g=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="SistemaTrackingBiblioteca.dll" size="20992">
+      <assemblyIdentity name="SistemaTrackingBiblioteca" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>8enPdGWxamVPNjuAfTWgUa2gbTtprPR6iu2rrrgsqXw=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <file name="ServidorTracking.exe.config" size="187">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>xm4bo26HQ0LNVwz1vdPYtzhkpMnp2AI5i+f0b+OahTI=</dsig:DigestValue>
+    </hash>
+  </file>
+<publisherIdentity name="CN=MARIO-ULP\Mario" issuerKeyHash="8f5941a232ab6c1a8b7f0edfdb81ecdaea089780" /><Signature Id="StrongNameSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>FwRXVpfcraiJtPLfoxz9aPA4HQOp7cU5FICRe8C+5xg=</DigestValue></Reference></SignedInfo><SignatureValue>PleIb45MnOdL+BbMMv9ZDF5/NelymB0TFYFzdEN/d8+3zxFB+zd5aTa0WSttGbUbXDH8P08WEzpezJq0S+u7a2HB/jmWkaJWb0F3JGKQOV2ozXojuW0KDtm+sC1JfvMwJsclpPG6xPIa4WGhtoBCLY7C7t6HxQFS4poEm4isfms=</SignatureValue><KeyInfo Id="StrongNameKeyInfo"><KeyValue><RSAKeyValue><Modulus>yPuhgn0blYIdIczwZJGSfLVGgv7v2OPPuxytq3Koc8sDiflYclBB7fAcjwIXK0xsQC7VkaNfv0lVPvnXrqFrIFVDpT8NdoND3THB5J9lbLnGjwQ19OIOljUpwWZ345l00qQMrPFzBC1hSHLR/WAHaP1ODP2aVFFp5YzNSe/Bic0=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><msrel:RelData xmlns:msrel="http://schemas.microsoft.com/windows/rel/2005/reldata"><r:license xmlns:r="urn:mpeg:mpeg21:2003:01-REL-R-NS" xmlns:as="http://schemas.microsoft.com/windows/pki/2005/Authenticode"><r:grant><as:ManifestInformation Hash="18e7bec07b91801439c5eda9031d38f068fd1ca3dff2b489a8addc9756570417" Description="" Url=""><as:assemblyIdentity name="ServidorTracking.exe" version="1.0.0.1" publicKeyToken="0cd5067a3876493f" language="neutral" processorArchitecture="msil" type="win32" /></as:ManifestInformation><as:SignedBy /><as:AuthenticodePublisher><as:X509SubjectName>CN=MARIO-ULP\Mario</as:X509SubjectName></as:AuthenticodePublisher></r:grant><r:issuer><Signature Id="AuthenticodeSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>8TU8pgYsvQTGuWAWgn83a77b+dCjXtzeZJxEZiQFxR4=</DigestValue></Reference></SignedInfo><SignatureValue>rhGU6AU5NsTqOkPKmZxQXJUGqBfsjDmZkeuHQ3NfKxPX8K6JBUPS5C06IWFxMRXTXMjZGvJxYH0cpQovEq8n3nc3acTrw4Vnu/xQK5AyhNuvddYJftDq4+PdVqqu+l+xQevc3s1UjW4CxtvHP0aQD/tc8QVALCQu8L2JbwaOVaY=</SignatureValue><KeyInfo><KeyValue><RSAKeyValue><Modulus>yPuhgn0blYIdIczwZJGSfLVGgv7v2OPPuxytq3Koc8sDiflYclBB7fAcjwIXK0xsQC7VkaNfv0lVPvnXrqFrIFVDpT8NdoND3THB5J9lbLnGjwQ19OIOljUpwWZ345l00qQMrPFzBC1hSHLR/WAHaP1ODP2aVFFp5YzNSe/Bic0=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><X509Data><X509Certificate>MIIB1TCCAT6gAwIBAgIQWyaui3tjRYpLQq87DQUtvTANBgkqhkiG9w0BAQsFADApMScwJQYDVQQDHh4ATQBBAFIASQBPAC0AVQBMAFAAXABNAGEAcgBpAG8wHhcNMTYxMTE1MTQwOTQxWhcNMTcxMTE1MjAwOTQxWjApMScwJQYDVQQDHh4ATQBBAFIASQBPAC0AVQBMAFAAXABNAGEAcgBpAG8wgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAMj7oYJ9G5WCHSHM8GSRkny1RoL+79jjz7scratyqHPLA4n5WHJQQe3wHI8CFytMbEAu1ZGjX79JVT75166hayBVQ6U/DXaDQ90xweSfZWy5xo8ENfTiDpY1KcFmd+OZdNKkDKzxcwQtYUhy0f1gB2j9Tgz9mlRRaeWMzUnvwYnNAgMBAAEwDQYJKoZIhvcNAQELBQADgYEABYSnPARPwkFlu+wxemUE+RderFU/ih6CreSdXiHp5SLRi5A+qC2ZpdUY0sI82OJ+f7OT2fWfgTSx0eBKWoe8R4pTWjM+DF4O4SwmTrLGf8fj2vr+vnq9TiiZjiUjC68XsgXAqCA2NRaY6hACnDFCqf3cVr6Zqxf7DcsAoDgGjbg=</X509Certificate></X509Data></KeyInfo></Signature></r:issuer></r:license></msrel:RelData></KeyInfo></Signature></asmv1:assembly>

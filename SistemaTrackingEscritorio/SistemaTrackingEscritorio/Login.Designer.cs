@@ -38,14 +38,14 @@
             // 
             // tbUsuario
             // 
-            this.tbUsuario.Location = new System.Drawing.Point(42, 39);
+            this.tbUsuario.Location = new System.Drawing.Point(56, 71);
             this.tbUsuario.Name = "tbUsuario";
             this.tbUsuario.Size = new System.Drawing.Size(180, 20);
             this.tbUsuario.TabIndex = 0;
             // 
             // tbPassword
             // 
-            this.tbPassword.Location = new System.Drawing.Point(42, 93);
+            this.tbPassword.Location = new System.Drawing.Point(56, 125);
             this.tbPassword.Name = "tbPassword";
             this.tbPassword.PasswordChar = '*';
             this.tbPassword.Size = new System.Drawing.Size(180, 20);
@@ -55,7 +55,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(39, 23);
+            this.label1.Location = new System.Drawing.Point(53, 55);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(43, 13);
             this.label1.TabIndex = 2;
@@ -64,7 +64,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(39, 77);
+            this.label2.Location = new System.Drawing.Point(53, 109);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(53, 13);
             this.label2.TabIndex = 3;
@@ -73,7 +73,7 @@
             // 
             // btnLogin
             // 
-            this.btnLogin.Location = new System.Drawing.Point(42, 132);
+            this.btnLogin.Location = new System.Drawing.Point(56, 164);
             this.btnLogin.Name = "btnLogin";
             this.btnLogin.Size = new System.Drawing.Size(89, 23);
             this.btnLogin.TabIndex = 4;
@@ -83,7 +83,7 @@
             // 
             // btnCrearCuenta
             // 
-            this.btnCrearCuenta.Location = new System.Drawing.Point(137, 132);
+            this.btnCrearCuenta.Location = new System.Drawing.Point(151, 164);
             this.btnCrearCuenta.Name = "btnCrearCuenta";
             this.btnCrearCuenta.Size = new System.Drawing.Size(89, 23);
             this.btnCrearCuenta.TabIndex = 6;
@@ -103,6 +103,7 @@
             this.Controls.Add(this.tbPassword);
             this.Controls.Add(this.tbUsuario);
             this.Name = "Login";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Login";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Login_FormClosing);
             this.Load += new System.EventHandler(this.Login_Load);
