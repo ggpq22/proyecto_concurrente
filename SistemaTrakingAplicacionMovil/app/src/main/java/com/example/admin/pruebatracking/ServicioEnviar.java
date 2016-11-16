@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.admin.pruebatracking.Entidades.Grupo;
 import com.example.admin.pruebatracking.Mensajes.Mensaje;
 import com.example.admin.pruebatracking.Mensajes.MsgConexion;
 import com.example.admin.pruebatracking.Mensajes.MsgDBPeticion;
@@ -105,9 +106,17 @@ public class ServicioEnviar extends AsyncTask<Mensaje, Void, Void> implements Lo
                 if (global.getSocket().isConnected() && global.getConectado()) {
 
                     PrintWriter writer = new PrintWriter(global.getSocket().getOutputStream());
+
                     ArrayList<String> arrayDestino = new ArrayList<String>();
-                    arrayDestino.add("mario");
-                    writer.println(Serializacion.Serializar(new MsgLocalizacion(arrayDestino, "yo", "2016-10-27", location.getLatitude() + "", location.getLongitude() + "")));
+                    ArrayList<Grupo> grupos = global.getGrupos();
+                    for (int i = 0; i < grupos.size(); i++)
+                    {
+                        arrayDestino.add(grupos.get(i).getNombre());
+                    }
+
+                    Toast.makeText(context, "cantidad : "+grupos.size(), Toast.LENGTH_SHORT).show();
+
+                    writer.println(Serializacion.Serializar(new MsgLocalizacion(arrayDestino, global.getCuenta().getUsuario(), "2016-10-27", location.getLatitude() + "", location.getLongitude() + "")));
                     writer.flush();
 
                     Log.e("msg","Se envio un punto...");

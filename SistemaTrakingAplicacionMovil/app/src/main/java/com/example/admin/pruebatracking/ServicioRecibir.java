@@ -54,7 +54,7 @@ public class ServicioRecibir implements Runnable {
 
                                     break;
                                 case "MsgLocalizacion":
-                                    Log.e("msg", "Llego mensaje de conexion");
+                                    Log.e("msg", "Llego mensaje de localizacion");
 
                                     break;
                                 case "MsgDBPeticion":
@@ -84,8 +84,10 @@ public class ServicioRecibir implements Runnable {
                                                 @Override
                                                 public void run() {
                                                     adapter.setGrupos(((MsgDBRespuesta) msg).getReturnGrupo());
+                                                    adapter.addSeleccionados(false);
                                                     adapter.notifyDataSetChanged();
                                                     global.setRespuestaRecuperarGrupos(true);
+                                                    global.setGrupos(((MsgDBRespuesta) msg).getReturnGrupo());
                                                 }
                                             });
                                             }
@@ -102,6 +104,7 @@ public class ServicioRecibir implements Runnable {
                                             @Override
                                             public void run() {
                                                 adapter.addGrupo(((MsgNotificacion)msg).getRespuesta().getReturnGrupo().get(0));
+                                                adapter.addSeleccionados(false);
                                                 adapter.notifyDataSetChanged();
                                                 Toast.makeText(global.getContext(), "Fuiste añadido a un nuevo grupo", Toast.LENGTH_LONG).show();
                                             }

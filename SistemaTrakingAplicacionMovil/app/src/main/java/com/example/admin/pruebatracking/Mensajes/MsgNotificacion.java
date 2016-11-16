@@ -8,7 +8,7 @@ public class MsgNotificacion extends Mensaje{
 
     private MsgDBRespuesta Respuesta;
 
-    public MsgNotificacion(ArrayList<String> to, String from, String fecha, MsgDBPeticion Peticion) {
+    public MsgNotificacion(ArrayList<String> to, String from, String fecha, MsgDBRespuesta Respuesta) {
         super(to, from, fecha, "MsgNotificacion", true);
         this.Respuesta = Respuesta;
     }
