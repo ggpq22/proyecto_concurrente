@@ -25,40 +25,33 @@ namespace Mapa
         private GMapOverlay markerOverlay;
         private GMapOverlay overlay;
         private Thread TareaProgreso;
+        private bool login;
 
         public frmPrincipal()
         {
             InitializeComponent();
             ConfiguracionMapa();
-
-
         }
-
 
         public frmPrincipal(Sesion sesion)
         {
-            // TODO: Complete member initialization
             InitializeComponent();
             this.sesion = sesion;
             sesion.Server.Connect += Server_Connect;
             sesion.Server.DBRespuesta += Server_DBRespuesta;
             sesion.Server.Disconnect += Server_Disconnect;
             sesion.Server.LocationChanged += Server_LocationChanged;
-
             ConfiguracionMapa();
             new Thread(ConectarServidor).Start();
-            //sesion.Progress = new frmProgresBar();
-            //sesion.Progress.Show();
             ActualizarGrupos();
             btnGrupos.Enabled = false;
-
-
-
         }
 
         void Server_Disconnect(object sender, Mensaje mensaje)
         {
-
+            sesion.FormLogin.Visible = true;
+            tokenProgress.Cancel();
+            TareaProgreso.Join();
         }
 
         void Server_Connect(object sender, Mensaje mensaje)
@@ -70,7 +63,7 @@ namespace Mapa
         {
             var msg = mensaje as MsgLocalizacion;
 
-            var lat = Double.Parse(msg.Latitud.Replace(",","."));
+            var lat = Double.Parse(msg.Latitud.Replace(",", "."));
             var lng = Double.Parse(msg.Longitud.Replace(",", "."));
             var esta = sesion.CuentasUsuario.FirstOrDefault(x => x.Usuario == mensaje.From);
             if (esta == null)
@@ -186,9 +179,7 @@ namespace Mapa
 
         private void frmPrincipal_FormClosing(object sender, FormClosingEventArgs e)
         {
-            sesion.FormLogin.Visible = true;
-            tokenProgress.Cancel();
-            TareaProgreso.Join();
+            Deslogeo();
         }
 
         private void BuscarGruposAnfitrion()
@@ -310,7 +301,7 @@ namespace Mapa
 
         internal void ActualizarGrupos()
         {
-            if(sesion.Grupos != null)
+            if (sesion.Grupos != null)
             {
                 dgvGruposAnfitrion.DataSource = null;
                 sesion.Grupos.Clear();
@@ -324,11 +315,11 @@ namespace Mapa
                 {
                     if (pbProgreso.InvokeRequired)
                     {
-                    pbProgreso.Invoke(new Action(() =>
-                    {
-                        contador = contador == 100 ? 0 : contador + 10;
-                        pbProgreso.Value = contador;
-                    }));
+                        pbProgreso.Invoke(new Action(() =>
+                        {
+                            contador = contador == 100 ? 0 : contador + 10;
+                            pbProgreso.Value = contador;
+                        }));
 
                     }
                     else
@@ -351,6 +342,19 @@ namespace Mapa
                 pbProgreso.Visible = true;
             }
             TareaProgreso.Start(tokenProgress.Token);
+        }
+
+        private void Deslogeo()
+        {
+            MsgConexion msg = new MsgConexion()
+            {
+                Fecha = DateTime.Now,
+                From = sesion.Usuario.Usuario,
+                Mensaje = "desconectar",
+                To = new List<string>() { sesion.Usuario.Usuario },
+            };
+
+            sesion.Server.SendToServer(msg);
         }
     }
 }
