@@ -385,9 +385,11 @@ namespace ServidorTracking.DataBase
 
         public void CreateHistorial(Historial entry)
         {
+            string query;
             try
             {
-                dbMan.execute("insert into historial(idGrupo, idCuenta, fecha, lat, long, state) values(" + entry.Grupo.Id + ", " + entry.Cuenta.Id + ", " + entry.Fecha + ", " + entry.Lat + ", " + entry.Long + ", 1)", QueryType.INSERT);
+                query = "insert into historial(idGrupo, idCuenta, fecha, lat, long, state) values(" + entry.Grupo.Id + ", " + entry.Cuenta.Id + ", '" + entry.Fecha.ToString("s") + "', " + entry.Lat.ToString().Replace(',', '.') + ", " + entry.Long.ToString().Replace(',', '.') + ", 1)";
+                dbMan.execute(query, QueryType.INSERT);
             }
             catch (Exception e)
             {
