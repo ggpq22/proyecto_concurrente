@@ -26,6 +26,7 @@ namespace Mapa
         private GMapOverlay overlay;
         private Thread TareaProgreso;
         private bool login;
+        private bool salir = false;
 
         public frmPrincipal()
         {
@@ -37,10 +38,7 @@ namespace Mapa
         {
             InitializeComponent();
             this.sesion = sesion;
-            sesion.Server.Connect += Server_Connect;
-            sesion.Server.DBRespuesta += Server_DBRespuesta;
-            sesion.Server.Disconnect += Server_Disconnect;
-            sesion.Server.LocationChanged += Server_LocationChanged;
+            AsignarEventos();
             ConfiguracionMapa();
             new Thread(ConectarServidor).Start();
             ActualizarGrupos();
@@ -52,6 +50,7 @@ namespace Mapa
             sesion.FormLogin.Visible = true;
             tokenProgress.Cancel();
             TareaProgreso.Join();
+            salir = true;
         }
 
         void Server_Connect(object sender, Mensaje mensaje)
@@ -111,7 +110,7 @@ namespace Mapa
 
         }
 
-        private void ConfigurarGrillaGrupo()
+        internal void ConfigurarGrillaGrupo()
         {
             dgvGruposAnfitrion.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvGruposAnfitrion.MultiSelect = false;
@@ -167,10 +166,7 @@ namespace Mapa
             tokenProgress.Cancel();
             TareaProgreso.Join();
             pbProgreso.Invoke(new Action(() => { pbProgreso.Visible = false; }));
-            sesion.Server.Connect -= Server_Connect;
-            sesion.Server.DBRespuesta -= Server_DBRespuesta;
-            sesion.Server.Disconnect -= Server_Disconnect;
-            sesion.Server.LocationChanged -= Server_LocationChanged;
+            QuitarEventos();
 
             frmGrupoCrear frm = new frmGrupoCrear(sesion);
             frm.Show();
@@ -180,6 +176,10 @@ namespace Mapa
         private void frmPrincipal_FormClosing(object sender, FormClosingEventArgs e)
         {
             Deslogeo();
+            while (!salir)
+            {
+                Application.DoEvents();
+            }
         }
 
         private void BuscarGruposAnfitrion()
@@ -195,7 +195,7 @@ namespace Mapa
 
             sesion.Server.SendToServer(msg);
         }
-
+        
         private void dgvGruposAnfitrion_SelectionChan(object sender, EventArgs e)
         {
             try
@@ -355,6 +355,22 @@ namespace Mapa
             };
 
             sesion.Server.SendToServer(msg);
+        }
+
+        private void AsignarEventos()
+        {
+            sesion.Server.Connect += Server_Connect;
+            sesion.Server.DBRespuesta += Server_DBRespuesta;
+            sesion.Server.Disconnect += Server_Disconnect;
+            sesion.Server.LocationChanged += Server_LocationChanged;
+        }
+
+        private void QuitarEventos()
+        {
+            sesion.Server.Connect -= Server_Connect;
+            sesion.Server.DBRespuesta -= Server_DBRespuesta;
+            sesion.Server.Disconnect -= Server_Disconnect;
+            sesion.Server.LocationChanged -= Server_LocationChanged;
         }
     }
 }

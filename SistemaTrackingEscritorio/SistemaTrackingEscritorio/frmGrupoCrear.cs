@@ -38,9 +38,8 @@ namespace Mapa
 
             // TODO: Complete member initialization
             this.sesion = sesion;
-            sesion.Server.DBRespuesta += Server_DBRespuesta;
+            AsignarEventos();
         }
-
 
         private void frmGrupoCrear_Load(object sender, EventArgs e)
         {
@@ -65,7 +64,6 @@ namespace Mapa
             ConfiguracionGrillaBusqueda();
         }
 
-
         private void CrearGrupo(object sender, EventArgs e)
         {
 
@@ -78,6 +76,12 @@ namespace Mapa
             }
 
             grupoNuevo.Integrantes = ListaIntegrantesSeleccionados();
+
+            if (grupoNuevo.Integrantes.Count == 0)
+            {
+                MessageBox.Show("Seleccione al menos un integrante");
+                return;
+            }
 
             MsgDBPeticion msg = new MsgDBPeticion()
             {
@@ -172,8 +176,15 @@ namespace Mapa
             }
             if (msg.CodigoPeticion.Equals("CrearGrupo"))
             {
-
+                if (btnCrearGrupo.InvokeRequired)
+                {
                 btnCrearGrupo.Invoke(new Action(() => { btnCrearGrupo.Enabled = true; }));
+
+                }
+                else
+                {
+                    btnCrearGrupo.Enabled = true; 
+                }
                 try
                 {
                     if (msg.IsValido)
@@ -181,13 +192,14 @@ namespace Mapa
                         MessageBox.Show("Se creo el grupo correctamente.");
                         sesion.form.Invoke(new Action(() => { sesion.form.Visible = true; }));
                         sesion.Grupos.Add(msg.ReturnGrupo[0]);
-
+                        QuitarEventos();
                         if (((frmPrincipal)sesion.form).dgvGruposAnfitrion.InvokeRequired)
                         {
                             ((frmPrincipal)sesion.form).dgvGruposAnfitrion.Invoke(new Action(() =>
                             {
                                 ((frmPrincipal)sesion.form).dgvGruposAnfitrion.DataSource = null;
                                 ((frmPrincipal)sesion.form).dgvGruposAnfitrion.DataSource = sesion.Grupos;
+                                ((frmPrincipal)sesion.form).ConfigurarGrillaGrupo();
                             }));
                         }
                         else
@@ -240,8 +252,6 @@ namespace Mapa
 
         }
 
-
-
         private void ConfiguracionGrillaBusqueda()
         {
             dgvUsuarioBusqueda.MultiSelect = true;
@@ -256,10 +266,20 @@ namespace Mapa
             sesion.form.Visible = true;
             tokenProgreso.Cancel();
             tareaProgreso.Join();
+            QuitarEventos();
 
 
         }
 
+        private void AsignarEventos()
+        {
+            sesion.Server.DBRespuesta += Server_DBRespuesta;
+        }
+
+        private void QuitarEventos()
+        {
+            sesion.Server.DBRespuesta -= Server_DBRespuesta;
+        }
 
     }
 }
