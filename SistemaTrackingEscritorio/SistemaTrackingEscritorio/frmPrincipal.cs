@@ -25,40 +25,32 @@ namespace Mapa
         private GMapOverlay markerOverlay;
         private GMapOverlay overlay;
         private Thread TareaProgreso;
+        private bool login;
+        private bool salir = false;
 
         public frmPrincipal()
         {
             InitializeComponent();
             ConfiguracionMapa();
-
-
         }
-
 
         public frmPrincipal(Sesion sesion)
         {
-            // TODO: Complete member initialization
             InitializeComponent();
             this.sesion = sesion;
-            sesion.Server.Connect += Server_Connect;
-            sesion.Server.DBRespuesta += Server_DBRespuesta;
-            sesion.Server.Disconnect += Server_Disconnect;
-            sesion.Server.LocationChanged += Server_LocationChanged;
-
+            AsignarEventos();
             ConfiguracionMapa();
             new Thread(ConectarServidor).Start();
-            //sesion.Progress = new frmProgresBar();
-            //sesion.Progress.Show();
             ActualizarGrupos();
             btnGrupos.Enabled = false;
-
-
-
         }
 
         void Server_Disconnect(object sender, Mensaje mensaje)
         {
-
+            sesion.FormLogin.Visible = true;
+            tokenProgress.Cancel();
+            TareaProgreso.Join();
+            salir = true;
         }
 
         void Server_Connect(object sender, Mensaje mensaje)
@@ -70,8 +62,8 @@ namespace Mapa
         {
             var msg = mensaje as MsgLocalizacion;
 
-            var lat = Double.Parse(msg.Latitud);
-            var lng = Double.Parse(msg.Longitud);
+            var lat = Double.Parse(msg.Latitud.Replace(",", "."));
+            var lng = Double.Parse(msg.Longitud.Replace(",", "."));
             var esta = sesion.CuentasUsuario.FirstOrDefault(x => x.Usuario == mensaje.From);
             if (esta == null)
             {
@@ -118,7 +110,7 @@ namespace Mapa
 
         }
 
-        private void ConfigurarGrillaGrupo()
+        internal void ConfigurarGrillaGrupo()
         {
             dgvGruposAnfitrion.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvGruposAnfitrion.MultiSelect = false;
@@ -128,7 +120,6 @@ namespace Mapa
             dgvGruposAnfitrion.CellClick += dgvGruposAnfitrion_SelectionChan;
             dgvGruposAnfitrion.Columns["Nombre"].Width = dgvGruposAnfitrion.Width;
         }
-
 
         private void frmPrincipal_Load(object sender, EventArgs e)
         {
@@ -175,10 +166,7 @@ namespace Mapa
             tokenProgress.Cancel();
             TareaProgreso.Join();
             pbProgreso.Invoke(new Action(() => { pbProgreso.Visible = false; }));
-            sesion.Server.Connect -= Server_Connect;
-            sesion.Server.DBRespuesta -= Server_DBRespuesta;
-            sesion.Server.Disconnect -= Server_Disconnect;
-            sesion.Server.LocationChanged -= Server_LocationChanged;
+            QuitarEventos();
 
             frmGrupoCrear frm = new frmGrupoCrear(sesion);
             frm.Show();
@@ -187,11 +175,12 @@ namespace Mapa
 
         private void frmPrincipal_FormClosing(object sender, FormClosingEventArgs e)
         {
-            sesion.FormLogin.Visible = true;
-            tokenProgress.Cancel();
-            TareaProgreso.Join();
+            Deslogeo();
+            while (!salir)
+            {
+                Application.DoEvents();
+            }
         }
-
 
         private void BuscarGruposAnfitrion()
         {
@@ -206,7 +195,7 @@ namespace Mapa
 
             sesion.Server.SendToServer(msg);
         }
-
+        
         private void dgvGruposAnfitrion_SelectionChan(object sender, EventArgs e)
         {
             try
@@ -310,10 +299,9 @@ namespace Mapa
             mapa.Zoom = 9;
         }
 
-
         internal void ActualizarGrupos()
         {
-            if(sesion.Grupos != null)
+            if (sesion.Grupos != null)
             {
                 dgvGruposAnfitrion.DataSource = null;
                 sesion.Grupos.Clear();
@@ -325,11 +313,20 @@ namespace Mapa
                 var contador = 0;
                 while (!token.IsCancellationRequested)
                 {
-                    pbProgreso.Invoke(new Action(() =>
+                    if (pbProgreso.InvokeRequired)
+                    {
+                        pbProgreso.Invoke(new Action(() =>
+                        {
+                            contador = contador == 100 ? 0 : contador + 10;
+                            pbProgreso.Value = contador;
+                        }));
+
+                    }
+                    else
                     {
                         contador = contador == 100 ? 0 : contador + 10;
                         pbProgreso.Value = contador;
-                    }));
+                    }
 
                     Thread.Sleep(500);
                 }
@@ -345,6 +342,35 @@ namespace Mapa
                 pbProgreso.Visible = true;
             }
             TareaProgreso.Start(tokenProgress.Token);
+        }
+
+        private void Deslogeo()
+        {
+            MsgConexion msg = new MsgConexion()
+            {
+                Fecha = DateTime.Now,
+                From = sesion.Usuario.Usuario,
+                Mensaje = "desconectar",
+                To = new List<string>() { sesion.Usuario.Usuario },
+            };
+
+            sesion.Server.SendToServer(msg);
+        }
+
+        private void AsignarEventos()
+        {
+            sesion.Server.Connect += Server_Connect;
+            sesion.Server.DBRespuesta += Server_DBRespuesta;
+            sesion.Server.Disconnect += Server_Disconnect;
+            sesion.Server.LocationChanged += Server_LocationChanged;
+        }
+
+        private void QuitarEventos()
+        {
+            sesion.Server.Connect -= Server_Connect;
+            sesion.Server.DBRespuesta -= Server_DBRespuesta;
+            sesion.Server.Disconnect -= Server_Disconnect;
+            sesion.Server.LocationChanged -= Server_LocationChanged;
         }
     }
 }

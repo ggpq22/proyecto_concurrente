@@ -76,7 +76,7 @@ namespace ServidorTracking
         private void incomingMessage()
         {
             string str = null;
-            Mensaje message;
+            Mensaje message = null;
 
             while (client.Client.Connected)
             {
@@ -99,7 +99,9 @@ namespace ServidorTracking
                     }
                     catch (Exception e)
                     {
-                        throw e;
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("== ERROR == -" + e.Message);
+                        Console.ForegroundColor = ConsoleColor.White;
                     }
 
                     MsgConexion menCon;
@@ -107,12 +109,12 @@ namespace ServidorTracking
                     MsgDBPeticion menDB;
 
                     {
-                        Console.ForegroundColor = ConsoleColor.Magenta;
+                        Console.ForegroundColor = ConsoleColor.Cyan;
                         Console.WriteLine("RECIBIENDO: " + message.Tipo);
 
                         switch (message.Tipo)
                         {
-                            case "MsgConeccion":
+                            case "MsgConexion":
                                 Console.ForegroundColor = ConsoleColor.Green; break;
                             case "MsgLocalizacion":
                                 Console.ForegroundColor = ConsoleColor.Blue; break;
@@ -140,25 +142,40 @@ namespace ServidorTracking
                     else if (message is MsgLocalizacion)
                     {
                         menLoc = message as MsgLocalizacion;
-                        Historial h = new Historial();
+                        Historial h;
 
                         try
                         {
-                            foreach (string to in menLoc.To)
+                            new Thread(() =>
                             {
-                                h.Fecha = menLoc.Fecha;
-                                h.Lat = Convert.ToDecimal(menLoc.Latitud.Replace('.', ','));
-                                h.Long = Convert.ToDecimal(menLoc.Longitud.Replace('.', ','));
-                                h.Cuenta = dbcontrol.GetCuentaByUsuario(menLoc.From);
-                                h.Grupo = dbcontrol.GetGrupoByNombre(to);
+                                MsgLocalizacion m = menLoc;
+                                try
+                                {
+                                    foreach (string to in m.To)
+                                    {
+                                        h = new Historial();
+                                        h.Fecha = m.Fecha;
+                                        h.Lat = Convert.ToDecimal(m.Latitud.Replace('.', ','));
+                                        h.Long = Convert.ToDecimal(m.Longitud.Replace('.', ','));
+                                        h.Cuenta = dbcontrol.GetCuentaByUsuario(m.From);
+                                        h.Grupo = dbcontrol.GetGrupoByNombre(to);
 
-                                dbcontrol.CreateHistorial(h);
-                            }
+                                        dbcontrol.CreateHistorial(h);
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("== ERROR == -" + e.Message);
+                                    Console.ForegroundColor = ConsoleColor.White;
+                                }
+                            }).Start();
                         }
                         catch (Exception e)
                         {
-                            menLoc.IsValido = false;
-                            menLoc.Errores.Add(e.Message);
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("== ERROR == -" + e.Message);
+                            Console.ForegroundColor = ConsoleColor.White;
                         }
                         finally
                         {
@@ -520,12 +537,12 @@ namespace ServidorTracking
                 string str = SerializarcionJson.Serializar<Mensaje>(message);
 
                 {
-                    Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                    Console.ForegroundColor = ConsoleColor.DarkCyan;
                     Console.WriteLine("ENVIANDO: " + message.Tipo);
 
                     switch (message.Tipo)
                     {
-                        case "MsgConeccion":
+                        case "MsgConexion":
                             Console.ForegroundColor = ConsoleColor.DarkGreen; break;
                         case "MsgLocalizacion":
                             Console.ForegroundColor = ConsoleColor.DarkBlue; break;

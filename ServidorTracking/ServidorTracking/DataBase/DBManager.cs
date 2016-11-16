@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Data;
+using SistemaTrackingBiblioteca;
 
 namespace ServidorTracking.DataBase
 {
@@ -29,14 +30,17 @@ namespace ServidorTracking.DataBase
                 set { password = value; }
             }
 
-            string server = "tcp:pbarco.database.windows.net,1433";
+            //string server = "tcp:pbarco.database.windows.net,1433";
+            string server = @"PABLO-PC\SQLEXPRESS";
 
             public string Server
             {
                 get { return server; }
                 set { server = value; }
             }
-            string dataBase = "ProgConcurrente";
+
+            //string dataBase = "ProgConcurrente";
+            string dataBase = "SistemaTracking";
 
             public string DataBase
             {
@@ -55,6 +59,7 @@ namespace ServidorTracking.DataBase
 
             public string connectionString()
             {
+                user = ""; password = "";
                 if (user == "" && password == "")
                 {
                     strcnn = "Server=" + server + ";Initial Catalog=" + dataBase + ";Integrated Security=True";
@@ -64,7 +69,7 @@ namespace ServidorTracking.DataBase
                     strcnn = "Server=" + server + ";Initial Catalog=" + dataBase + ";User ID=" + User + ";Password=" + Password;
                 }
 
-                return strcnn;
+                return Configuracion.GetConnectionString("Local");
             }
 
             private SqlConnection getConnection()

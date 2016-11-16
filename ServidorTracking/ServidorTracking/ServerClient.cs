@@ -30,22 +30,6 @@ namespace ServidorTracking
             set { getsLocations = value; }
         }
 
-        CancellationToken token;
-
-        public CancellationToken Token
-        {
-            get { return token; }
-            set { token = value; }
-        }
-
-        CountdownEvent countdownEvent;
-
-        public CountdownEvent CountdownEvent
-        {
-            get { return countdownEvent; }
-            set { countdownEvent = value; }
-        }
-
         TcpClient client;
 
         public TcpClient Client
@@ -57,6 +41,8 @@ namespace ServidorTracking
         MessageRouter router;
         DBController dbCon;
         ConcurrentQueue<Mensaje> mensajes = new ConcurrentQueue<Mensaje>();
+        WaitHandle handle = new EventWaitHandle(false, EventResetMode.AutoReset, "CF2D4313-33DE-489D-9721-6AFF69841DEB");
+        bool waitSignaled;
 
         Thread sending;
 
@@ -123,9 +109,10 @@ namespace ServidorTracking
             service.CloseCommunications();
         }
 
+        //este hilo se morfa la compu
         private void sendMessages()
         {
-            while (true)
+            while(true)
             {
                 if (mensajes.Count > 0)
                 {
@@ -136,14 +123,8 @@ namespace ServidorTracking
                         service.SendToClient(m);
                     }
                 }
-
-                if (token.IsCancellationRequested)
-                {
-                    break;
-                }
+                Thread.Sleep(500);
             }
-            
-            countdownEvent.Signal();
         }
 
         public void RemoveMe()

@@ -18,6 +18,7 @@ namespace ServidorTracking
         List<Grupo> grupos = new List<Grupo>();
         DBController dbCon;
         ConcurrentQueue<Mensaje> mensajes = new ConcurrentQueue<Mensaje>();
+        CancellationToken cancelToken;
         Thread routing;
 
         CancellationToken token;
@@ -28,16 +29,9 @@ namespace ServidorTracking
             set { token = value; }
         }
 
-        CountdownEvent countdownEvent;
-
-        public CountdownEvent CountdownEvent
+        public MessageRouter(CancellationToken cancellationToken)
         {
-            get { return countdownEvent; }
-            set { countdownEvent = value; }
-        }
-
-        public MessageRouter()
-        {
+            cancelToken = cancellationToken;
             dbCon = new DBController("pbarco", "12345Pablo");
 
             try
@@ -55,9 +49,10 @@ namespace ServidorTracking
             }
         }
 
+        //este hilo se morfa la compu
         private void route()
         {
-            while (true)
+            while(!cancelToken.IsCancellationRequested)
             {
                 if (mensajes.Count > 0)
                 {
@@ -92,7 +87,7 @@ namespace ServidorTracking
                                     }
                                 }
                             }
-                            
+
                             foreach (ServerClient sc in clientes)
                             {
                                 if (sc.Name == to)
@@ -103,7 +98,9 @@ namespace ServidorTracking
                         }
                     }
                 }
+                Thread.Sleep(500);
             }
+            CloseRouter();
         }
 
         public void AddClient(ServerClient client)
@@ -124,6 +121,19 @@ namespace ServidorTracking
         public void RouteMessage(Mensaje message)
         {
             mensajes.Enqueue(message);
+        }
+
+        public void CloseRouter()
+        {
+            foreach (ServerClient sc in clientes)
+            {
+                sc.RemoveMe();
+            }
+        }
+
+        public void WaitToFinish()
+        {
+            routing.Join();
         }
     }
 }

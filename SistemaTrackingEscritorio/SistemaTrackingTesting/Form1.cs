@@ -31,6 +31,12 @@ namespace SistemaTrackingTesting
         {
             client = new ServerClient(tbIp.Text, Convert.ToInt32(tbPort.Text));
             client.Connect += client_Connect;
+            MsgConexion con = new MsgConexion();
+            con.Fecha = DateTime.Now;
+            con.From = tbFrom.Text;
+            con.To.Add(tbTo.Text);
+            con.Mensaje = "conectar";
+            client.SendToServer(con);
         }
 
         void client_Connect(object sender, Mensaje mensaje)
@@ -45,6 +51,7 @@ namespace SistemaTrackingTesting
             m.To.Add(tbTo.Text);
             m.Latitud = "3.3";
             m.Longitud = "3.3";
+            m.Fecha = DateTime.Now;
 
             client.SendToServer(m);
         }

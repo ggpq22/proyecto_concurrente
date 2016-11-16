@@ -38,9 +38,8 @@ namespace Mapa
 
             // TODO: Complete member initialization
             this.sesion = sesion;
-            sesion.Server.DBRespuesta += Server_DBRespuesta;
+            AsignarEventos();
         }
-
 
         private void frmGrupoCrear_Load(object sender, EventArgs e)
         {
@@ -65,7 +64,6 @@ namespace Mapa
             ConfiguracionGrillaBusqueda();
         }
 
-
         private void CrearGrupo(object sender, EventArgs e)
         {
 
@@ -78,6 +76,12 @@ namespace Mapa
             }
 
             grupoNuevo.Integrantes = ListaIntegrantesSeleccionados();
+
+            if (grupoNuevo.Integrantes.Count == 0)
+            {
+                MessageBox.Show("Seleccione al menos un integrante");
+                return;
+            }
 
             MsgDBPeticion msg = new MsgDBPeticion()
             {
@@ -161,11 +165,26 @@ namespace Mapa
             var msg = mensaje as MsgDBRespuesta;
             tokenProgreso.Cancel();
             tareaProgreso.Join();
-            prProgreso.Invoke(new Action(() => { prProgreso.Visible = false; }));
+            if (prProgreso.InvokeRequired)
+            {
+                prProgreso.Invoke(new Action(() => { prProgreso.Visible = false; }));
+
+            }
+            else
+            {
+                prProgreso.Visible = false;
+            }
             if (msg.CodigoPeticion.Equals("CrearGrupo"))
             {
-                
+                if (btnCrearGrupo.InvokeRequired)
+                {
                 btnCrearGrupo.Invoke(new Action(() => { btnCrearGrupo.Enabled = true; }));
+
+                }
+                else
+                {
+                    btnCrearGrupo.Enabled = true; 
+                }
                 try
                 {
                     if (msg.IsValido)
@@ -173,12 +192,14 @@ namespace Mapa
                         MessageBox.Show("Se creo el grupo correctamente.");
                         sesion.form.Invoke(new Action(() => { sesion.form.Visible = true; }));
                         sesion.Grupos.Add(msg.ReturnGrupo[0]);
-                        
+                        QuitarEventos();
                         if (((frmPrincipal)sesion.form).dgvGruposAnfitrion.InvokeRequired)
                         {
-                            ((frmPrincipal)sesion.form).dgvGruposAnfitrion.Invoke(new Action(() => {
+                            ((frmPrincipal)sesion.form).dgvGruposAnfitrion.Invoke(new Action(() =>
+                            {
                                 ((frmPrincipal)sesion.form).dgvGruposAnfitrion.DataSource = null;
                                 ((frmPrincipal)sesion.form).dgvGruposAnfitrion.DataSource = sesion.Grupos;
+                                ((frmPrincipal)sesion.form).ConfigurarGrillaGrupo();
                             }));
                         }
                         else
@@ -186,8 +207,8 @@ namespace Mapa
                             ((frmPrincipal)sesion.form).dgvGruposAnfitrion.DataSource = null;
                             ((frmPrincipal)sesion.form).dgvGruposAnfitrion.DataSource = sesion.Grupos;
                         }
-                        
-                        if(this.InvokeRequired)
+
+                        if (this.InvokeRequired)
                         {
                             this.Invoke(new Action(() => { this.Close(); }));
                         }
@@ -231,8 +252,6 @@ namespace Mapa
 
         }
 
-        
-
         private void ConfiguracionGrillaBusqueda()
         {
             dgvUsuarioBusqueda.MultiSelect = true;
@@ -247,10 +266,20 @@ namespace Mapa
             sesion.form.Visible = true;
             tokenProgreso.Cancel();
             tareaProgreso.Join();
-            
+            QuitarEventos();
+
 
         }
 
+        private void AsignarEventos()
+        {
+            sesion.Server.DBRespuesta += Server_DBRespuesta;
+        }
+
+        private void QuitarEventos()
+        {
+            sesion.Server.DBRespuesta -= Server_DBRespuesta;
+        }
 
     }
 }

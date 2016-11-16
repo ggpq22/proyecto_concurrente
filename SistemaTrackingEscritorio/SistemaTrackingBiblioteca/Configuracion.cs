@@ -23,5 +23,11 @@ namespace SistemaTrackingBiblioteca
                 file.WriteLine(ex.Message);
             }
         }
+
+        public static string GetConnectionString(string nombre){
+
+            return ConfigurationManager.ConnectionStrings[nombre].ConnectionString;
+
+        }
     }
 }

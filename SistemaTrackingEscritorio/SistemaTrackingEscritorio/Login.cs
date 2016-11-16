@@ -25,19 +25,11 @@ namespace Mapa
         Thread isConected;
         frmPrincipal frm;
         delThread DelMostrarForm;
-
-        //private ServerClient server;
         private Sesion sesion;
-
 
         public Login()
         {
             InitializeComponent();
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void lblNuevaCuenta_LinkClicked(object sender, EventArgs e)
@@ -68,8 +60,6 @@ namespace Mapa
             sesion.Server.SendToServer(msg);
 
         }
-
-
 
         void server_Disconnect(object sender, Mensaje mensaje)
         {
@@ -103,10 +93,9 @@ namespace Mapa
                 From = guid.ToString(),
                 Fecha = DateTime.Now,
                 CodigoPeticion = "Login",
+                To = new List<string>() { guid.ToString() },
+                ParamsCuenta = new List<Cuenta>() { cuenta },
             };
-
-            msg.To.Add(guid.ToString());
-            msg.ParamsCuenta.Add(cuenta);
 
             sesion.Server.SendToServer(msg);
 
@@ -115,19 +104,17 @@ namespace Mapa
         private void Login_Load(object sender, EventArgs e)
         {
             guid = System.Guid.NewGuid();
-            cancelar = new CancellationTokenSource();
-            CancellationToken token = cancelar.Token;
             DelMostrarForm += MostrarForm;
             sesion = new Sesion();
+            LanzarHiloConexion();
+        }
+
+        public void LanzarHiloConexion()
+        {
+            cancelar = new CancellationTokenSource();
             delHilo del = hilo;
             isConected = new Thread(hilo);
-
-
-            isConected.Start(token);
-
-            frm = new frmPrincipal();
-
-
+            isConected.Start(cancelar.Token);
         }
 
         void hilo(object t)
@@ -143,7 +130,6 @@ namespace Mapa
                         var puerto = Configuracion.GetConfiguracion("PuertoServidor");
                         var retorno = new ServerClient(ip, int.Parse(puerto));
                         sesion.Server = retorno;
-                        conectado = true;
                         sesion.Server.Connect += server_Connect;
                         sesion.Server.Disconnect += server_Disconnect;
                         sesion.Server.DBRespuesta += server_DBRespuesta;
@@ -194,7 +180,6 @@ namespace Mapa
 
                     cancelar.Cancel();
                     isConected.Join();
-
                     tbUsuario.Invoke(DelMostrarForm);
                 }
                 else
@@ -215,7 +200,6 @@ namespace Mapa
             }
         }
 
-
         void MostrarForm()
         {
             sesion.Server.Connect -= server_Connect;
@@ -224,7 +208,6 @@ namespace Mapa
             sesion.FormLogin = this;
             sesion.FormPrincipal = new frmPrincipal(sesion);
             sesion.FormPrincipal.Show();
-
             this.Visible = false;
         }
 
@@ -248,6 +231,11 @@ namespace Mapa
             cancelar.Cancel();
             isConected.Join();
 
+        }
+
+        public void Reconexion()
+        {
+            conectado = false;
         }
 
     }
