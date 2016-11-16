@@ -54,7 +54,7 @@ namespace ServidorTracking
                 Console.ForegroundColor = ConsoleColor.White;
             }
         }
-
+        //este hilo se morfa la compu
         private void route()
         {
             while (true)
@@ -103,6 +103,7 @@ namespace ServidorTracking
                         }
                     }
                 }
+                Thread.Sleep(500);
             }
         }
 

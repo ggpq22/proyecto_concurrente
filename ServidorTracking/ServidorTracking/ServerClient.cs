@@ -141,6 +141,7 @@ namespace ServidorTracking
                 {
                     break;
                 }
+                Thread.Sleep(500);
             }
             
             countdownEvent.Signal();
