@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Data;
+using SistemaTrackingBiblioteca;
 
 namespace ServidorTracking.DataBase
 {
@@ -37,6 +38,7 @@ namespace ServidorTracking.DataBase
                 get { return server; }
                 set { server = value; }
             }
+
             //string dataBase = "ProgConcurrente";
             string dataBase = "SistemaTracking";
 
@@ -67,7 +69,7 @@ namespace ServidorTracking.DataBase
                     strcnn = "Server=" + server + ";Initial Catalog=" + dataBase + ";User ID=" + User + ";Password=" + Password;
                 }
 
-                return strcnn;
+                return Configuracion.GetConnectionString("Local");
             }
 
             private SqlConnection getConnection()

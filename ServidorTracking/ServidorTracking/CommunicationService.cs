@@ -76,7 +76,7 @@ namespace ServidorTracking
         private void incomingMessage()
         {
             string str = null;
-            Mensaje message;
+            Mensaje message = null;
 
             while (client.Client.Connected)
             {
@@ -99,7 +99,9 @@ namespace ServidorTracking
                     }
                     catch (Exception e)
                     {
-                        throw e;
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("== ERROR == -" + e.Message);
+                        Console.ForegroundColor = ConsoleColor.White;
                     }
 
                     MsgConexion menCon;
