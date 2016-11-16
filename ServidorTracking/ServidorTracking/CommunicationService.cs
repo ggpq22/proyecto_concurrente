@@ -107,12 +107,12 @@ namespace ServidorTracking
                     MsgDBPeticion menDB;
 
                     {
-                        Console.ForegroundColor = ConsoleColor.Magenta;
+                        Console.ForegroundColor = ConsoleColor.Cyan;
                         Console.WriteLine("RECIBIENDO: " + message.Tipo);
 
                         switch (message.Tipo)
                         {
-                            case "MsgConeccion":
+                            case "MsgConexion":
                                 Console.ForegroundColor = ConsoleColor.Green; break;
                             case "MsgLocalizacion":
                                 Console.ForegroundColor = ConsoleColor.Blue; break;
@@ -520,12 +520,12 @@ namespace ServidorTracking
                 string str = SerializarcionJson.Serializar<Mensaje>(message);
 
                 {
-                    Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                    Console.ForegroundColor = ConsoleColor.DarkCyan;
                     Console.WriteLine("ENVIANDO: " + message.Tipo);
 
                     switch (message.Tipo)
                     {
-                        case "MsgConeccion":
+                        case "MsgConexion":
                             Console.ForegroundColor = ConsoleColor.DarkGreen; break;
                         case "MsgLocalizacion":
                             Console.ForegroundColor = ConsoleColor.DarkBlue; break;
