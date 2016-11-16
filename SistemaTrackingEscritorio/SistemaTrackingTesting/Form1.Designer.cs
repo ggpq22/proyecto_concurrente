@@ -134,6 +134,7 @@
             this.tbIp.Name = "tbIp";
             this.tbIp.Size = new System.Drawing.Size(100, 20);
             this.tbIp.TabIndex = 12;
+            this.tbIp.Text = "10.75.20.98";
             // 
             // tbPort
             // 

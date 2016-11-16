@@ -32,8 +32,10 @@ namespace ServidorTracking
 
             int port = 8999;
 
+            CancellationTokenSource cts = new CancellationTokenSource();
+
             TcpServer server = new TcpServer(ip, port);
-            MessageRouter router = new MessageRouter();
+            MessageRouter router = new MessageRouter(cts.Token);
 
             Thread runningServer = new Thread(() => {
 
@@ -81,6 +83,8 @@ namespace ServidorTracking
                 if (command == "shutdown")
                 {
                     //Console.Beep();
+                    cts.Cancel();
+                    router.WaitToFinish();
                     Environment.Exit(0);
                 }
             }
