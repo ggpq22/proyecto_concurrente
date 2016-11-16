@@ -19,6 +19,7 @@ namespace Mapa
 
     public partial class Login : Form
     {
+        bool vuelta = false;
         bool conectado;
         Guid guid;
         CancellationTokenSource cancelar;
@@ -218,6 +219,7 @@ namespace Mapa
 
         void MostrarForm()
         {
+            vuelta = true;
             sesion.Server.Connect -= server_Connect;
             sesion.Server.Disconnect -= server_Disconnect;
             sesion.Server.DBRespuesta -= server_DBRespuesta;

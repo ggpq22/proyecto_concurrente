@@ -70,8 +70,8 @@ namespace Mapa
         {
             var msg = mensaje as MsgLocalizacion;
 
-            var lat = Double.Parse(msg.Latitud);
-            var lng = Double.Parse(msg.Longitud);
+            var lat = Double.Parse(msg.Latitud.Replace(",","."));
+            var lng = Double.Parse(msg.Longitud.Replace(",", "."));
             var esta = sesion.CuentasUsuario.FirstOrDefault(x => x.Usuario == mensaje.From);
             if (esta == null)
             {
@@ -128,7 +128,6 @@ namespace Mapa
             dgvGruposAnfitrion.CellClick += dgvGruposAnfitrion_SelectionChan;
             dgvGruposAnfitrion.Columns["Nombre"].Width = dgvGruposAnfitrion.Width;
         }
-
 
         private void frmPrincipal_Load(object sender, EventArgs e)
         {
@@ -191,7 +190,6 @@ namespace Mapa
             tokenProgress.Cancel();
             TareaProgreso.Join();
         }
-
 
         private void BuscarGruposAnfitrion()
         {
@@ -310,7 +308,6 @@ namespace Mapa
             mapa.Zoom = 9;
         }
 
-
         internal void ActualizarGrupos()
         {
             if(sesion.Grupos != null)
@@ -325,11 +322,20 @@ namespace Mapa
                 var contador = 0;
                 while (!token.IsCancellationRequested)
                 {
+                    if (pbProgreso.InvokeRequired)
+                    {
                     pbProgreso.Invoke(new Action(() =>
                     {
                         contador = contador == 100 ? 0 : contador + 10;
                         pbProgreso.Value = contador;
                     }));
+
+                    }
+                    else
+                    {
+                        contador = contador == 100 ? 0 : contador + 10;
+                        pbProgreso.Value = contador;
+                    }
 
                     Thread.Sleep(500);
                 }

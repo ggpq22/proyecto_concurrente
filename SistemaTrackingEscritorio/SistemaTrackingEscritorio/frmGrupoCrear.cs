@@ -161,10 +161,18 @@ namespace Mapa
             var msg = mensaje as MsgDBRespuesta;
             tokenProgreso.Cancel();
             tareaProgreso.Join();
-            prProgreso.Invoke(new Action(() => { prProgreso.Visible = false; }));
+            if (prProgreso.InvokeRequired)
+            {
+                prProgreso.Invoke(new Action(() => { prProgreso.Visible = false; }));
+
+            }
+            else
+            {
+                prProgreso.Visible = false;
+            }
             if (msg.CodigoPeticion.Equals("CrearGrupo"))
             {
-                
+
                 btnCrearGrupo.Invoke(new Action(() => { btnCrearGrupo.Enabled = true; }));
                 try
                 {
@@ -173,10 +181,11 @@ namespace Mapa
                         MessageBox.Show("Se creo el grupo correctamente.");
                         sesion.form.Invoke(new Action(() => { sesion.form.Visible = true; }));
                         sesion.Grupos.Add(msg.ReturnGrupo[0]);
-                        
+
                         if (((frmPrincipal)sesion.form).dgvGruposAnfitrion.InvokeRequired)
                         {
-                            ((frmPrincipal)sesion.form).dgvGruposAnfitrion.Invoke(new Action(() => {
+                            ((frmPrincipal)sesion.form).dgvGruposAnfitrion.Invoke(new Action(() =>
+                            {
                                 ((frmPrincipal)sesion.form).dgvGruposAnfitrion.DataSource = null;
                                 ((frmPrincipal)sesion.form).dgvGruposAnfitrion.DataSource = sesion.Grupos;
                             }));
@@ -186,8 +195,8 @@ namespace Mapa
                             ((frmPrincipal)sesion.form).dgvGruposAnfitrion.DataSource = null;
                             ((frmPrincipal)sesion.form).dgvGruposAnfitrion.DataSource = sesion.Grupos;
                         }
-                        
-                        if(this.InvokeRequired)
+
+                        if (this.InvokeRequired)
                         {
                             this.Invoke(new Action(() => { this.Close(); }));
                         }
@@ -231,7 +240,7 @@ namespace Mapa
 
         }
 
-        
+
 
         private void ConfiguracionGrillaBusqueda()
         {
@@ -247,7 +256,7 @@ namespace Mapa
             sesion.form.Visible = true;
             tokenProgreso.Cancel();
             tareaProgreso.Join();
-            
+
 
         }
 
