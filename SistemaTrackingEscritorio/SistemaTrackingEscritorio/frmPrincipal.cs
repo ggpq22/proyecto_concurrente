@@ -117,7 +117,6 @@ namespace Mapa
             dgvGruposAnfitrion.Columns["Id"].Visible = false;
             dgvGruposAnfitrion.Columns["Anfitrion"].Visible = false;
             //dgvGruposAnfitrion.Columns["Integrantes"].Visible = false;
-            dgvGruposAnfitrion.CellClick += dgvGruposAnfitrion_SelectionChan;
             dgvGruposAnfitrion.Columns["Nombre"].Width = dgvGruposAnfitrion.Width;
         }
 
@@ -162,15 +161,14 @@ namespace Mapa
 
         private void btnGrupos_Click(object sender, EventArgs e)
         {
-            sesion.form = this;
             tokenProgress.Cancel();
             TareaProgreso.Join();
             pbProgreso.Invoke(new Action(() => { pbProgreso.Visible = false; }));
             QuitarEventos();
-
+            //dgvGruposAnfitrion.CellClick -= dgvGruposAnfitrion_SelectionChan;
             frmGrupoCrear frm = new frmGrupoCrear(sesion);
             frm.Show();
-            this.Visible = false;
+            sesion.FormPrincipal.Visible = false;
         }
 
         private void frmPrincipal_FormClosing(object sender, FormClosingEventArgs e)
@@ -196,14 +194,17 @@ namespace Mapa
             sesion.Server.SendToServer(msg);
         }
         
-        private void dgvGruposAnfitrion_SelectionChan(object sender, EventArgs e)
+        
+
+        void dgvGruposAnfitrion_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
                 var nombre = dgvGruposAnfitrion.SelectedRows[0].Cells["Nombre"].Value.ToString();
 
-                sesion.CuentasUsuario = sesion.Grupos.FirstOrDefault(x => x.Nombre == nombre).Integrantes;
-                dgvUsuariosGrupo.DataSource = sesion.CuentasUsuario;
+                List<Cuenta> lista = sesion.Grupos.FirstOrDefault(x => x.Nombre == nombre).Integrantes;
+                dgvUsuariosGrupo.DataSource = null;
+                dgvUsuariosGrupo.DataSource = lista;
                 mapa.Overlays[0].Markers.Clear();
                 ConfigurarGrillaIntegrantes();
             }
@@ -372,5 +373,6 @@ namespace Mapa
             sesion.Server.Disconnect -= Server_Disconnect;
             sesion.Server.LocationChanged -= Server_LocationChanged;
         }
+
     }
 }

@@ -37,7 +37,9 @@ namespace Mapa
             InitializeComponent();
 
             // TODO: Complete member initialization
+            tokenProgreso = new CancellationTokenSource();
             this.sesion = sesion;
+            sesion.FormCrearGrupo = this;
             AsignarEventos();
         }
 
@@ -62,6 +64,7 @@ namespace Mapa
 
             dgvUsuarioBusqueda.DataSource = CuentasUsuarioBusqueda;
             ConfiguracionGrillaBusqueda();
+
         }
 
         private void CrearGrupo(object sender, EventArgs e)
@@ -101,7 +104,6 @@ namespace Mapa
 
         private void ActivarProgressBar()
         {
-            tokenProgreso = new CancellationTokenSource();
 
             prProgreso.Visible = true;
 
@@ -178,44 +180,44 @@ namespace Mapa
             {
                 if (btnCrearGrupo.InvokeRequired)
                 {
-                btnCrearGrupo.Invoke(new Action(() => { btnCrearGrupo.Enabled = true; }));
+                    btnCrearGrupo.Invoke(new Action(() => { btnCrearGrupo.Enabled = true; }));
 
                 }
                 else
                 {
-                    btnCrearGrupo.Enabled = true; 
+                    btnCrearGrupo.Enabled = true;
                 }
                 try
                 {
                     if (msg.IsValido)
                     {
                         MessageBox.Show("Se creo el grupo correctamente.");
-                        sesion.form.Invoke(new Action(() => { sesion.form.Visible = true; }));
+                        sesion.FormPrincipal.Invoke(new Action(() => { sesion.FormPrincipal.Visible = true; }));
                         sesion.Grupos.Add(msg.ReturnGrupo[0]);
                         QuitarEventos();
-                        if (((frmPrincipal)sesion.form).dgvGruposAnfitrion.InvokeRequired)
+                        if (((frmPrincipal)sesion.FormPrincipal).dgvGruposAnfitrion.InvokeRequired)
                         {
-                            ((frmPrincipal)sesion.form).dgvGruposAnfitrion.Invoke(new Action(() =>
+                            ((frmPrincipal)sesion.FormPrincipal).dgvGruposAnfitrion.Invoke(new Action(() =>
                             {
-                                ((frmPrincipal)sesion.form).dgvGruposAnfitrion.DataSource = null;
-                                ((frmPrincipal)sesion.form).dgvGruposAnfitrion.DataSource = sesion.Grupos;
-                                ((frmPrincipal)sesion.form).ConfigurarGrillaGrupo();
+                                ((frmPrincipal)sesion.FormPrincipal).dgvGruposAnfitrion.DataSource = null;
+                                ((frmPrincipal)sesion.FormPrincipal).dgvGruposAnfitrion.DataSource = sesion.Grupos;
+                                ((frmPrincipal)sesion.FormPrincipal).ConfigurarGrillaGrupo();
                             }));
                         }
                         else
                         {
-                            ((frmPrincipal)sesion.form).dgvGruposAnfitrion.DataSource = null;
-                            ((frmPrincipal)sesion.form).dgvGruposAnfitrion.DataSource = sesion.Grupos;
+                            ((frmPrincipal)sesion.FormPrincipal).dgvGruposAnfitrion.DataSource = null;
+                            ((frmPrincipal)sesion.FormPrincipal).dgvGruposAnfitrion.DataSource = sesion.Grupos;
+                            ((frmPrincipal)sesion.FormPrincipal).ConfigurarGrillaGrupo();
                         }
 
-                        if (this.InvokeRequired)
+                        if (sesion.FormCrearGrupo.InvokeRequired)
                         {
-                            this.Invoke(new Action(() => { this.Close(); }));
+                            this.Invoke(new Action(() => { sesion.FormCrearGrupo.Close(); }));
                         }
                         else
                         {
-                            this.Close();
-
+                            sesion.FormCrearGrupo.Close();
                         }
 
                     }
@@ -263,7 +265,7 @@ namespace Mapa
 
         private void frmGrupoCrear_FormClosing(object sender, FormClosingEventArgs e)
         {
-            sesion.form.Visible = true;
+            sesion.FormPrincipal.Visible = true;
             tokenProgreso.Cancel();
             tareaProgreso.Join();
             QuitarEventos();
