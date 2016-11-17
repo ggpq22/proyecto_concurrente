@@ -104,10 +104,10 @@ public class ListViewAdapterGrupos extends BaseAdapter {
         String estado = "EN SEGUIMIENTO";
         int imagen = R.drawable.defaultuser;
 
-        /*if(seleccionados.get(position))
+        if(seleccionados.get(position))
         {
             item_sel.setBackgroundColor(Color.parseColor("#81F781"));
-        }*/
+        }
 
         tvNombreGrupo.setText(grupo.getNombre());
         tvEstadoGrupo.setText(estado);

@@ -55,9 +55,9 @@ public class FragmentGrupos extends Fragment {
         lista.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> av, View v, int pos, long id) {
-                /*Toast.makeText(getContext(), "posicion "+pos, Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "posicion "+pos, Toast.LENGTH_LONG).show();
                 seleccionados.set(pos - 1, true);
-                adapter.notifyDataSetChanged();*/
+                adapter.notifyDataSetChanged();
                 return true;
             }
         });
