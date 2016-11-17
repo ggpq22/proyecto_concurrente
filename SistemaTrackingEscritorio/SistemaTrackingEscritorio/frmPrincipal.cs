@@ -25,7 +25,6 @@ namespace Mapa
         private GMapOverlay markerOverlay;
         private GMapOverlay overlay;
         private Thread TareaProgreso;
-        private bool login;
         private bool salir = false;
 
         public frmPrincipal()
@@ -62,8 +61,8 @@ namespace Mapa
         {
             var msg = mensaje as MsgLocalizacion;
 
-            var lat = Double.Parse(msg.Latitud.Replace(",", "."));
-            var lng = Double.Parse(msg.Longitud.Replace(",", "."));
+            var lat = Double.Parse( msg.Latitud.Replace(".",","));
+            var lng = Double.Parse(msg.Longitud.Replace(".",","));
             var esta = sesion.CuentasUsuario.FirstOrDefault(x => x.Usuario == mensaje.From);
             if (esta == null)
             {
@@ -174,10 +173,6 @@ namespace Mapa
         private void frmPrincipal_FormClosing(object sender, FormClosingEventArgs e)
         {
             Deslogeo();
-            while (!salir)
-            {
-                Application.DoEvents();
-            }
         }
 
         private void BuscarGruposAnfitrion()
@@ -194,17 +189,15 @@ namespace Mapa
             sesion.Server.SendToServer(msg);
         }
         
-        
-
         void dgvGruposAnfitrion_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
                 var nombre = dgvGruposAnfitrion.SelectedRows[0].Cells["Nombre"].Value.ToString();
 
-                List<Cuenta> lista = sesion.Grupos.FirstOrDefault(x => x.Nombre == nombre).Integrantes;
+                sesion.CuentasUsuario = sesion.Grupos.FirstOrDefault(x => x.Nombre == nombre).Integrantes;
                 dgvUsuariosGrupo.DataSource = null;
-                dgvUsuariosGrupo.DataSource = lista;
+                dgvUsuariosGrupo.DataSource = sesion.CuentasUsuario;
                 mapa.Overlays[0].Markers.Clear();
                 ConfigurarGrillaIntegrantes();
             }
@@ -356,6 +349,8 @@ namespace Mapa
             };
 
             sesion.Server.SendToServer(msg);
+
+            sesion.FormLogin.Close();
         }
 
         private void AsignarEventos()
