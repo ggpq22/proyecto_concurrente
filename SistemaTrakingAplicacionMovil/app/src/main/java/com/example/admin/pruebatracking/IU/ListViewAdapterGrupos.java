@@ -106,7 +106,15 @@ public class ListViewAdapterGrupos extends BaseAdapter {
 
         if(seleccionados.get(position))
         {
-            item_sel.setBackgroundColor(Color.parseColor("#81F781"));
+            item_sel.setBackgroundColor(Color.parseColor("#4C0B5F"));
+            tvNombreGrupo.setTextColor(Color.parseColor("#FFFFFF"));
+            tvEstadoGrupo.setTextColor(Color.parseColor("#FFFFFF"));
+        }
+        else
+        {
+            item_sel.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            tvNombreGrupo.setTextColor(Color.parseColor("#000000"));
+            tvEstadoGrupo.setTextColor(Color.parseColor("#000000"));
         }
 
         tvNombreGrupo.setText(grupo.getNombre());

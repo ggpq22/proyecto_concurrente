@@ -102,7 +102,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 while (!((AplicacionPrincipal) getApplicationContext()).getConectado()) {
                     try {
-                        Thread.sleep(1);
+                        Thread.sleep(100);
                     } catch (Exception e) {
                         e.printStackTrace();
                         Log.e("msg", "Error en esperando conexion: " + e.toString());
@@ -116,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 while (!((AplicacionPrincipal) getApplicationContext()).getLogin()) {
                     try {
-                        Thread.sleep(1);
+                        Thread.sleep(100);
                     } catch (Exception e) {
                         e.printStackTrace();
                         Log.e("msg", "Error en esperando enviar peticion Crear Cuenta: " + e.toString());
@@ -127,7 +127,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 while (!((AplicacionPrincipal) getApplicationContext()).getRespuestaEntrar()) {
                     try {
-                        Thread.sleep(1);
+                        Thread.sleep(100);
                     } catch (Exception e) {
                         e.printStackTrace();
                         Log.e("msg", "Error en esperando Respuesta Login: " + e.toString());
@@ -135,8 +135,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
                 cliente.pararRecibirMensajes();
-                cliente.cancel(true
-                );
+                cliente.cancel(true);
                 cliente.cerrarConexion();
                 Log.e("msg", "PASO RESPUESTA LOGIN");
 
@@ -161,7 +160,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     while (!((AplicacionPrincipal) getApplicationContext()).getConectado()) {
                         try {
-                            Thread.sleep(1);
+                            Thread.sleep(100);
                         } catch (Exception e) {
                             e.printStackTrace();
                             Log.e("msg", "Error en esperando conexion con usuario: " + e.toString());
@@ -175,7 +174,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     while (!((AplicacionPrincipal) getApplicationContext()).getRecuperarGrupos()) {
                         try {
-                            Thread.sleep(1);
+                            Thread.sleep(100);
                         } catch (Exception e) {
                             e.printStackTrace();
                             Log.e("msg", "Error en esperando enviar peticion Recuperar Grupos: " + e.toString());
@@ -186,7 +185,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     while (!((AplicacionPrincipal) getApplicationContext()).getRespuestaRecuperarGrupos()) {
                         try {
-                            Thread.sleep(1);
+                            Thread.sleep(100);
                         } catch (Exception e) {
                             e.printStackTrace();
                             Log.e("msg", "Error en esperando Respuesta Login: " + e.toString());

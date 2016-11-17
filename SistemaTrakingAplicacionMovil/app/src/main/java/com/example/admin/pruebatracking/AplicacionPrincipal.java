@@ -24,11 +24,13 @@ public class AplicacionPrincipal extends Application {
     private boolean crearCuenta = false;
     private boolean respuestaEntrar = false;
     private boolean login = false;
-    private boolean recuperarGrupos;
-    private boolean respuestaRecuperarGrupos;
+    private boolean recuperarGrupos = false;
+    private boolean respuestaRecuperarGrupos = false;
+    private boolean respuestaDeleteGrupos = false;
     private Cuenta cuenta;
     private ArrayList<Grupo> grupos = new ArrayList<Grupo>();
     private ListViewAdapterGrupos adapterGrupos;
+    MsgDBRespuesta msgDBRespuestaDeleteGrupos;
 
     public Socket getSocket() {
         return socket;
@@ -125,5 +127,21 @@ public class AplicacionPrincipal extends Application {
 
     public void setContext(Context context) {
         this.context = context;
+    }
+
+    public boolean getRespuestaDeleteGrupos() {
+        return respuestaDeleteGrupos;
+    }
+
+    public void setRespuestaDeleteGrupos(boolean respuestaDeleteGrupos) {
+        this.respuestaDeleteGrupos = respuestaDeleteGrupos;
+    }
+
+    public MsgDBRespuesta getMsgDBRespuestaDeleteGrupos() {
+        return msgDBRespuestaDeleteGrupos;
+    }
+
+    public void setMsgDBRespuestaDeleteGrupos(MsgDBRespuesta msgDBRespuestaDeleteGrupos) {
+        this.msgDBRespuestaDeleteGrupos = msgDBRespuestaDeleteGrupos;
     }
 }

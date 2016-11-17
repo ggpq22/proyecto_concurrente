@@ -107,7 +107,7 @@ public class SignupActivity extends AppCompatActivity {
 
                 while (!((AplicacionPrincipal) getApplicationContext()).getConectado()) {
                     try {
-                        Thread.sleep(1);
+                        Thread.sleep(100);
                     } catch (Exception e) {
                         e.printStackTrace();
                         Log.e("msg", "Error en esperando conexion: " + e.toString());
@@ -121,7 +121,7 @@ public class SignupActivity extends AppCompatActivity {
 
                 while (!((AplicacionPrincipal) getApplicationContext()).getCrearCuenta()) {
                     try {
-                        Thread.sleep(1);
+                        Thread.sleep(100);
                     } catch (Exception e) {
                         e.printStackTrace();
                         Log.e("msg", "Error en esperando enviar peticion Crear Cuenta: " + e.toString());
@@ -132,7 +132,7 @@ public class SignupActivity extends AppCompatActivity {
 
                 while (!((AplicacionPrincipal) getApplicationContext()).getRespuestaEntrar()) {
                     try {
-                        Thread.sleep(1);
+                        Thread.sleep(100);
                     } catch (Exception e) {
                         e.printStackTrace();
                         Log.e("msg", "Error en esperando Respuesta crear cuenta: " + e.toString());
@@ -162,7 +162,7 @@ public class SignupActivity extends AppCompatActivity {
 
                     while (!((AplicacionPrincipal) getApplicationContext()).getConectado()) {
                         try {
-                            Thread.sleep(1);
+                            Thread.sleep(100);
                         } catch (Exception e) {
                             e.printStackTrace();
                             Log.e("msg", "Error en esperando conexion con usuario: " + e.toString());
@@ -176,7 +176,7 @@ public class SignupActivity extends AppCompatActivity {
 
                     while (!((AplicacionPrincipal) getApplicationContext()).getRecuperarGrupos()) {
                         try {
-                            Thread.sleep(1);
+                            Thread.sleep(100);
                         } catch (Exception e) {
                             e.printStackTrace();
                             Log.e("msg", "Error en esperando enviar peticion Recuperar Grupos: " + e.toString());

@@ -92,6 +92,12 @@ public class ServicioRecibir implements Runnable {
                                             });
                                             }
                                             break;
+
+                                        case "BorrarCuentaDeGrupo":
+                                            Log.e("msg", "Llego mensaje de respuesta con codigo de BorrarCuentaDeGrupo");;;
+                                            global.setRespuestaDeleteGrupos(true);
+                                            global.setMsgDBRespuestaDeleteGrupos(((MsgDBRespuesta) msg));
+                                            break;
                                     }
                                     break;
 

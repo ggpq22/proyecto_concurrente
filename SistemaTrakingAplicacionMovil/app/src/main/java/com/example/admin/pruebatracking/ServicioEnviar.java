@@ -114,8 +114,6 @@ public class ServicioEnviar extends AsyncTask<Mensaje, Void, Void> implements Lo
                         arrayDestino.add(grupos.get(i).getNombre());
                     }
 
-                    Toast.makeText(context, "cantidad : "+grupos.size(), Toast.LENGTH_SHORT).show();
-
                     writer.println(Serializacion.Serializar(new MsgLocalizacion(arrayDestino, global.getCuenta().getUsuario(), "2016-10-27", location.getLatitude() + "", location.getLongitude() + "")));
                     writer.flush();
 
