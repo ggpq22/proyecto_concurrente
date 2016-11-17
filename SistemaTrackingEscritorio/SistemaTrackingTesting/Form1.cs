@@ -1,4 +1,5 @@
 ﻿using SistemaTrackingBiblioteca;
+using SistemaTrackingBiblioteca.Entidades;
 using SistemaTrackingBiblioteca.Mensajes;
 using System;
 using System.Collections.Generic;
@@ -46,13 +47,21 @@ namespace SistemaTrackingTesting
 
         private void button2_Click(object sender, EventArgs e)
         {
-            MsgLocalizacion m = new MsgLocalizacion();
+            //MsgLocalizacion m = new MsgLocalizacion();
+            //m.Latitud = "3.3";
+            //m.Longitud = "3.3";
+            
+            MsgDBPeticion m = new MsgDBPeticion();
+            m.CodigoPeticion = "BorrarCuentaDeGrupo";
+            m.ParamsCuenta.Add(new Cuenta() { Id = 1 });
+            m.ParamsGrupo.Add((new Grupo() { Id = 1 }));
+            m.ParamsGrupo.Add((new Grupo() { Id = 2 }));
+            m.ParamsGrupo.Add((new Grupo() { Id = 3 }));
+            m.ParamsGrupo.Add((new Grupo() { Id = 4 }));
+
             m.From = tbFrom.Text;
             m.To.Add(tbTo.Text);
-            m.Latitud = "3.3";
-            m.Longitud = "3.3";
             m.Fecha = DateTime.Now;
-
             client.SendToServer(m);
         }
     }
