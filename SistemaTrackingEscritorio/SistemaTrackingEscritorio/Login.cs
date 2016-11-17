@@ -238,5 +238,22 @@ namespace Mapa
             conectado = false;
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                MsgConexion msg = new MsgConexion()
+                {
+                    Fecha = DateTime.Now,
+                    From = guid.ToString() + i,
+                    To = new List<string>() { guid.ToString() + i },
+                    Mensaje = "conectar"
+                };
+                sesion.Server.SendToServer(msg);
+            }
+        }
+
+        
+
     }
 }

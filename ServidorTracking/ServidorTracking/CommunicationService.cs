@@ -389,13 +389,15 @@ namespace ServidorTracking
                         else if (menDB.CodigoPeticion == "BorrarCuentaDeGrupo")
                         {
                             Cuenta c = menDB.ParamsCuenta[0];
-                            Grupo g = menDB.ParamsGrupo[0];
-                            Grupo gr = new Grupo();
+                            List<Grupo> gr = new List<Grupo>();
                             MsgDBRespuesta res = new MsgDBRespuesta();
 
                             try
                             {
-                                gr = dbcontrol.DeleteCuentaFromGrupo(c.Id, g.Id);
+                                foreach (Grupo g in menDB.ParamsGrupo)
+                                {
+                                    gr.Add(dbcontrol.DeleteCuentaFromGrupo(c.Id, g.Id));
+                                }
                             }
                             catch (Exception e)
                             {
@@ -408,7 +410,7 @@ namespace ServidorTracking
                                 res.To = menDB.To;
                                 res.Fecha = DateTime.Now;
                                 res.CodigoPeticion = menDB.CodigoPeticion;
-                                res.ReturnGrupo.Add(gr);
+                                res.ReturnGrupo.AddRange(gr);
 
                                 OnDBRequested(res);
                             }
