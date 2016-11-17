@@ -51,7 +51,7 @@ public class ServicioRecibir implements Runnable {
                             switch (msg.getTipo()) {
                                 case "MsgConexion":
                                     Log.e("msg", "Llego mensaje de conexion");
-
+                                    global.setConectado(true);
                                     break;
                                 case "MsgLocalizacion":
                                     Log.e("msg", "Llego mensaje de localizacion");

@@ -62,7 +62,7 @@ public class FragmentGrupos extends Fragment {
 
         seleccionados = new ArrayList<Boolean>();
 
-        for(int i = 0; i <= global.getGrupos().size(); i++) {
+        for(int i = 0; i < global.getGrupos().size(); i++) {
             seleccionados.add(new Boolean(false));
         }
 

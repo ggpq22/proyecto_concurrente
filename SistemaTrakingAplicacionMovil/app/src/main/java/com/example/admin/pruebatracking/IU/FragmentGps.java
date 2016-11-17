@@ -1,6 +1,7 @@
 package com.example.admin.pruebatracking.IU;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
@@ -66,7 +67,7 @@ public class FragmentGps extends Fragment {
                                 btnLocalizacion.setText("STOP LOCALIZACIÓN");
                                 btnLocalizacion.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_stop1, 0, 0, 0);
 
-                                if(global.getSocket().isConnected() && global.getConectado()) {
+                                if(global.getSocket().isConnected()) {
                                     ArrayList<String> arrayDestino = new ArrayList<String>();
                                     ArrayList<Grupo> grupos = global.getGrupos();
                                     for (int i = 0; i < grupos.size(); i++)
@@ -74,13 +75,21 @@ public class FragmentGps extends Fragment {
                                         arrayDestino.add(grupos.get(i).getNombre());
                                     }
 
-                                    String fecha = (DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString());
+                                    if(arrayDestino.size() > 0) {
 
-                                    cliente = new Cliente(context, arrayDestino, ((AplicacionPrincipal) context.getApplicationContext()).getCuenta().getUsuario(), fecha);
+                                        String fecha = (DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString());
 
-                                    cliente.iniciarLocalizacion();
+                                        cliente = new Cliente(context, arrayDestino, ((AplicacionPrincipal) context.getApplicationContext()).getCuenta().getUsuario(), fecha);
 
-                                    savinAnimation.start();
+                                        cliente.iniciarLocalizacion();
+
+                                        savinAnimation.start();
+                                    }
+                                    else {
+
+                                        Toast.makeText(getContext(), "No hay grupos asociados para enviar localización", Toast.LENGTH_LONG).show();
+
+                                    }
                                 }
                                 else
                                 {

@@ -187,7 +187,7 @@ public class SignupActivity extends AppCompatActivity {
 
                     while (!((AplicacionPrincipal) getApplicationContext()).getRespuestaRecuperarGrupos()) {
                         try {
-                            Thread.sleep(1);
+                            Thread.sleep(100);
                         } catch (Exception e) {
                             e.printStackTrace();
                             Log.e("msg", "Error en esperando Respuesta Login: " + e.toString());

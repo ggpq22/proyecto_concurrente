@@ -113,11 +113,11 @@ public class ServicioEnviar extends AsyncTask<Mensaje, Void, Void> implements Lo
                     {
                         arrayDestino.add(grupos.get(i).getNombre());
                     }
+                        writer.println(Serializacion.Serializar(new MsgLocalizacion(arrayDestino, global.getCuenta().getUsuario(), "2016-10-27", location.getLatitude() + "", location.getLongitude() + "")));
+                        writer.flush();
 
-                    writer.println(Serializacion.Serializar(new MsgLocalizacion(arrayDestino, global.getCuenta().getUsuario(), "2016-10-27", location.getLatitude() + "", location.getLongitude() + "")));
-                    writer.flush();
+                        Log.e("msg", "Se envio un punto...");
 
-                    Log.e("msg","Se envio un punto...");
 
                 }
             }
