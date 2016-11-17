@@ -57,6 +57,8 @@ namespace ServidorTracking
                 if (mensajes.Count > 0)
                 {
                     Mensaje m;
+                    List<Grupo> gr = grupos;
+                    List<ServerClient> sc = clientes;
 
                     while (mensajes.TryDequeue(out m))
                     {
@@ -64,7 +66,7 @@ namespace ServidorTracking
                         {
                             if (m is MsgLocalizacion)
                             {
-                                foreach (Grupo g in grupos)
+                                foreach (Grupo g in gr)
                                 {
                                     if (g.Nombre == to)
                                     {
@@ -73,13 +75,13 @@ namespace ServidorTracking
 
                                         foreach (Cuenta c in cList)
                                         {
-                                            foreach (ServerClient sc in clientes)
+                                            foreach (ServerClient clie in sc)
                                             {
-                                                if (sc.Name == c.Usuario)
+                                                if (clie.Name == c.Usuario)
                                                 {
-                                                    if (sc.GetsLocations == 1)
+                                                    if (clie.GetsLocations == 1)
                                                     {
-                                                        sc.SendToClient(m);
+                                                        clie.SendToClient(m);
                                                     }
                                                 }
                                             }
@@ -88,11 +90,11 @@ namespace ServidorTracking
                                 }
                             }
 
-                            foreach (ServerClient sc in clientes)
+                            foreach (ServerClient clie in sc)
                             {
-                                if (sc.Name == to)
+                                if (clie.Name == to)
                                 {
-                                    sc.SendToClient(m);
+                                    clie.SendToClient(m);
                                 }
                             }
                         }
