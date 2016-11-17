@@ -30,15 +30,15 @@
         {
             this.btnGrupos = new System.Windows.Forms.Button();
             this.mapa = new GMap.NET.WindowsForms.GMapControl();
-            this.dgvGruposAnfitrion = new System.Windows.Forms.DataGridView();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.dgvUsuariosGrupo = new System.Windows.Forms.DataGridView();
             this.button1 = new System.Windows.Forms.Button();
             this.pbProgreso = new System.Windows.Forms.ProgressBar();
             this.button2 = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvGruposAnfitrion)).BeginInit();
+            this.dgvGruposAnfitrion = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuariosGrupo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvGruposAnfitrion)).BeginInit();
             this.SuspendLayout();
             // 
             // btnGrupos
@@ -75,18 +75,6 @@
             this.mapa.Size = new System.Drawing.Size(625, 416);
             this.mapa.TabIndex = 1;
             this.mapa.Zoom = 0D;
-            // 
-            // dgvGruposAnfitrion
-            // 
-            this.dgvGruposAnfitrion.AllowUserToAddRows = false;
-            this.dgvGruposAnfitrion.AllowUserToDeleteRows = false;
-            this.dgvGruposAnfitrion.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvGruposAnfitrion.Location = new System.Drawing.Point(654, 30);
-            this.dgvGruposAnfitrion.Name = "dgvGruposAnfitrion";
-            this.dgvGruposAnfitrion.ReadOnly = true;
-            this.dgvGruposAnfitrion.RowHeadersVisible = false;
-            this.dgvGruposAnfitrion.Size = new System.Drawing.Size(250, 141);
-            this.dgvGruposAnfitrion.TabIndex = 2;
             // 
             // label1
             // 
@@ -146,18 +134,26 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
+            // dgvGruposAnfitrion
+            // 
+            this.dgvGruposAnfitrion.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvGruposAnfitrion.Location = new System.Drawing.Point(654, 40);
+            this.dgvGruposAnfitrion.Name = "dgvGruposAnfitrion";
+            this.dgvGruposAnfitrion.Size = new System.Drawing.Size(250, 150);
+            this.dgvGruposAnfitrion.TabIndex = 9;
+            // 
             // frmPrincipal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(916, 492);
+            this.Controls.Add(this.dgvGruposAnfitrion);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.pbProgreso);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.dgvUsuariosGrupo);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.dgvGruposAnfitrion);
             this.Controls.Add(this.mapa);
             this.Controls.Add(this.btnGrupos);
             this.Name = "frmPrincipal";
@@ -165,23 +161,25 @@
             this.Text = "Principal";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmPrincipal_FormClosing);
             this.Load += new System.EventHandler(this.frmPrincipal_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvGruposAnfitrion)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuariosGrupo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvGruposAnfitrion)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
+        
+
         #endregion
 
         private System.Windows.Forms.Button btnGrupos;
         private GMap.NET.WindowsForms.GMapControl mapa;
-        public System.Windows.Forms.DataGridView dgvGruposAnfitrion;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DataGridView dgvUsuariosGrupo;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ProgressBar pbProgreso;
         private System.Windows.Forms.Button button2;
+        internal System.Windows.Forms.DataGridView dgvGruposAnfitrion;
     }
 }

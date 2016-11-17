@@ -19,7 +19,14 @@ namespace Mapa
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Login());
+            try
+            {
+                Application.Run(new Login());
+            }
+            catch (Exception ex)
+            {
+                Console.Write("asdasd");
+            }
         }
 
     }

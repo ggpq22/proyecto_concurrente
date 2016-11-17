@@ -23,14 +23,13 @@ namespace SistemaTrackingBiblioteca
 
         public System.Threading.CancellationTokenSource TokenSource { get; set; }
 
-        public Form form { get; set; }
-
         public Form FormLogin { get; set; }
 
         public List<Grupo> Grupos { get; set; }
 
-        public Form Progress { get; set; }
-
         public Form FormPrincipal { get; set; }
+
+
+        public Form FormCrearGrupo { get; set; }
     }
 }
