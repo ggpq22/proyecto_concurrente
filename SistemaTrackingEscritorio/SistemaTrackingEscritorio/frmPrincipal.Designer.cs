@@ -33,9 +33,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.dgvUsuariosGrupo = new System.Windows.Forms.DataGridView();
-            this.button1 = new System.Windows.Forms.Button();
             this.pbProgreso = new System.Windows.Forms.ProgressBar();
-            this.button2 = new System.Windows.Forms.Button();
             this.dgvGruposAnfitrion = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuariosGrupo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvGruposAnfitrion)).BeginInit();
@@ -105,16 +103,7 @@
             this.dgvUsuariosGrupo.RowHeadersVisible = false;
             this.dgvUsuariosGrupo.Size = new System.Drawing.Size(250, 131);
             this.dgvUsuariosGrupo.TabIndex = 4;
-            this.dgvUsuariosGrupo.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUsuariosGrupo_CellContentClick);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(794, 405);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 6;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
+            this.dgvUsuariosGrupo.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUsuariosGrupo_CellContentClick);
             // 
             // pbProgreso
             // 
@@ -124,23 +113,18 @@
             this.pbProgreso.TabIndex = 7;
             this.pbProgreso.Visible = false;
             // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(794, 447);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 8;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
             // dgvGruposAnfitrion
             // 
+            this.dgvGruposAnfitrion.AllowUserToAddRows = false;
+            this.dgvGruposAnfitrion.AllowUserToDeleteRows = false;
             this.dgvGruposAnfitrion.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvGruposAnfitrion.Location = new System.Drawing.Point(654, 40);
             this.dgvGruposAnfitrion.Name = "dgvGruposAnfitrion";
+            this.dgvGruposAnfitrion.ReadOnly = true;
+            this.dgvGruposAnfitrion.RowHeadersVisible = false;
             this.dgvGruposAnfitrion.Size = new System.Drawing.Size(250, 150);
             this.dgvGruposAnfitrion.TabIndex = 9;
+            this.dgvGruposAnfitrion.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvGruposAnfitrion_CellClick);
             // 
             // frmPrincipal
             // 
@@ -148,9 +132,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(916, 492);
             this.Controls.Add(this.dgvGruposAnfitrion);
-            this.Controls.Add(this.button2);
             this.Controls.Add(this.pbProgreso);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.dgvUsuariosGrupo);
             this.Controls.Add(this.label1);
@@ -177,9 +159,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DataGridView dgvUsuariosGrupo;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.ProgressBar pbProgreso;
-        private System.Windows.Forms.Button button2;
         internal System.Windows.Forms.DataGridView dgvGruposAnfitrion;
     }
 }

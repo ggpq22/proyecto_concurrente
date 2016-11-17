@@ -72,11 +72,11 @@ namespace ServidorTracking.DataBase
             return c;
         }
 
-        public void DeleteCuenta(int idCuenta)
+        public void DeleteCuenta(string usuario)
         {
             try
             {
-                dbMan.execute("update cuenta set state = 0 where idCuenta = " + idCuenta, QueryType.UPDATE);
+                dbMan.execute("update cuenta set state = 0 where usuario = '" + usuario + "'", QueryType.UPDATE);
             }
             catch (Exception e)
             {

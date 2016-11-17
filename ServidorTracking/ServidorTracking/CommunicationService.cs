@@ -245,7 +245,7 @@ namespace ServidorTracking
 
                             try
                             {
-                                dbcontrol.DeleteCuenta(c.Id);
+                                dbcontrol.DeleteCuenta(c.Usuario);
                             }
                             catch (Exception e)
                             {
