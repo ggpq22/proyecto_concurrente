@@ -57,8 +57,10 @@ namespace ServidorTracking
                 if (mensajes.Count > 0)
                 {
                     Mensaje m;
-                    List<Grupo> gr = grupos;
-                    List<ServerClient> sc = clientes;
+                    List<Grupo> gr = new List<Grupo>();
+                    gr.AddRange(grupos);
+                    List<ServerClient> sc = new List<ServerClient>();
+                    sc.AddRange(clientes);
 
                     while (mensajes.TryDequeue(out m))
                     {
@@ -70,7 +72,8 @@ namespace ServidorTracking
                                 {
                                     if (g.Nombre == to)
                                     {
-                                        List<Cuenta> cList = g.Integrantes;
+                                        List<Cuenta> cList = new List<Cuenta>();
+                                        cList.AddRange(g.Integrantes);
                                         cList.Add(g.Anfitrion);
 
                                         foreach (Cuenta c in cList)

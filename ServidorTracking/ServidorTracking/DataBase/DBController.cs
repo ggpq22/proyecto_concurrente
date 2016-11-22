@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SistemaTrackingBiblioteca.Entidades;
 using System.Data;
+using System.Collections.Concurrent;
 
 namespace ServidorTracking.DataBase
 {

@@ -87,7 +87,7 @@ namespace ServidorTracking
                 catch (Exception e)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("== ERROR == -" + e.Message);
+                    Console.WriteLine("== ERROR EN: " + this.GetType().Name + " == -" + e.Message);
                     Console.ForegroundColor = ConsoleColor.White;
                 }
 
@@ -100,7 +100,7 @@ namespace ServidorTracking
                     catch (Exception e)
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("== ERROR == -" + e.Message);
+                        Console.WriteLine("== ERROR EN: " + this.GetType().Name + " == -" + e.Message);
                         Console.ForegroundColor = ConsoleColor.White;
                     }
 
@@ -166,7 +166,7 @@ namespace ServidorTracking
                                 catch (Exception e)
                                 {
                                     Console.ForegroundColor = ConsoleColor.Red;
-                                    Console.WriteLine("== ERROR == -" + e.Message);
+                                    Console.WriteLine("== ERROR EN: " + this.GetType().Name + " == -" + e.Message);
                                     Console.ForegroundColor = ConsoleColor.White;
                                 }
                             }).Start();
@@ -174,7 +174,7 @@ namespace ServidorTracking
                         catch (Exception e)
                         {
                             Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("== ERROR == -" + e.Message);
+                            Console.WriteLine("== ERROR EN: " + this.GetType().Name + " == -" + e.Message);
                             Console.ForegroundColor = ConsoleColor.White;
                         }
                         finally
@@ -363,6 +363,11 @@ namespace ServidorTracking
                             try
                             {
                                 gr = dbcontrol.AddCuentaToGrupo(c.Id, g.Id);
+
+                                not.Fecha = DateTime.Now;
+                                not.From = menDB.From;
+                                not.To = menDB.To;
+                                not.Respuesta = res;
                             }
                             catch (Exception e)
                             {
@@ -561,7 +566,7 @@ namespace ServidorTracking
             catch (Exception e)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("== ERROR == -" + e.Message);
+                Console.WriteLine("== ERROR EN: " + this.GetType().Name + " == -" + e.Message);
                 Console.ForegroundColor = ConsoleColor.White;
             }
         }
@@ -575,7 +580,7 @@ namespace ServidorTracking
             catch (Exception e)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("== ERROR == -" + e.Message);
+                Console.WriteLine("== ERROR EN: " + this.GetType().Name + " == -" + e.Message);
                 Console.ForegroundColor = ConsoleColor.White;
             }
         }

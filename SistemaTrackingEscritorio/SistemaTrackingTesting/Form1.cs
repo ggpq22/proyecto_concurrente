@@ -48,16 +48,40 @@ namespace SistemaTrackingTesting
         private void button2_Click(object sender, EventArgs e)
         {
             //MsgLocalizacion m = new MsgLocalizacion();
-            //m.Latitud = "3.3";
-            //m.Longitud = "3.3";
+            //m.Latitud = "3.3837398745";
+            //m.Longitud = "3.334983470";
             
             MsgDBPeticion m = new MsgDBPeticion();
-            m.CodigoPeticion = "BorrarCuentaDeGrupo";
-            m.ParamsCuenta.Add(new Cuenta() { Id = 1 });
-            m.ParamsGrupo.Add((new Grupo() { Id = 1 }));
-            m.ParamsGrupo.Add((new Grupo() { Id = 2 }));
+            m.CodigoPeticion = "AgregarCuentaAGrupo";
+            m.ParamsCuenta.Add(new Cuenta() { Id = 36 });
+            m.ParamsGrupo.Add((new Grupo() { Id = 34 }));
+            /*m.ParamsGrupo.Add((new Grupo() { Id = 2 }));
             m.ParamsGrupo.Add((new Grupo() { Id = 3 }));
-            m.ParamsGrupo.Add((new Grupo() { Id = 4 }));
+            m.ParamsGrupo.Add((new Grupo() { Id = 4 }));*/
+
+            m.From = tbFrom.Text;
+            m.To.Add(tbTo.Text);
+            m.Fecha = DateTime.Now;
+            client.SendToServer(m);
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            MsgDBPeticion m = new MsgDBPeticion();
+            m.CodigoPeticion = "Login";
+            m.ParamsCuenta.Add(new Cuenta() { Usuario = "pablo", Pass = "pablo" });
+
+            m.From = tbFrom.Text;
+            m.To.Add(tbTo.Text);
+            m.Fecha = DateTime.Now;
+            client.SendToServer(m);
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            MsgDBPeticion m = new MsgDBPeticion();
+            m.CodigoPeticion = "CrearCuenta";
+            m.ParamsCuenta.Add(new Cuenta() { Usuario = "pablo", Pass = "pablo", RecibeLocalizacion = 1 });
 
             m.From = tbFrom.Text;
             m.To.Add(tbTo.Text);
