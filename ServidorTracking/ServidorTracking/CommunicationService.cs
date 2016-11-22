@@ -286,7 +286,7 @@ namespace ServidorTracking
                                 res.To = menDB.To;
                                 res.Fecha = DateTime.Now;
                                 res.CodigoPeticion = menDB.CodigoPeticion;
-                                res.ReturnGrupo.Add(g);
+                                res.ReturnGrupo.Add(gres);
 
                                 not.From = menDB.From;
                                 not.Fecha = DateTime.Now;
