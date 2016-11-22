@@ -50,7 +50,7 @@
         android:textColor="#fff"
         android:id="@+id/btnEnviarLocalizacion"
         android:layout_gravity="center_horizontal" />
-            
+
 
     </LinearLayout>
     </ScrollView>

@@ -103,7 +103,7 @@ public class ServicioEnviar extends AsyncTask<Mensaje, Void, Void> implements Lo
 
         try {
             if(global.getSocket() != null) {
-                if (global.getSocket().isConnected() && global.getConectado()) {
+                if (global.getSocket().isConnected()) {
 
                     PrintWriter writer = new PrintWriter(global.getSocket().getOutputStream());
 
