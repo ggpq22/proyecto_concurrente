@@ -28,8 +28,8 @@ create table historial
 	idGrupo integer foreign key references grupo,
 	idCuenta integer foreign key references cuenta,
 	fecha DateTime,
-	lat decimal,
-	long decimal,
+	lat float,
+	long float,
 	state integer
 );
 

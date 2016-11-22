@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SistemaTrackingBiblioteca.Entidades;
 using System.Data;
+using System.Collections.Concurrent;
 
 namespace ServidorTracking.DataBase
 {
@@ -150,7 +151,7 @@ namespace ServidorTracking.DataBase
                 }
                 else
                 {
-                    id = dbMan.execute("insert into Grupo(nombre, idAnfitrion, state) values('" + grupo.Nombre + "', " + grupo.Anfitrion.Id + ", 1)", QueryType.INSERT);
+                    id = dbMan.execute("insert into grupo(nombre, idAnfitrion, state) values('" + grupo.Nombre + "', " + grupo.Anfitrion.Id + ", 1)", QueryType.INSERT);
 
                     foreach (Cuenta c in grupo.Integrantes)
                     {
