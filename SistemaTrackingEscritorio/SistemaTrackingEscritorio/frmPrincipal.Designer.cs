@@ -35,6 +35,7 @@
             this.dgvUsuariosGrupo = new System.Windows.Forms.DataGridView();
             this.pbProgreso = new System.Windows.Forms.ProgressBar();
             this.dgvGruposAnfitrion = new System.Windows.Forms.DataGridView();
+            this.btnAgregar = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuariosGrupo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvGruposAnfitrion)).BeginInit();
             this.SuspendLayout();
@@ -126,11 +127,22 @@
             this.dgvGruposAnfitrion.TabIndex = 9;
             this.dgvGruposAnfitrion.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvGruposAnfitrion_CellClick);
             // 
+            // btnAgregar
+            // 
+            this.btnAgregar.Location = new System.Drawing.Point(784, 405);
+            this.btnAgregar.Name = "btnAgregar";
+            this.btnAgregar.Size = new System.Drawing.Size(75, 23);
+            this.btnAgregar.TabIndex = 10;
+            this.btnAgregar.Text = "Agregar Integrante";
+            this.btnAgregar.UseVisualStyleBackColor = true;
+            this.btnAgregar.Click += new System.EventHandler(this.button1_Click);
+            // 
             // frmPrincipal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(916, 492);
+            this.Controls.Add(this.btnAgregar);
             this.Controls.Add(this.dgvGruposAnfitrion);
             this.Controls.Add(this.pbProgreso);
             this.Controls.Add(this.label2);
@@ -161,5 +173,6 @@
         private System.Windows.Forms.DataGridView dgvUsuariosGrupo;
         private System.Windows.Forms.ProgressBar pbProgreso;
         internal System.Windows.Forms.DataGridView dgvGruposAnfitrion;
+        private System.Windows.Forms.Button btnAgregar;
     }
 }

@@ -193,22 +193,28 @@ namespace Mapa
                     {
                         MessageBox.Show("Se creo el grupo correctamente.");
                         sesion.FormPrincipal.Invoke(new Action(() => { sesion.FormPrincipal.Visible = true; }));
-                        sesion.Grupos.Add(msg.ReturnGrupo[0]);
+                        //sesion.Grupos.Add(msg.ReturnGrupo[0]);
                         QuitarEventos();
                         if (((frmPrincipal)sesion.FormPrincipal).dgvGruposAnfitrion.InvokeRequired)
                         {
                             ((frmPrincipal)sesion.FormPrincipal).dgvGruposAnfitrion.Invoke(new Action(() =>
                             {
-                                ((frmPrincipal)sesion.FormPrincipal).dgvGruposAnfitrion.DataSource = null;
-                                ((frmPrincipal)sesion.FormPrincipal).dgvGruposAnfitrion.DataSource = sesion.Grupos;
-                                ((frmPrincipal)sesion.FormPrincipal).ConfigurarGrillaGrupo();
+                                ((frmPrincipal)sesion.FormPrincipal).AsignarEventos();
+                                ((frmPrincipal)sesion.FormPrincipal).BuscarGruposAnfitrion();
+                                ((frmPrincipal)sesion.FormPrincipal).ActualizarGrupos();
+                                //((frmPrincipal)sesion.FormPrincipal).dgvGruposAnfitrion.DataSource = null;
+                                //((frmPrincipal)sesion.FormPrincipal).dgvGruposAnfitrion.DataSource = sesion.Grupos;
+                                //((frmPrincipal)sesion.FormPrincipal).ConfigurarGrillaGrupo();
                             }));
                         }
                         else
                         {
-                            ((frmPrincipal)sesion.FormPrincipal).dgvGruposAnfitrion.DataSource = null;
-                            ((frmPrincipal)sesion.FormPrincipal).dgvGruposAnfitrion.DataSource = sesion.Grupos;
-                            ((frmPrincipal)sesion.FormPrincipal).ConfigurarGrillaGrupo();
+                            ((frmPrincipal)sesion.FormPrincipal).AsignarEventos();
+                            ((frmPrincipal)sesion.FormPrincipal).BuscarGruposAnfitrion();
+                            ((frmPrincipal)sesion.FormPrincipal).ActualizarGrupos();
+                            //((frmPrincipal)sesion.FormPrincipal).dgvGruposAnfitrion.DataSource = null;
+                            //((frmPrincipal)sesion.FormPrincipal).dgvGruposAnfitrion.DataSource = sesion.Grupos;
+                            //((frmPrincipal)sesion.FormPrincipal).ConfigurarGrillaGrupo();
                         }
 
                         if (sesion.FormCrearGrupo.InvokeRequired)
@@ -281,6 +287,39 @@ namespace Mapa
         private void QuitarEventos()
         {
             sesion.Server.DBRespuesta -= Server_DBRespuesta;
+        }
+
+        private void btnCancelar_Click(object sender, EventArgs e)
+        {
+            sesion.FormPrincipal.Invoke(new Action(() => { sesion.FormPrincipal.Visible = true; }));
+            //sesion.Grupos.Add(msg.ReturnGrupo[0]);
+            QuitarEventos();
+            //if (((frmPrincipal)sesion.FormPrincipal).dgvGruposAnfitrion.InvokeRequired)
+            //{
+            //    ((frmPrincipal)sesion.FormPrincipal).dgvGruposAnfitrion.Invoke(new Action(() =>
+            //    {
+            //        ((frmPrincipal)sesion.FormPrincipal).ActualizarGrupos();
+            //        //((frmPrincipal)sesion.FormPrincipal).dgvGruposAnfitrion.DataSource = null;
+            //        //((frmPrincipal)sesion.FormPrincipal).dgvGruposAnfitrion.DataSource = sesion.Grupos;
+            //        //((frmPrincipal)sesion.FormPrincipal).ConfigurarGrillaGrupo();
+            //    }));
+            //}
+            //else
+            //{
+            //    ((frmPrincipal)sesion.FormPrincipal).ActualizarGrupos();
+            //    //((frmPrincipal)sesion.FormPrincipal).dgvGruposAnfitrion.DataSource = null;
+            //    //((frmPrincipal)sesion.FormPrincipal).dgvGruposAnfitrion.DataSource = sesion.Grupos;
+            //    //((frmPrincipal)sesion.FormPrincipal).ConfigurarGrillaGrupo();
+            //}
+
+            if (sesion.FormCrearGrupo.InvokeRequired)
+            {
+                this.Invoke(new Action(() => { sesion.FormCrearGrupo.Close(); }));
+            }
+            else
+            {
+                sesion.FormCrearGrupo.Close();
+            }
         }
 
     }

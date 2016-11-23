@@ -25,7 +25,6 @@ namespace Mapa
         private GMapOverlay markerOverlay;
         private GMapOverlay overlay;
         private Thread TareaProgreso;
-        private bool salir = false;
 
         public frmPrincipal()
         {
@@ -49,12 +48,11 @@ namespace Mapa
             sesion.FormLogin.Visible = true;
             tokenProgress.Cancel();
             TareaProgreso.Join();
-            salir = true;
         }
 
         void Server_Connect(object sender, Mensaje mensaje)
         {
-            new Thread(BuscarGruposAnfitrion).Start();
+            BuscarGruposAnfitrion();
         }
 
         void Server_LocationChanged(object sender, Mensaje mensaje)
@@ -175,7 +173,7 @@ namespace Mapa
             Deslogeo();
         }
 
-        private void BuscarGruposAnfitrion()
+        internal void BuscarGruposAnfitrion()
         {
             MsgDBPeticion msg = new MsgDBPeticion()
             {
@@ -353,7 +351,7 @@ namespace Mapa
             sesion.FormLogin.Close();
         }
 
-        private void AsignarEventos()
+        internal void AsignarEventos()
         {
             sesion.Server.Connect += Server_Connect;
             sesion.Server.DBRespuesta += Server_DBRespuesta;
@@ -367,6 +365,26 @@ namespace Mapa
             sesion.Server.DBRespuesta -= Server_DBRespuesta;
             sesion.Server.Disconnect -= Server_Disconnect;
             sesion.Server.LocationChanged -= Server_LocationChanged;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (dgvGruposAnfitrion.SelectedRows.Count == 0)
+            {
+                return;
+            }
+
+            var nombre = dgvGruposAnfitrion.SelectedRows[0].Cells["nombre"].Value.ToString();
+            var grupo = sesion.Grupos.SingleOrDefault(x => x.Nombre == nombre);
+            tokenProgress.Cancel();
+            TareaProgreso.Join();
+            pbProgreso.Invoke(new Action(() => { pbProgreso.Visible = false; }));
+            QuitarEventos();
+
+            sesion.FormAgregarIntegrante = new frmAgregarIntegrante(sesion, grupo);
+            sesion.FormAgregarIntegrante.Show();
+            sesion.FormPrincipal.Visible = false;
+
         }
 
     }

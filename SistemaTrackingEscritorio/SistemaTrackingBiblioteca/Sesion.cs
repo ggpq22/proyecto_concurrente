@@ -31,5 +31,7 @@ namespace SistemaTrackingBiblioteca
 
 
         public Form FormCrearGrupo { get; set; }
+
+        public Form FormAgregarIntegrante { get; set; }
     }
 }
