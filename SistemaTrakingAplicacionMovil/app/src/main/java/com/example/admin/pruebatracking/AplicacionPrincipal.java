@@ -27,6 +27,7 @@ public class AplicacionPrincipal extends Application {
     private boolean recuperarGrupos = false;
     private boolean respuestaRecuperarGrupos = false;
     private boolean respuestaDeleteGrupos = false;
+    private boolean estadoGps = false;
     private Cuenta cuenta;
     private ArrayList<Grupo> grupos = new ArrayList<Grupo>();
     private ListViewAdapterGrupos adapterGrupos;
@@ -143,5 +144,13 @@ public class AplicacionPrincipal extends Application {
 
     public void setMsgDBRespuestaDeleteGrupos(MsgDBRespuesta msgDBRespuestaDeleteGrupos) {
         this.msgDBRespuestaDeleteGrupos = msgDBRespuestaDeleteGrupos;
+    }
+
+    public boolean getEstadoGps() {
+        return estadoGps;
+    }
+
+    public void setEstadoGps(boolean estadoGps) {
+        this.estadoGps = estadoGps;
     }
 }

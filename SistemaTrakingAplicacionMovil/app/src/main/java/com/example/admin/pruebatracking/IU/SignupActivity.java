@@ -241,7 +241,7 @@ public class SignupActivity extends AppCompatActivity {
 
         String nombre = _nombreText.getText().toString();
         String apellido = _apellidoText.getText().toString();
-        String email = _emailText.getText().toString();
+        String user = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
         String rePassword = _rePasswordText.getText().toString();
 
@@ -259,7 +259,7 @@ public class SignupActivity extends AppCompatActivity {
             _apellidoText.setError(null);
         }
 
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if (user.isEmpty() || password.length() < 4 || user.length() > 10) {
             _emailText.setError("Ingrese un email valido");
             valid = false;
         } else {

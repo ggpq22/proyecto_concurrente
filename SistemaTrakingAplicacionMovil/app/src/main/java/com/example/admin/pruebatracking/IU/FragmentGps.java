@@ -64,9 +64,6 @@ public class FragmentGps extends Fragment {
                         switch (btnLocalizacion.getText().toString())
                         {
                             case "ENVIAR LOCALIZACIÓN":
-                                btnLocalizacion.setText("STOP LOCALIZACIÓN");
-                                btnLocalizacion.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_stop1, 0, 0, 0);
-
                                 if(global.getSocket().isConnected()) {
                                     ArrayList<String> arrayDestino = new ArrayList<String>();
                                     ArrayList<Grupo> grupos = global.getGrupos();
@@ -80,10 +77,13 @@ public class FragmentGps extends Fragment {
                                         String fecha = (DateFormat.format("yyyy-MM-dd", new java.util.Date()).toString());
 
                                         cliente = new Cliente(context, arrayDestino, ((AplicacionPrincipal) context.getApplicationContext()).getCuenta().getUsuario(), fecha);
-
                                         cliente.iniciarLocalizacion();
 
-                                        savinAnimation.start();
+                                        if(global.getEstadoGps()) {
+                                            btnLocalizacion.setText("STOP LOCALIZACIÓN");
+                                            btnLocalizacion.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_stop1, 0, 0, 0);
+                                            savinAnimation.start();
+                                        }
                                     }
                                     else {
 

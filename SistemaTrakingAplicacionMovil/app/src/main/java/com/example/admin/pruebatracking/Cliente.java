@@ -2,7 +2,10 @@ package com.example.admin.pruebatracking;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.AnimationDrawable;
 import android.location.LocationManager;
@@ -51,8 +54,8 @@ public class Cliente extends AsyncTask<Void, Void, Void>{
         servicioEnviar = new ServicioEnviar(context);
         servicioRecibir = new Thread(new ServicioRecibir(context));
         manager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
-        tiempo = 5000;
-        distancia = 5;
+        tiempo = 3;
+        distancia = 1;
 
         this.TO = TO;
         this.FROM = FROM;
@@ -64,7 +67,7 @@ public class Cliente extends AsyncTask<Void, Void, Void>{
     protected Void doInBackground(Void... arg0) {
         try {
             Log.e("msg","entro en abrir conexion");
-            socket = new Socket("10.75.60.37", 8999);
+            socket = new Socket("10.75.60.122", 8999);
             writer = new PrintWriter(socket.getOutputStream());
             reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             Log.e("msg","creo el socket");
@@ -114,16 +117,22 @@ public class Cliente extends AsyncTask<Void, Void, Void>{
 
     public void iniciarLocalizacion()
     {
-        if(manager != null && servicioEnviar!= null) {
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                //Requiere permisos para Android 6.0
-                Log.e("Location", "No se tienen permisos necesarios!, se requieren.");
-                ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 225);
-                manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, tiempo, distancia, servicioEnviar);
-            } else {
-                Log.i("Location", "Permisos necesarios OK!.");
-                manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, tiempo, distancia, servicioEnviar);
+        if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+
+            if(manager != null && servicioEnviar!= null) {
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    //Requiere permisos para Android 6.0
+                    Log.e("Location", "No se tienen permisos necesarios!, se requieren.");
+                    ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 225);
+                } else {
+                    global.setEstadoGps(true);
+                    Log.i("Location", "Permisos necesarios OK!.");
+                    manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, tiempo, distancia, servicioEnviar);
+                }
             }
+        }else{
+            global.setEstadoGps(false);
+            showGPSDisabledAlertToUser();
         }
     }
 
@@ -140,6 +149,28 @@ public class Cliente extends AsyncTask<Void, Void, Void>{
                 manager.removeUpdates(servicioEnviar);
             }
         }
+    }
+
+    private void showGPSDisabledAlertToUser(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(global.getContext());
+        alertDialogBuilder.setMessage("GPS is disabled in your device. Would you like to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Goto Settings Page To Enable GPS",
+                        new DialogInterface.OnClickListener(){
+                            public void onClick(DialogInterface dialog, int id){
+                                Intent callGPSSettingIntent = new Intent(
+                                        android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                global.getContext().startActivity(callGPSSettingIntent);
+                            }
+                        });
+        alertDialogBuilder.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int id){
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = alertDialogBuilder.create();
+        alert.show();
     }
 
     public void recibirMensajes()
