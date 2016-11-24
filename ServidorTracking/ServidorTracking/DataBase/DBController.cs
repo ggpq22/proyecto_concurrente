@@ -321,6 +321,7 @@ namespace ServidorTracking.DataBase
             try
             {
                 dbMan.execute("update grupo set state = 0 where idGrupo = " + idGrupo, QueryType.UPDATE);
+                dbMan.execute("update grupo_cuentas set state = 0 where idGrupo = " + idGrupo, QueryType.UPDATE);
             }
             catch (Exception e)
             {
