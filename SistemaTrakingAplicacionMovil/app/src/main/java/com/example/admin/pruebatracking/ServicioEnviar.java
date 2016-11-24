@@ -100,8 +100,7 @@ public class ServicioEnviar extends AsyncTask<Mensaje, Void, Void> implements Lo
 
     @Override
     public void onLocationChanged(Location location) {
-
-        Toast.makeText(global.getContext(), "entro lat: "+ location.getLatitude() + "long: "+ location.getLongitude(), Toast.LENGTH_SHORT).show();
+        
         try {
             if(global.getSocket() != null) {
                 if (global.getSocket().isConnected()) {
