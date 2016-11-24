@@ -259,7 +259,7 @@ public class SignupActivity extends AppCompatActivity {
             _apellidoText.setError(null);
         }
 
-        if (user.isEmpty() || password.length() < 4 || user.length() > 10) {
+        if (user.isEmpty() || user.length() < 4 || user.length() > 10) {
             _emailText.setError("Ingrese un email valido");
             valid = false;
         } else {
