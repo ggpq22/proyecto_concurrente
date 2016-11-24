@@ -25,6 +25,7 @@ namespace Mapa
         private GMapOverlay markerOverlay;
         private GMapOverlay overlay;
         private Thread TareaProgreso;
+        private Grupo grupoEliminar;
 
         public frmPrincipal()
         {
@@ -103,6 +104,41 @@ namespace Mapa
                     btnGrupos.Enabled = true;
                 }
 
+            }
+            else if (msg.CodigoPeticion.Equals("BorrarGrupo"))
+            {
+                if (msg.IsValido)
+                {
+                    tokenProgress.Cancel();
+                    TareaProgreso.Join();
+                    if (pbProgreso.InvokeRequired)
+                    {
+                        pbProgreso.Invoke(new Action(() =>
+                        {
+                            pbProgreso.Visible = false;
+                        }));
+                    }
+                    else
+                    {
+                        pbProgreso.Visible = false;
+                    }
+                    BuscarGruposAnfitrion();
+                    ActualizarGrupos();
+                    MessageBox.Show("Se borro correctamente el grupo.");
+                    if (dgvUsuariosGrupo.InvokeRequired)
+                    {
+                        dgvUsuariosGrupo.Invoke(new Action(() => { dgvUsuariosGrupo.DataSource = null; }));
+                    }
+                    else
+                    {
+                        dgvUsuariosGrupo.DataSource = null;
+                    }
+
+                }
+                else
+                {
+                    MessageBox.Show(msg.Errores[0]);
+                }
             }
 
         }
@@ -230,7 +266,7 @@ namespace Mapa
 
                 MsgLocalizacion msg1 = new MsgLocalizacion()
                 {
-                    From = "a@a.a",
+                    From = "w@w.w",
                     To = new List<string>() { "prueba" },
                     Fecha = DateTime.Now,
                     Latitud = "-33",
@@ -255,8 +291,8 @@ namespace Mapa
         {
             var msg = mensaje as MsgLocalizacion;
 
-            var lat = Double.Parse(msg.Latitud);
-            var lng = Double.Parse(msg.Longitud);
+            var lat = Double.Parse(msg.Latitud.Replace(".", ","));
+            var lng = Double.Parse(msg.Longitud.Replace(".", ","));
             var esta = sesion.CuentasUsuario.FirstOrDefault(x => x.Usuario == mensaje.From);
             if (esta == null)
             {
@@ -305,7 +341,15 @@ namespace Mapa
         {
             if (sesion.Grupos != null)
             {
-                dgvGruposAnfitrion.DataSource = null;
+                if (dgvGruposAnfitrion.InvokeRequired)
+                {
+                    dgvGruposAnfitrion.Invoke(new Action(() => { dgvGruposAnfitrion.DataSource = null; }));
+                }
+                else
+                {
+                    dgvGruposAnfitrion.DataSource = null;
+
+                }
                 sesion.Grupos.Clear();
             }
             tokenProgress = new CancellationTokenSource();
@@ -395,6 +439,33 @@ namespace Mapa
             sesion.FormAgregarIntegrante.Show();
             sesion.FormPrincipal.Visible = false;
 
+        }
+
+        private void btnEliminar_Click(object sender, EventArgs e)
+        {
+            if (dgvGruposAnfitrion.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Seleccione un grupo para eliminarlo");
+                return;
+            }
+
+            var nombre = dgvGruposAnfitrion.SelectedRows[0].Cells["nombre"].Value.ToString();
+
+            grupoEliminar = sesion.Grupos.SingleOrDefault(x => x.Nombre == nombre);
+
+            if (grupoEliminar == null) { return; }
+
+            MsgDBPeticion msg = new MsgDBPeticion()
+            {
+                CodigoPeticion = "BorrarGrupo",
+                Fecha = DateTime.Now,
+                From = sesion.Usuario.Usuario,
+                To = new List<string>() { sesion.Usuario.Usuario },
+                ParamsGrupo = new List<Grupo>() { grupoEliminar }
+
+            };
+
+            sesion.Server.SendToServer(msg);
         }
 
     }

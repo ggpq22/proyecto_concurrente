@@ -39,6 +39,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.tbZoom = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.btnEliminar = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsuariosGrupo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvGruposAnfitrion)).BeginInit();
             this.SuspendLayout();
@@ -47,7 +49,7 @@
             // 
             this.btnGrupos.BackgroundImage = global::Mapa.Properties.Resources.personas;
             this.btnGrupos.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnGrupos.Location = new System.Drawing.Point(1036, 169);
+            this.btnGrupos.Location = new System.Drawing.Point(1046, 147);
             this.btnGrupos.Name = "btnGrupos";
             this.btnGrupos.Size = new System.Drawing.Size(75, 68);
             this.btnGrupos.TabIndex = 0;
@@ -141,9 +143,9 @@
             // 
             this.btnAgregar.BackgroundImage = global::Mapa.Properties.Resources.engranaje;
             this.btnAgregar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnAgregar.Location = new System.Drawing.Point(1048, 377);
+            this.btnAgregar.Location = new System.Drawing.Point(1046, 407);
             this.btnAgregar.Name = "btnAgregar";
-            this.btnAgregar.Size = new System.Drawing.Size(75, 57);
+            this.btnAgregar.Size = new System.Drawing.Size(75, 68);
             this.btnAgregar.TabIndex = 10;
             this.btnAgregar.UseVisualStyleBackColor = true;
             this.btnAgregar.Click += new System.EventHandler(this.button1_Click);
@@ -179,6 +181,29 @@
             this.label4.TabIndex = 13;
             this.label4.Text = "zoom";
             // 
+            // btnEliminar
+            // 
+            this.btnEliminar.BackgroundImage = global::Mapa.Properties.Resources.cancelar;
+            this.btnEliminar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnEliminar.Location = new System.Drawing.Point(1046, 269);
+            this.btnEliminar.Name = "btnEliminar";
+            this.btnEliminar.Size = new System.Drawing.Size(75, 68);
+            this.btnEliminar.TabIndex = 14;
+            this.btnEliminar.UseVisualStyleBackColor = true;
+            this.btnEliminar.Click += new System.EventHandler(this.btnEliminar_Click);
+            // 
+            // button1
+            // 
+            this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.button1.Location = new System.Drawing.Point(964, 523);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(128, 29);
+            this.button1.TabIndex = 15;
+            this.button1.Text = "prueba";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Visible = false;
+            this.button1.Click += new System.EventHandler(this.button2_Click);
+            // 
             // frmPrincipal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -186,6 +211,8 @@
             this.BackgroundImage = global::Mapa.Properties.Resources.images__1_;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1201, 624);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnEliminar);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.tbZoom);
             this.Controls.Add(this.label3);
@@ -224,5 +251,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox tbZoom;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button btnEliminar;
+        private System.Windows.Forms.Button button1;
     }
 }
