@@ -252,8 +252,5 @@ namespace Mapa
                 sesion.Server.SendToServer(msg);
             }
         }
-
-        
-
     }
 }

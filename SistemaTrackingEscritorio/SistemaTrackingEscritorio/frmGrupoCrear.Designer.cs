@@ -39,49 +39,59 @@
             // 
             // tbNombreGrupo
             // 
-            this.tbNombreGrupo.Location = new System.Drawing.Point(194, 26);
+            this.tbNombreGrupo.Location = new System.Drawing.Point(321, 40);
             this.tbNombreGrupo.Name = "tbNombreGrupo";
-            this.tbNombreGrupo.Size = new System.Drawing.Size(100, 20);
+            this.tbNombreGrupo.Size = new System.Drawing.Size(154, 20);
             this.tbNombreGrupo.TabIndex = 0;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(92, 29);
+            this.label1.BackColor = System.Drawing.Color.Transparent;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.White;
+            this.label1.Location = new System.Drawing.Point(202, 43);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(91, 13);
+            this.label1.Size = new System.Drawing.Size(117, 16);
             this.label1.TabIndex = 1;
             this.label1.Text = "Nombre del grupo";
             // 
             // dgvUsuarioBusqueda
             // 
+            this.dgvUsuarioBusqueda.AllowUserToAddRows = false;
+            this.dgvUsuarioBusqueda.AllowUserToDeleteRows = false;
             this.dgvUsuarioBusqueda.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvUsuarioBusqueda.Location = new System.Drawing.Point(29, 74);
+            this.dgvUsuarioBusqueda.Location = new System.Drawing.Point(106, 102);
             this.dgvUsuarioBusqueda.Name = "dgvUsuarioBusqueda";
+            this.dgvUsuarioBusqueda.ReadOnly = true;
+            this.dgvUsuarioBusqueda.RowHeadersVisible = false;
             this.dgvUsuarioBusqueda.Size = new System.Drawing.Size(197, 177);
             this.dgvUsuarioBusqueda.TabIndex = 4;
             // 
             // btnCrearGrupo
             // 
-            this.btnCrearGrupo.Location = new System.Drawing.Point(292, 101);
+            this.btnCrearGrupo.BackgroundImage = global::Mapa.Properties.Resources.anadir;
+            this.btnCrearGrupo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnCrearGrupo.Location = new System.Drawing.Point(429, 127);
             this.btnCrearGrupo.Name = "btnCrearGrupo";
-            this.btnCrearGrupo.Size = new System.Drawing.Size(75, 23);
+            this.btnCrearGrupo.Size = new System.Drawing.Size(46, 41);
             this.btnCrearGrupo.TabIndex = 9;
-            this.btnCrearGrupo.Text = "Crear";
             this.btnCrearGrupo.UseVisualStyleBackColor = true;
             // 
             // btnCancelar
             // 
-            this.btnCancelar.Location = new System.Drawing.Point(292, 187);
+            this.btnCancelar.BackgroundImage = global::Mapa.Properties.Resources.cancelar;
+            this.btnCancelar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnCancelar.Location = new System.Drawing.Point(429, 209);
             this.btnCancelar.Name = "btnCancelar";
-            this.btnCancelar.Size = new System.Drawing.Size(75, 23);
+            this.btnCancelar.Size = new System.Drawing.Size(46, 41);
             this.btnCancelar.TabIndex = 10;
-            this.btnCancelar.Text = "Cancelar";
             this.btnCancelar.UseVisualStyleBackColor = true;
+            this.btnCancelar.Click += new System.EventHandler(this.btnCancelar_Click);
             // 
             // prProgreso
             // 
-            this.prProgreso.Location = new System.Drawing.Point(43, 264);
+            this.prProgreso.Location = new System.Drawing.Point(183, 333);
             this.prProgreso.Name = "prProgreso";
             this.prProgreso.Size = new System.Drawing.Size(308, 23);
             this.prProgreso.TabIndex = 11;
@@ -91,7 +101,9 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(418, 299);
+            this.BackgroundImage = global::Mapa.Properties.Resources.images__1_;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ClientSize = new System.Drawing.Size(596, 399);
             this.Controls.Add(this.prProgreso);
             this.Controls.Add(this.btnCancelar);
             this.Controls.Add(this.btnCrearGrupo);

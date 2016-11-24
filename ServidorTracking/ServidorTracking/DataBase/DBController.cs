@@ -304,7 +304,7 @@ namespace ServidorTracking.DataBase
 
             try
             {
-                dbMan.execute("delete from grupo_cuentas where idGrupo = " + idGrupo + " and idCuenta = " + idIntegrante, QueryType.UPDATE);
+                dbMan.execute("update grupo_cuentas set state = 0 where idGrupo = " + idGrupo + " and idCuenta = " + idIntegrante, QueryType.UPDATE);
 
                 grupo = GetGrupoById(idGrupo);
             }
@@ -320,7 +320,7 @@ namespace ServidorTracking.DataBase
         {
             try
             {
-                dbMan.execute("delete from grupo where idGrupo = " + idGrupo, QueryType.UPDATE);
+                dbMan.execute("update grupo set state = 0 where idGrupo = " + idGrupo, QueryType.UPDATE);
             }
             catch (Exception e)
             {

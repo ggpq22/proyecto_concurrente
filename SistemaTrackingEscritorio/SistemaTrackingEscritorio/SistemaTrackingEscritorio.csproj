@@ -88,6 +88,15 @@
     <Compile Include="EjemploMapa.Designer.cs">
       <DependentUpon>EjemploMapa.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormPrincipal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAgregarIntegrante.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmAgregarIntegrante.Designer.cs">
+      <DependentUpon>frmAgregarIntegrante.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmGrupoCrear.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -116,6 +125,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="EjemploMapa.resx">
       <DependentUpon>EjemploMapa.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormPrincipal.resx">
+      <DependentUpon>FormPrincipal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmAgregarIntegrante.resx">
+      <DependentUpon>frmAgregarIntegrante.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmGrupoCrear.resx">
       <DependentUpon>frmGrupoCrear.cs</DependentUpon>
@@ -177,6 +192,42 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\images.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\images %281%29.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\avance-rapido.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\boton-crear-grupo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\engranaje.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\iniciar-sesion.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\personas.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\rebobinar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\anadir.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\menos.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\marca-ok.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cancelar.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

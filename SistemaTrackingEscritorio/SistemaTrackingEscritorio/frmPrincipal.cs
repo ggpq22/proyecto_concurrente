@@ -25,7 +25,7 @@ namespace Mapa
         private GMapOverlay markerOverlay;
         private GMapOverlay overlay;
         private Thread TareaProgreso;
-        private bool salir = false;
+        private Grupo grupoEliminar;
 
         public frmPrincipal()
         {
@@ -49,20 +49,19 @@ namespace Mapa
             sesion.FormLogin.Visible = true;
             tokenProgress.Cancel();
             TareaProgreso.Join();
-            salir = true;
         }
 
         void Server_Connect(object sender, Mensaje mensaje)
         {
-            new Thread(BuscarGruposAnfitrion).Start();
+            BuscarGruposAnfitrion();
         }
 
         void Server_LocationChanged(object sender, Mensaje mensaje)
         {
             var msg = mensaje as MsgLocalizacion;
 
-            var lat = Double.Parse( msg.Latitud.Replace(".",","));
-            var lng = Double.Parse(msg.Longitud.Replace(".",","));
+            var lat = Double.Parse(msg.Latitud.Replace(".", ","));
+            var lng = Double.Parse(msg.Longitud.Replace(".", ","));
             var esta = sesion.CuentasUsuario.FirstOrDefault(x => x.Usuario == mensaje.From);
             if (esta == null)
             {
@@ -105,6 +104,41 @@ namespace Mapa
                     btnGrupos.Enabled = true;
                 }
 
+            }
+            else if (msg.CodigoPeticion.Equals("BorrarGrupo"))
+            {
+                if (msg.IsValido)
+                {
+                    tokenProgress.Cancel();
+                    TareaProgreso.Join();
+                    if (pbProgreso.InvokeRequired)
+                    {
+                        pbProgreso.Invoke(new Action(() =>
+                        {
+                            pbProgreso.Visible = false;
+                        }));
+                    }
+                    else
+                    {
+                        pbProgreso.Visible = false;
+                    }
+                    BuscarGruposAnfitrion();
+                    ActualizarGrupos();
+                    MessageBox.Show("Se borro correctamente el grupo.");
+                    if (dgvUsuariosGrupo.InvokeRequired)
+                    {
+                        dgvUsuariosGrupo.Invoke(new Action(() => { dgvUsuariosGrupo.DataSource = null; }));
+                    }
+                    else
+                    {
+                        dgvUsuariosGrupo.DataSource = null;
+                    }
+
+                }
+                else
+                {
+                    MessageBox.Show(msg.Errores[0]);
+                }
             }
 
         }
@@ -175,7 +209,7 @@ namespace Mapa
             Deslogeo();
         }
 
-        private void BuscarGruposAnfitrion()
+        internal void BuscarGruposAnfitrion()
         {
             MsgDBPeticion msg = new MsgDBPeticion()
             {
@@ -188,7 +222,7 @@ namespace Mapa
 
             sesion.Server.SendToServer(msg);
         }
-        
+
         void dgvGruposAnfitrion_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             try
@@ -232,7 +266,7 @@ namespace Mapa
 
                 MsgLocalizacion msg1 = new MsgLocalizacion()
                 {
-                    From = "a@a.a",
+                    From = "w@w.w",
                     To = new List<string>() { "prueba" },
                     Fecha = DateTime.Now,
                     Latitud = "-33",
@@ -257,8 +291,8 @@ namespace Mapa
         {
             var msg = mensaje as MsgLocalizacion;
 
-            var lat = Double.Parse(msg.Latitud);
-            var lng = Double.Parse(msg.Longitud);
+            var lat = Double.Parse(msg.Latitud.Replace(".", ","));
+            var lng = Double.Parse(msg.Longitud.Replace(".", ","));
             var esta = sesion.CuentasUsuario.FirstOrDefault(x => x.Usuario == mensaje.From);
             if (esta == null)
             {
@@ -290,14 +324,32 @@ namespace Mapa
             }
 
             mapa.Position = marcador.Position;
-            mapa.Zoom = 9;
+            int zoom;
+            if (int.TryParse(tbZoom.Text, out zoom))
+            {
+                mapa.Zoom = zoom;
+            }
+            else
+            {
+                mapa.Zoom = 9;
+            }
+
+
         }
 
         internal void ActualizarGrupos()
         {
             if (sesion.Grupos != null)
             {
-                dgvGruposAnfitrion.DataSource = null;
+                if (dgvGruposAnfitrion.InvokeRequired)
+                {
+                    dgvGruposAnfitrion.Invoke(new Action(() => { dgvGruposAnfitrion.DataSource = null; }));
+                }
+                else
+                {
+                    dgvGruposAnfitrion.DataSource = null;
+
+                }
                 sesion.Grupos.Clear();
             }
             tokenProgress = new CancellationTokenSource();
@@ -353,7 +405,7 @@ namespace Mapa
             sesion.FormLogin.Close();
         }
 
-        private void AsignarEventos()
+        internal void AsignarEventos()
         {
             sesion.Server.Connect += Server_Connect;
             sesion.Server.DBRespuesta += Server_DBRespuesta;
@@ -367,6 +419,53 @@ namespace Mapa
             sesion.Server.DBRespuesta -= Server_DBRespuesta;
             sesion.Server.Disconnect -= Server_Disconnect;
             sesion.Server.LocationChanged -= Server_LocationChanged;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (dgvGruposAnfitrion.SelectedRows.Count == 0)
+            {
+                return;
+            }
+
+            var nombre = dgvGruposAnfitrion.SelectedRows[0].Cells["nombre"].Value.ToString();
+            var grupo = sesion.Grupos.SingleOrDefault(x => x.Nombre == nombre);
+            tokenProgress.Cancel();
+            TareaProgreso.Join();
+            pbProgreso.Invoke(new Action(() => { pbProgreso.Visible = false; }));
+            QuitarEventos();
+
+            sesion.FormAgregarIntegrante = new frmAgregarIntegrante(sesion, grupo);
+            sesion.FormAgregarIntegrante.Show();
+            sesion.FormPrincipal.Visible = false;
+
+        }
+
+        private void btnEliminar_Click(object sender, EventArgs e)
+        {
+            if (dgvGruposAnfitrion.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Seleccione un grupo para eliminarlo");
+                return;
+            }
+
+            var nombre = dgvGruposAnfitrion.SelectedRows[0].Cells["nombre"].Value.ToString();
+
+            grupoEliminar = sesion.Grupos.SingleOrDefault(x => x.Nombre == nombre);
+
+            if (grupoEliminar == null) { return; }
+
+            MsgDBPeticion msg = new MsgDBPeticion()
+            {
+                CodigoPeticion = "BorrarGrupo",
+                Fecha = DateTime.Now,
+                From = sesion.Usuario.Usuario,
+                To = new List<string>() { sesion.Usuario.Usuario },
+                ParamsGrupo = new List<Grupo>() { grupoEliminar }
+
+            };
+
+            sesion.Server.SendToServer(msg);
         }
 
     }
