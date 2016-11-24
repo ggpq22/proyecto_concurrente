@@ -60,6 +60,9 @@
     <Compile Include="Entidades\Grupo_Cuentas.cs" />
     <Compile Include="Entidades\Historial.cs" />
     <Compile Include="Entidades\Servidor.cs" />
+    <Compile Include="formPer.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GMarkerGoogle.cs" />
     <Compile Include="MarcadorGoogle.cs" />
     <Compile Include="Mensajes\MsgDBPeticion.cs" />

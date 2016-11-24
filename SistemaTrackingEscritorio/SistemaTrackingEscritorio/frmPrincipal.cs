@@ -59,8 +59,8 @@ namespace Mapa
         {
             var msg = mensaje as MsgLocalizacion;
 
-            var lat = Double.Parse( msg.Latitud.Replace(".",","));
-            var lng = Double.Parse(msg.Longitud.Replace(".",","));
+            var lat = Double.Parse(msg.Latitud.Replace(".", ","));
+            var lng = Double.Parse(msg.Longitud.Replace(".", ","));
             var esta = sesion.CuentasUsuario.FirstOrDefault(x => x.Usuario == mensaje.From);
             if (esta == null)
             {
@@ -186,7 +186,7 @@ namespace Mapa
 
             sesion.Server.SendToServer(msg);
         }
-        
+
         void dgvGruposAnfitrion_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             try
@@ -288,7 +288,17 @@ namespace Mapa
             }
 
             mapa.Position = marcador.Position;
-            mapa.Zoom = 9;
+            int zoom;
+            if (int.TryParse(tbZoom.Text, out zoom))
+            {
+                mapa.Zoom = zoom;
+            }
+            else
+            {
+                mapa.Zoom = 9;
+            }
+
+
         }
 
         internal void ActualizarGrupos()
