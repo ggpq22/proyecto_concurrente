@@ -177,14 +177,13 @@ namespace Mapa
                 if (msg.IsValido)
                 {
                     sesion.Usuario = msg.ReturnCuenta[0];
-
                     cancelar.Cancel();
                     isConected.Join();
                     tbUsuario.Invoke(DelMostrarForm);
                 }
                 else
                 {
-                    MessageBox.Show("Login incorrecto");
+                    MessageBox.Show(msg.Errores[0]);
                 }
             }
             else if (msg.CodigoPeticion.Equals("CrearCuenta"))
@@ -195,7 +194,7 @@ namespace Mapa
                 }
                 else
                 {
-                    MessageBox.Show("No se creo la cuenta");
+                    MessageBox.Show(msg.Errores[0]);
                 }
             }
         }

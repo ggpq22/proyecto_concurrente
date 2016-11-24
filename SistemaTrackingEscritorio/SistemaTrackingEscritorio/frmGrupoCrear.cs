@@ -181,7 +181,6 @@ namespace Mapa
                 if (btnCrearGrupo.InvokeRequired)
                 {
                     btnCrearGrupo.Invoke(new Action(() => { btnCrearGrupo.Enabled = true; }));
-
                 }
                 else
                 {
@@ -229,7 +228,7 @@ namespace Mapa
                     }
                     else
                     {
-                        MessageBox.Show("Hubo un error.");
+                        MessageBox.Show(msg.Errores[0]);
                     }
                 }
                 catch (Exception ex)
@@ -267,6 +266,7 @@ namespace Mapa
             dgvUsuarioBusqueda.Columns["Pass"].Visible = false;
             dgvUsuarioBusqueda.Columns["Id"].Visible = false;
             dgvUsuarioBusqueda.Columns["RecibeLocalizacion"].Visible = false;
+            dgvUsuarioBusqueda.Columns["Usuario"].Width = dgvUsuarioBusqueda.Width;
         }
 
         private void frmGrupoCrear_FormClosing(object sender, FormClosingEventArgs e)

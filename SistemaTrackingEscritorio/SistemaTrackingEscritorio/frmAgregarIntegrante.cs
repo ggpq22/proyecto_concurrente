@@ -248,6 +248,7 @@ namespace Mapa
 
         private void frmAgregarIntegrante_FormClosing(object sender, FormClosingEventArgs e)
         {
+            sesion.FormPrincipal.Visible = true;
             QuitarEvento();
             DesactivarBarra();
         }
