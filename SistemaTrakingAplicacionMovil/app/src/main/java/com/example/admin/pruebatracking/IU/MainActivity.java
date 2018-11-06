@@ -1,5 +1,6 @@
 package com.example.admin.pruebatracking.IU;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -11,7 +12,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.example.admin.pruebatracking.AplicacionPrincipal;
 import com.example.admin.pruebatracking.IU.FragmentContacto;
 import com.example.admin.pruebatracking.IU.FragmentCreditos;
 import com.example.admin.pruebatracking.IU.FragmentInicio;
@@ -51,6 +54,10 @@ public class MainActivity extends AppCompatActivity {
             ab.setHomeAsUpIndicator(R.drawable.drawer_toggle);
             ab.setDisplayHomeAsUpEnabled(true);
         }
+
+        ((AplicacionPrincipal)getBaseContext().getApplicationContext()).setContext(this);
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
 
     }
 

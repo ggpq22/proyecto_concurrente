@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SistemaTrackingEscritorio", "SistemaTrackingEscritorio\SistemaTrackingEscritorio.csproj", "{9150AA28-65D7-4A5C-A291-7E9CD368C835}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SistemaTrackingBiblioteca", "SistemaTrackingBiblioteca\SistemaTrackingBiblioteca.csproj", "{EDDA7F28-5AE1-4960-B905-A3A91EFF6409}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServidorTracking", "..\ServidorTracking\ServidorTracking\ServidorTracking.csproj", "{8143839F-BA11-404B-9D68-03AF4B37F0ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SistemaTrackingTesting", "SistemaTrackingTesting\SistemaTrackingTesting.csproj", "{E52CF622-98F8-4B79-8A61-850F080CB0B8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{8143839F-BA11-404B-9D68-03AF4B37F0ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8143839F-BA11-404B-9D68-03AF4B37F0ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8143839F-BA11-404B-9D68-03AF4B37F0ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E52CF622-98F8-4B79-8A61-850F080CB0B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E52CF622-98F8-4B79-8A61-850F080CB0B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E52CF622-98F8-4B79-8A61-850F080CB0B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E52CF622-98F8-4B79-8A61-850F080CB0B8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

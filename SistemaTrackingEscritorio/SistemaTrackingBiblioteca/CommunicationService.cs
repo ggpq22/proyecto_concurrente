@@ -40,9 +40,20 @@ namespace SistemaTrackingBiblioteca
                 LocationChanged(this, e);
         }
 
+        // Events: DBRequested
+        public event CommunicationEventHandler DBRespuesta;
+        private TcpClient tcpClient;
+        private CancellationToken token;
+        protected virtual void OnDBRequested(Mensaje e)
+        {
+            if (DBRespuesta != null)
+                DBRespuesta(this, e);
+        }
+
         // Constructor
         public CommunicationService(TcpClient client)
         {
+            this.tcpClient = client;
             delivery = new MessageDelivery(client);
             delivery.OpenDelivery();
 
@@ -56,7 +67,7 @@ namespace SistemaTrackingBiblioteca
             string str;
             Mensaje message;
 
-            while (true)
+            while (tcpClient.Connected)
             {
                 str = delivery.RecieveMessage();
                 Console.WriteLine(str);
@@ -66,6 +77,7 @@ namespace SistemaTrackingBiblioteca
                     // TODO: Descerializar a Mensaje, checkear el tipo y descerializar a el tipo que corresponde
                     MsgConexion menCon;
                     MsgLocalizacion menLoc;
+                    MsgDBRespuesta menDB;
 
                     if (message is MsgConexion)
                     {
@@ -85,6 +97,12 @@ namespace SistemaTrackingBiblioteca
                         menLoc = message as MsgLocalizacion;
 
                         OnLocationChanged(menLoc);
+                    }
+                    else if (message is MsgDBRespuesta)
+                    {
+                        menDB = message as MsgDBRespuesta;
+
+                        OnDBRequested(menDB);
                     }
                 }
                 else

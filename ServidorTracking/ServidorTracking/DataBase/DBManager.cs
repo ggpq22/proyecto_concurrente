@@ -5,41 +5,42 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Data;
+using SistemaTrackingBiblioteca;
 
-namespace SistemaTrackingBiblioteca.DataBase
+namespace ServidorTracking.DataBase
 {
     public class DBManager
     {
-        
             SqlConnection cnn;
 
             SqlCommand cmd;
 
-            SqlTransaction transaction;
-
             string strcnn;
-            string user;
+            string user = "";
 
             public string User
             {
                 get { return user; }
                 set { user = value; }
             }
-            string password;
+            string password = "";
             public string Password
             {
                 get { return password; }
                 set { password = value; }
             }
 
-            string server = "PABLO-PC\\SQLEXPRESS";
+            //string server = "tcp:pbarco.database.windows.net,1433";
+            string server = @"PABLO-PC\SQLEXPRESS";
 
             public string Server
             {
                 get { return server; }
                 set { server = value; }
             }
-            string dataBase = "ProjectManager";
+
+            //string dataBase = "ProgConcurrente";
+            string dataBase = "SistemaTracking";
 
             public string DataBase
             {
@@ -58,16 +59,17 @@ namespace SistemaTrackingBiblioteca.DataBase
 
             public string connectionString()
             {
+                user = ""; password = "";
                 if (user == "" && password == "")
                 {
-                    strcnn = "Data Source=" + server + ";Initial Catalog=" + dataBase + ";Integrated Security=True";
+                    strcnn = "Server=" + server + ";Initial Catalog=" + dataBase + ";Integrated Security=True";
                 }
                 else
                 {
-                    strcnn = "Data Source=" + server + ";Initial Catalog=" + dataBase + ";User ID=" + User + ";Password=" + Password;
+                    strcnn = "Server=" + server + ";Initial Catalog=" + dataBase + ";User ID=" + User + ";Password=" + Password;
                 }
 
-                return strcnn;
+                return Configuracion.GetConnectionString("Local");
             }
 
             private SqlConnection getConnection()
@@ -126,21 +128,25 @@ namespace SistemaTrackingBiblioteca.DataBase
                 int valor;
 
                 cmd = new SqlCommand();
-                cmd.CommandType = System.Data.CommandType.Text;
-                cmd.CommandText = query;
-                cmd.CommandTimeout = 10;
 
                 try
                 {
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.CommandText = query;
+                    cmd.CommandTimeout = 10;
                     cmd.Connection = getConnection();
-                    if (action == QueryType.UPDATE || action == QueryType.INSERT)
+                    if (action == QueryType.UPDATE)
                     {
                         valor = cmd.ExecuteNonQuery();
                     }
-                    else
+                    else if (action == QueryType.INSERT)
                     {
                         cmd.CommandText += ";SELECT SCOPE_IDENTITY();";
                         valor = Convert.ToInt32(cmd.ExecuteScalar());
+                    }
+                    else
+                    {
+                        valor = cmd.ExecuteNonQuery();
                     }
 
                 }
@@ -162,12 +168,12 @@ namespace SistemaTrackingBiblioteca.DataBase
                 DataTable dt = new DataTable();
 
                 cmd = new SqlCommand();
-                cmd.CommandType = System.Data.CommandType.Text;
-                cmd.CommandText = query;
-                cmd.CommandTimeout = 10;
 
                 try
                 {
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.CommandText = query;
+                    cmd.CommandTimeout = 10;
                     cmd.Connection = getConnection();
                     SqlDataAdapter da = new SqlDataAdapter(cmd);
                     da.FillSchema(dt, SchemaType.Source);
@@ -191,25 +197,30 @@ namespace SistemaTrackingBiblioteca.DataBase
                 int valor;
 
                 cmd = new SqlCommand();
-                cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                cmd.CommandText = procedure;
-                cmd.Parameters.AddRange(param);
-                cmd.CommandTimeout = 10;
-
-                var returnParameter = cmd.Parameters.Add("@ReturnVal", SqlDbType.Int);
-                returnParameter.Direction = ParameterDirection.ReturnValue;
 
                 try
                 {
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.CommandText = procedure;
+                    cmd.Parameters.AddRange(param);
+                    cmd.CommandTimeout = 10;
+
+                    var returnParameter = cmd.Parameters.Add("@ReturnVal", SqlDbType.Int);
+                    returnParameter.Direction = ParameterDirection.ReturnValue;
+
                     cmd.Connection = getConnection();
-                    if (action == QueryType.UPDATE || action == QueryType.INSERT)
+                    if (action == QueryType.UPDATE)
                     {
                         valor = cmd.ExecuteNonQuery();
                     }
-                    else
+                    else if (action == QueryType.INSERT)
                     {
                         cmd.ExecuteNonQuery();
                         valor = Convert.ToInt32(returnParameter.Value);
+                    }
+                    else
+                    {
+                        valor = cmd.ExecuteNonQuery();
                     }
                 }
                 catch (Exception ex)
@@ -229,14 +240,14 @@ namespace SistemaTrackingBiblioteca.DataBase
                 DataTable dt = new DataTable();
 
                 cmd = new SqlCommand();
-                cmd.CommandType = System.Data.CommandType.Text;
-                cmd.CommandText = procedure;
-                cmd.Parameters.AddRange(param);
-                cmd.CommandTimeout = 10;
-
 
                 try
                 {
+                    cmd.CommandType = System.Data.CommandType.Text;
+                    cmd.CommandText = procedure;
+                    cmd.Parameters.AddRange(param);
+                    cmd.CommandTimeout = 10;
+
                     cmd.Connection = getConnection();
                     SqlDataAdapter da = new SqlDataAdapter(cmd);
                     da.FillSchema(dt, SchemaType.Source);
@@ -252,7 +263,6 @@ namespace SistemaTrackingBiblioteca.DataBase
                 }
 
                 return dt;
-            
         }
     }
 }

@@ -21,7 +21,7 @@ namespace SistemaTrackingBiblioteca
             set { name = value; }
         }
 
-        TcpClient client;
+        public TcpClient client { get; set; }
         CommunicationService service;
         ConcurrentQueue<Mensaje> mensajesSalida = new ConcurrentQueue<Mensaje>();
 
@@ -72,17 +72,19 @@ namespace SistemaTrackingBiblioteca
 
         public ServerClient(String ip, int puerto)
         {
+
             try
             {
                 this.client = new TcpClient(ip, puerto);
-                service = new CommunicationService(this.client);
-
                 // Subscribe Events
+                service = new CommunicationService(client);
                 service.Connect += service_Connect;
                 service.Disconnect += service_Disconnect;
                 service.LocationChanged += service_LocationChanged;
+                service.DBRespuesta += service_DBRespuesta;
 
                 sending = new Thread(sendMessages);
+                
                 sending.Start();
             }
             catch (Exception ex)
@@ -92,6 +94,22 @@ namespace SistemaTrackingBiblioteca
             }
 
         }
+
+        void service_DBRespuesta(object sender, Mensaje mensaje)
+        {
+            MsgDBRespuesta msn = mensaje as MsgDBRespuesta;
+            OnDBRespuesta(msn);
+        }
+
+
+        public event CommunicationEventHandler DBRespuesta;
+        protected virtual void OnDBRespuesta(Mensaje e)
+        {
+            if (DBRespuesta != null)
+                DBRespuesta(this, e);
+        }
+
+
 
         public void SendToServer(Mensaje message)
         {
@@ -106,7 +124,7 @@ namespace SistemaTrackingBiblioteca
 
         private void sendMessages()
         {
-            while (true)
+            while (client.Connected)
             {
                 if (mensajesSalida.Count > 0)
                 {
@@ -118,6 +136,16 @@ namespace SistemaTrackingBiblioteca
                     }
                 }
             }
+        }
+
+        public bool Conectado()
+        {
+            return this.client.Connected;
+        }
+
+        public void BeginInvoke()
+        {
+
         }
     }
 }

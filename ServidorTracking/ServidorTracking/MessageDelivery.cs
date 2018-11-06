@@ -6,14 +6,14 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SistemaTrackingBiblioteca
+namespace ServidorTracking
 {
     class MessageDelivery
     {
         StreamWriter writer;
         StreamReader reader;
         NetworkStream stream;
-        TcpClient client;
+        ServerClient client;
 
         public NetworkStream Stream
         {
@@ -21,7 +21,7 @@ namespace SistemaTrackingBiblioteca
           set { stream = value; }
         }
 
-        public MessageDelivery(NetworkStream stream, TcpClient client)
+        public MessageDelivery(NetworkStream stream, ServerClient client)
         {
             this.client = client;
             this.stream = stream;
@@ -58,10 +58,12 @@ namespace SistemaTrackingBiblioteca
             try
             {
                 string line = reader.ReadLine();
+                reader.DiscardBufferedData();
                 return line;
             }
             catch (Exception e)
             {
+                client.RemoveMe();
                 throw e;
             }
         }
@@ -74,6 +76,7 @@ namespace SistemaTrackingBiblioteca
             }
             catch (Exception e)
             {
+                client.RemoveMe();
                 throw e;
             }
         }

@@ -4,38 +4,90 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using System.Net;
 
-namespace SistemaTrackingBiblioteca
+namespace ServidorTracking
 {
     class Program
     {
+
+        public static string GetLocalIPAddress()
+        {
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    return ip.ToString();
+                }
+            }
+            throw new Exception("Local IP Address Not Found!");
+        }
+
         static void Main(string[] args)
         {
+            Console.SetWindowSize(120, 35);
 
-			string ip = "10.75.60.51";
+            string ip = GetLocalIPAddress();
 
             int port = 8999;
 
+            CancellationTokenSource cts = new CancellationTokenSource();
+
             TcpServer server = new TcpServer(ip, port);
-            MessageRouter router = new MessageRouter();
+            MessageRouter router = new MessageRouter(cts.Token);
 
             Thread runningServer = new Thread(() => {
 
-                server.StartServer();
-
-                while(true)
+                try
                 {
-                    TcpClient tcpclient = server.AcceptClient();
+                    server.StartServer();
 
-                    ServerClient client = new ServerClient(tcpclient, router);
+                    while(true)
+                    {
+                        TcpClient tcpclient = server.AcceptClient();
+                        Console.WriteLine("Cliente nuevo");
 
-                    router.AddClient(client);
+                        ServerClient client = new ServerClient(tcpclient, router);
+
+                        router.AddClient(client);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("== ERROR == -" + e.Message);
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             });
 
-            runningServer.Start();
+            try
+            {
+                runningServer.Start();
 
-            Console.WriteLine("Server running...");
+                Console.WriteLine("Server running on IP: " + ip + ", PORT: " + port + ".");
+            }
+            catch (Exception e)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("== ERROR == -" + e.Message);
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+
+            string command;
+
+            while (true)
+            {
+                command = Console.ReadLine();
+
+                if (command == "shutdown")
+                {
+                    //Console.Beep();
+                    cts.Cancel();
+                    router.WaitToFinish();
+                    Environment.Exit(0);
+                }
+            }
         }
     }
 }

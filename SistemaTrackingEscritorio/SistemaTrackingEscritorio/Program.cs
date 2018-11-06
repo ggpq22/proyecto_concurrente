@@ -17,12 +17,16 @@ namespace Mapa
         [STAThread]
         static void Main()
         {
-            //var ip = Configuracion.App.Configuracion.GetConfiguracion("IpServidor");
-            //var pueto = Configuracion.App.Configuracion.GetConfiguracion("PuertoConfiguracion");
-            //ServerClient servidor = new ServerClient(ip, int.Parse(pueto));
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Login());
+            try
+            {
+                Application.Run(new Login());
+            }
+            catch (Exception ex)
+            {
+                Console.Write("asdasd");
+            }
         }
 
     }

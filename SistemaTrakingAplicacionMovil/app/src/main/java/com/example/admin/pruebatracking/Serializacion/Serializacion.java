@@ -33,6 +33,15 @@ public class Serializacion{
             case "MsgLocalizacion":
                 o = gson.fromJson(json,MsgLocalizacion.class);
                 break;
+            case "MsgDBPeticion":
+                o = gson.fromJson(json,MsgDBPeticion.class);
+                break;
+            case "MsgDBRespuesta":
+                o = gson.fromJson(json,MsgDBRespuesta.class);
+                break;
+            case "MsgNotificacion":
+                o = gson.fromJson(json,MsgNotificacion.class);
+                break;
         }
         return  o;
     }

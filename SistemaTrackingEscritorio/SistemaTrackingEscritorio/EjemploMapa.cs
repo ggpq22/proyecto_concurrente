@@ -13,7 +13,6 @@ using GMap.NET.WindowsForms;
 using GMap.NET.WindowsForms.Markers;
 using SistemaTrackingBiblioteca;
 using SistemaTrackingBiblioteca.Mensajes;
-using SistemaTrackingBiblioteca;
 
 namespace Mapa
 {
@@ -21,10 +20,17 @@ namespace Mapa
     {
         
         ServerClient cliente;
+        private Sesion sesion;
 
         public EjemploMapa()
         {
             InitializeComponent();
+        }
+
+        public EjemploMapa(Sesion sesion)
+        {
+            // TODO: Complete member initialization
+            this.sesion = sesion;
         }
 
     
@@ -41,12 +47,10 @@ namespace Mapa
             gMapControl1.AutoScroll = true;
 
             GMapOverlay gmo = new GMapOverlay("marker");
-            GMapMarker gmm = new GMarkerGoogle(new PointLatLng(-33, -66), GMarkerGoogleType.green);
-            //MarcadorGoogle marca = new MarcadorGoogle(new PointLatLng(-33, -66), "lllll", GMarkerGoogleType.green);
-            //MarcadorGoogle marc = new MarcadorGoogle(new PointLatLng(-34, -66), "ttrrqwrq", GMarkerGoogleType.green);
+            GMarkerGooglePers gmm = new GMarkerGooglePers(new PointLatLng(-33, -66), GMarkerGoogleType.green, "gonza");
 
-            gmo.Markers.Add(new GMarkerGooglePers(new PointLatLng(-33, -66), GMarkerGoogleType.green, "mario"));
-            //gmo.Markers.Add(marc);
+            gmo.Markers.Add(gmm);
+
             gMapControl1.Overlays.Add(gmo);
             
         }
@@ -54,10 +58,22 @@ namespace Mapa
         void cliente_LocationChanged(object sender, Mensaje mensaje)
         {
             MsgLocalizacion localizacion = mensaje as MsgLocalizacion;
+                var lat = Double.Parse(localizacion.Latitud);
+                var lng = Double.Parse(localizacion.Longitud);
 
-            var marker = gMapControl1.Overlays[0].Markers[0] as MarcadorGoogle;            
-            
-            marker.NuevoPunto(new PointLatLng(-33,-66));
+            var marker = gMapControl1.Overlays[0].Markers.FirstOrDefault(x => ((GMarkerGooglePers)x).nombre == localizacion.From);
+
+            if (marker != null)
+            {
+                marker = marker as GMarkerGooglePers;
+                marker.Position = new PointLatLng(lat, lng);
+            }
+            else
+            {
+                var nuevo = new GMarkerGooglePers(new PointLatLng(lat, lng),GMarkerGoogleType.red,localizacion.From);
+                gMapControl1.Overlays[0].Markers.Add(nuevo);
+                sesion.Marcadores.Add(nuevo);
+            }
         }
 
         void cliente_Disconnect(object sender, Mensaje mensaje)
@@ -82,22 +98,35 @@ namespace Mapa
 
         private void btnConectar_Click(object sender, EventArgs e)
         {
-            cliente = new ServerClient(tbIp.Text, int.Parse(tbPuerto.Text));
-            cliente.Connect += cliente_Connect;
-            cliente.Disconnect += cliente_Disconnect;
-            cliente.LocationChanged += cliente_LocationChanged;
+            //cliente = new ServerClient(tbIp.Text, int.Parse(tbPuerto.Text));
+            //cliente.Connect += cliente_Connect;
+            //cliente.Disconnect += cliente_Disconnect;
+            //cliente.LocationChanged += cliente_LocationChanged;
 
-            cliente.SendToServer(new MsgConexion()
-            {
-                From = "escritorio",
-                To = "escritorio",
-                Fecha = DateTime.Now,
-                Mensaje = "conectar"
-            });
+            //cliente.SendToServer(new MsgConexion()
+            //{
+
+            //    From = "escritorio",
+            //    To = {"escritorio"},
+
+            //    Fecha = DateTime.Now,
+            //    Mensaje = "conectar"
+            //});
         }
 
         private void tbIp_TextChanged(object sender, EventArgs e)
         {
+
+        }
+
+        private void EjemploMapa_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Console.WriteLine("asd");
+        }
+
+        private void EjemploMapa_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Console.WriteLine("asd");
 
         }
     }

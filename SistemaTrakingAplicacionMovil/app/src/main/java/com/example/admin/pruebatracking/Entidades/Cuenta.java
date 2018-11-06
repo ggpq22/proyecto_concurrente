@@ -3,23 +3,19 @@ package com.example.admin.pruebatracking.Entidades;
 /**
  * Created by Mario on 25/10/2016.
  */
-public class Cuenta {
-
-    private int IdCuenta;
+public class Cuenta extends DBEntidad{
 
     private String Usuario;
 
     private String Pass;
 
-    public Cuenta() {
-    }
+    private int RecibeLocalizacion;
 
-    public int getIdCuenta() {
-        return IdCuenta;
-    }
-
-    public void setIdCuenta(int idCuenta) {
-        this.IdCuenta = idCuenta;
+    public Cuenta(int Id, String Usuario, String Pass, int RecibeLocalizacion) {
+        super(Id);
+        this.Usuario = Usuario;
+        this.Pass = Pass;
+        this.RecibeLocalizacion = RecibeLocalizacion;
     }
 
     public String getUsuario() {
@@ -36,5 +32,13 @@ public class Cuenta {
 
     public void setPass(String pass) {
         this.Pass = pass;
+    }
+
+    public int RecibeLocalizacion() {
+        return RecibeLocalizacion;
+    }
+
+    public void setPass(int RecibeLocalizacion) {
+        this.RecibeLocalizacion = RecibeLocalizacion;
     }
 }
